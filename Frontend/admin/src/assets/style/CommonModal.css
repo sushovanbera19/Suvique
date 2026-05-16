@@ -1,0 +1,79 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal Box */
+.common-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Close Button */
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+}
+/* Logout Button Style */
+
+.profile-dropdown ul li {
+  list-style: none;
+}
+
+.profile-dropdown ul li button,
+.profile-dropdown ul li {
+  display: flex;
+  
+  gap: 10px;
+
+  width: 100%;
+  
+  border: none;
+  outline: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  font-size: 15px;
+  font-weight: 500;
+  color: #334155;
+
+  border-radius: 8px;
+
+  transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.profile-dropdown ul li:hover {
+  background: #f1f5f9;
+  color: #ef4444;
+}
+
+/* Icon */
+.profile-dropdown ul li svg {
+  font-size: 18px;
+}
+
+/* Logout Special Color */
+.profile-dropdown ul li:last-child {
+  color: #ef4444;
+}

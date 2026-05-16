@@ -1,0 +1,103 @@
+/* -------------------- Top Info Bar -------------------- */
+
+.mainTop {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;            
+  padding: 15px 20px;
+  border-bottom: 1px solid #e7e5e4;
+  font-size: 18px !important;
+  color: #535251;
+  flex-wrap: wrap; /* allows wrapping on smaller screens */
+  background-color: #fafafa;
+}
+
+.mainTop p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px !important;
+}
+
+/* Top info list */
+.top-info {
+  list-style: none;
+  display: flex;    
+  gap: 15px;      
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap; /* wrap items on smaller screens */
+}
+
+.top-info li {
+  position: relative;
+  padding-right: 10px;
+  font-size: 18px !important;
+}
+
+/* Add divider | */
+.top-info li::after {
+  content: "|";
+  position: absolute;
+  right: 0;
+  top: 0;            
+  bottom: 0;          
+  color: #626160;
+  display: flex;      
+  align-items: center; 
+}
+
+/* Remove divider on last item */
+.top-info li:last-child::after {
+  content: "";  
+}
+
+/* -------------------- Responsive Styles -------------------- */
+
+/* Medium devices (tablets) */
+@media (max-width: 768px) {
+  .mainTop {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .top-info {
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .mainTop p {
+    font-size: 13px;
+  }
+}
+
+/* Small devices (mobile) */
+@media (max-width: 480px) {
+  .mainTop {
+    padding: 10px 15px;
+    flex-direction: column;       
+    align-items: center;          
+    justify-content: center;     
+    gap: 5px;                     
+    text-align: center;           
+  }
+
+  .top-info {
+    flex-direction: column;       
+    gap: 5px;
+    align-items: center;         
+  }
+
+  .top-info li {
+    padding-right: 0;
+  }
+
+  .top-info li::after {
+    display: none;               
+  }
+
+  .mainTop p {
+    font-size: 12px;
+  }
+}
+

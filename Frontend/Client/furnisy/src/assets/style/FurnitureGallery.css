@@ -1,0 +1,149 @@
+.gallery-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.gallery-header h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    font-family: 'Dosis', sans-serif !important;
+}
+
+
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    gap: 24px;
+}
+
+.gallery-item {
+    position: relative;
+    aspect-ratio: 4 / 4.2;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f8f8f8;
+}
+
+.image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Image zooms slightly on hover */
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.025);
+}
+
+/* Overlay starts small in center */
+.gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    /* dark overlay */
+    border-radius: 12px;
+    transform: scale(0);
+    /* tiny at center */
+    transform-origin: center center;
+    /* grow from center */
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    /* spring-like */
+
+    /* Center the content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+}
+
+
+/* Content inside overlay */
+.gallery-overlay-content {
+    color: white;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.35s ease, transform 0.4s ease;
+    text-align: center;
+}
+
+/* Hover: overlay grows to full size */
+.gallery-item:hover .gallery-overlay {
+    transform: scale(1);
+    /* full overlay */
+}
+
+.gallery-item:hover .gallery-overlay-content {
+    opacity: 1;
+    transform: translateY(0);
+    /* slide up content */
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .gallery-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .gallery-grid {
+        gap: 16px;
+    }
+
+    .gallery-item {
+        aspect-ratio: 4 / 4.8;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-container {
+        padding: 24px 16px;
+    }
+
+    .gallery-header h2 {
+        font-size: 22px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        /* single column */
+        gap: 16px;
+    }
+
+    .gallery-item {
+        aspect-ratio: 3 / 4;
+    }
+
+    .gallery-overlay {
+        padding: 16px;
+    }
+
+    .gallery-overlay-content h3 {
+        font-size: 18px;
+    }
+
+    .gallery-overlay-content p {
+        font-size: 14px;
+    }
+}

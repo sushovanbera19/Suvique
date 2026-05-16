@@ -1,0 +1,266 @@
+/* ===============================
+   GLOBAL FIXES (IMPORTANT)
+   =============================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* ===============================
+   PAGE
+   =============================== */
+.pageContainer {
+  font-family: 'Poppins', sans-serif;
+  max-width: 1400px;
+  margin: 100px auto;
+  padding: 0 20px;
+}
+
+.heading {
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+/* ===============================
+   MAIN LAYOUT
+   =============================== */
+.mainContent {
+  display: flex;
+  gap: 20px;
+}
+
+/* Left column */
+.leftColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+}
+
+/* ===============================
+   FILTERS
+   =============================== */
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filterButtons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  border: none;
+  background-color: #f6f6f6;
+  font-weight: 500;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.filterButton.activeFilter {
+  background-color: #1a1a19;
+  color: white;
+}
+
+/* ===============================
+   SEARCH INPUT
+   =============================== */
+.searchInputWrapper {
+  position: relative;
+  width: 100%;
+  height: 40px;
+}
+.searchInputWrapper .filterSearchInput {
+  all: unset;              /* removes inherited styles */
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  padding: 0 40px 0 45px;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  font-size: 14px;
+  background: white;
+}
+
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;   /* now it will work */
+}
+
+
+.locationButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+}
+
+.locationButton:hover {
+  color: #555;
+}
+
+/* ===============================
+   STORE LIST
+   =============================== */
+.storeList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Store Card */
+.storeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background: #fff;
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+}
+
+.storeItem:hover {
+  box-shadow: 0 2px 8px rgba(47, 103, 255, 0.2);
+}
+
+/* Store Info */
+.storeInfo {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.storeInfo div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Icons inside text */
+.storeInfo .icon {
+  font-size: 14px;
+  color: #2f67ff;
+}
+
+/* Store Image (RIGHT SIDE) */
+.storeImage {
+  width: 120px;
+  height: 110px;
+  object-fit: cover;
+  order: 2;
+  border-radius: 6px;
+}
+
+/* Details link */
+.showroomDetails {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   MAP
+   =============================== */
+.mapContainer {
+  width: 800px;
+  height: auto;
+  border: 1.5px solid #c4c4c4;
+  margin-left: 50px;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .mainContent {
+    flex-direction: column;
+  }
+
+  .leftColumn {
+    max-width: 100%;
+  }
+
+  .mapContainer {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+    height: 350px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .pageContainer {
+    margin: 60px auto;
+  }
+
+  .storeItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .storeImage {
+    width: 100%;
+    max-width: 100%;
+    height: 180px;
+    order: 1;
+    display: block;
+  }
+
+  .storeInfo {
+    width: 100%;
+    order: 2;
+  }
+
+  .mapContainer {
+    height: 300px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .heading {
+    font-size: 16px;
+  }
+
+  .filterButton {
+    font-size: 12px;
+  }
+
+  .storeInfo {
+    font-size: 13px;
+  }
+
+  .mapContainer {
+    height: 250px;
+  }
+}

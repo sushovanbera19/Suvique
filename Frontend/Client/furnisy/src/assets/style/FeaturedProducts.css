@@ -1,0 +1,163 @@
+/* Container */
+.featured-products-container {
+    padding: 30px;
+}
+
+.featured-products-container h1 {
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: 200 !important;
+    color: #1a1a19;
+    line-height: 0.1;
+}
+
+.featured-products-container p {
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: 200 !important;
+    color: #0b0b0b;
+    line-height: 1.2;
+}
+
+/* Tabs */
+.tabs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.view-all-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #000;
+}
+
+.products-section {
+    display: grid;
+    gap: 20px;
+    margin-top: 30px;
+    grid-template-columns: repeat(2, 1fr); /* mobile default */
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .products-section {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .products-section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+/* Product Card */
+.product-card {
+    text-align: left;
+}
+
+.product-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-img img {
+    width: 100%;
+    display: block;
+}
+
+/* Overlay (slide + fade) */
+.product-overlay {
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    opacity: 0;
+    transition: bottom 0.4s ease, opacity 0.4s ease;
+}
+
+.product-img:hover .product-overlay {
+    bottom: 0;
+    opacity: 1;
+}
+
+/* Icon styles */
+.product-overlay .icon {
+    background: #fff;
+    color: #000;
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.product-overlay .icon:hover {
+    transform: scale(1.15);
+    background: #f0f0f0;
+}
+
+/* Product Text */
+.product-info h4 {
+    font-size: 25px;
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: bold !important;
+    color: #191918;
+    margin: 0;
+    line-height: 1.1;
+}
+/* Mobile */
+@media (max-width: 768px) {
+    .product-info h4 {
+        font-size: 16px !important;
+    }
+}
+
+.product-info p {
+    font-size: 18px;
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: bold !important;
+    color: #2d2d2c;
+    margin: 0;
+    line-height: 1.1;
+}
+/* Tag badge top left */
+.product-tag {
+  position: absolute;
+  top: 30px;      /* 30px from the top of the image */
+  left: 0;        /* zero px from the left edge of the image */
+  background: #000;
+  color: #fff;
+  font-family: 'Dosis', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 13px 18px;
+  z-index: 10;
+  text-transform: uppercase;
+}
+
+
+
+/* Optional smaller on mobile */
+@media (max-width: 600px) {
+  .product-tag {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

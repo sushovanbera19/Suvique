@@ -1,0 +1,408 @@
+/* =========================
+   Dropdown Position Fix
+========================= */
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown exactly under profile */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Profile Trigger */
+.user-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.user-profile img,
+.dropdown-header img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.user-profile h4,
+.dropdown-header h4 {
+  margin: 0;
+  font-size: 15px;
+  text-align: center;
+}
+
+.user-profile p,
+.dropdown-header p {
+  margin: 0;
+  font-size: 13px;
+  color: #777;
+  text-align: center;
+}
+
+/* Header Center */
+.dropdown-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+  padding: 22px 18px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+/* Menu */
+.profile-dropdown ul {
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+/* All items centered */
+.profile-dropdown li {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.profile-dropdown li:hover {
+  background: #f5f5f5;
+}
+
+/* Badge */
+/* .profile-dropdown li span {
+  background: #dff7eb;
+  color: #19a463;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+} */
+
+/* Logout */
+.profile-dropdown .logout {
+  color: #8b5cf6;
+  border-top: 1px solid #eee;
+}
+/* =========================
+   CART DROPDOWN
+========================= */
+
+.cart-dropdown {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Header */
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.cart-header span {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Items */
+.cart-items {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.cart-item img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f4f4f4;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cart-item-info p {
+  margin-top: 4px;
+  color: #777;
+  font-size: 11px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shipping-tag {
+  background: rgba(236, 72, 153, 0.12);
+  color: #ec4899;
+
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Price */
+.cart-price {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Delete */
+.delete-btn {
+  border: none;
+  background: transparent;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-btn:hover {
+  color: #ff0000;
+  background: transparent;
+}
+
+/* Footer */
+.cart-footer {
+  padding: 20px;
+}
+
+.cart-footer button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+
+  background: black;
+  color: white;
+
+  padding: 11px;
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cart-footer button:hover {
+  background: #fff;
+  color: black;
+  border:1px solid black;
+}
+/* =========================
+   NOTIFICATION DROPDOWN
+========================= */
+
+.notification-dropdown {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Header */
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.notification-header span {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0ea5e9;
+
+  padding: 6px 12px;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* List */
+.notification-items {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+/* Item */
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 11px 20px;
+  border-bottom: 1px solid #f1f1f1;
+
+  transition: 0.2s ease;
+}
+
+.notification-item.active {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* Icon */
+.notification-icon {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+}
+
+/* Icon Colors */
+.notification-icon.purple {
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+  font-size: 18px;
+}
+
+.notification-icon.blue {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0ea5e9;
+  font-size: 18px;
+
+}
+
+.notification-icon.pink {
+  background: rgba(236, 72, 153, 0.12);
+  color: #ec4899;
+  font-size: 18px;
+
+}
+
+.notification-icon.yellow {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  font-size: 18px;
+
+}
+
+.notification-icon.green {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  font-size: 18px;
+
+}
+
+/* Content */
+.notification-content {
+  flex: 1;
+}
+
+.notification-content h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.notification-content p {
+  margin-top: 5px;
+  font-size: 10px;
+  color: #777;
+  line-height: 1.5;
+}
+
+/* Close */
+.notification-close {
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+
+  font-size: 20px;
+}
+
+.notification-close:hover {
+  color: #ff4d4f;
+  background: transparent;
+}
+
+/* Footer */
+.notification-footer {
+  padding: 18px 20px;
+}
+
+.notification-footer button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+
+  background: black;
+  color: white;
+
+  padding: 13px;
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.notification-footer button:hover {
+  background: #fff;
+  color: black;
+  border: 1px solid black;
+}

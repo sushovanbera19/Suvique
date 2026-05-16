@@ -1,0 +1,126 @@
+import React, { useRef } from "react";
+import "../assets/style/BlogSlider.css";
+import Blog1 from "../../public/images/blog-3.webp";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import BlogCard from "../Common/BlogCard";
+
+const blogs = [
+    {
+        date: "20 Jan 2025",
+        category: "Office Furniture",
+        author: "Anna Maria",
+        title: "Comfortable Chairs Can Help You Create Your Own Home Office",
+        description:
+            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        image: Blog1,
+    },
+    {
+        date: "14 Aug 2025",
+        category: "Office Furniture",
+        author: "Anna Maria",
+        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
+        description:
+            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        image: Blog1,
+    },
+    {
+        date: "18 Aug 2025",
+        category: "Office Furniture",
+        author: "Anna Maria",
+        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
+        description:
+            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        image: Blog1,
+    },
+    {
+        date: "18 Aug 2025",
+        category: "Office Furniture",
+        author: "Anna Maria",
+        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
+        description:
+            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        image: Blog1,
+    },
+    {
+        date: "18 Aug 2025",
+        category: "Office Furniture",
+        author: "Anna Maria",
+        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
+        description:
+            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        image: Blog1,
+    },
+];
+
+const BlogSlider = () => {
+    const sliderRef = useRef(null);
+
+    const scroll = (direction) => {
+        if (sliderRef.current) {
+            const width = sliderRef.current.clientWidth;
+            sliderRef.current.scrollBy({
+                left: direction === "next" ? width : -width,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+        isDown = true;
+        sliderRef.current.classList.add("active");
+        startX = e.pageX - sliderRef.current.offsetLeft;
+        scrollLeft = sliderRef.current.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+        isDown = false;
+        sliderRef.current.classList.remove("active");
+    };
+
+    const handleMouseUp = () => {
+        isDown = false;
+        sliderRef.current.classList.remove("active");
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - sliderRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        sliderRef.current.scrollLeft = scrollLeft - walk;
+    };
+
+    return (
+        <div className="blog-slider-container">
+            <h2>News & Blogs</h2>
+
+            <div className="Blogs-button">
+                <button onClick={() => scroll("prev")}>
+                    <FaArrowLeft />
+                </button>
+                <button onClick={() => scroll("next")}>
+                    <FaArrowRight />
+                </button>
+            </div>
+
+            <div
+                className="blog-slider"
+                ref={sliderRef}
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+            >
+                {blogs.map((blog, index) => (
+                    <BlogCard key={index} blog={blog} />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default BlogSlider;

@@ -1,0 +1,51 @@
+.account-header-container {
+    position: relative;
+    /* Needed for overlay positioning */
+    width: 100%;
+    height: 250px;
+    /* Adjust height as needed */
+    background-image: url('../../../public//images/Accountheaderbackground.jpg');
+    /* Replace with your image path */
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Center the image */
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    /* Text color */
+    font-family: sans-serif;
+}
+
+.account-header-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(36, 35, 35, 0.5);
+    /* Dark overlay */
+    z-index: 1;
+}
+
+.table-visual {
+    position: relative;
+    /* Make sure content is above the overlay */
+    z-index: 2;
+    text-align: center;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 2.5rem;
+    color: white;
+    /* Text color */
+}
+
+.breadcrumb {
+    margin-top: 10px;
+    font-size: 1rem;
+    opacity: 0.8;
+}

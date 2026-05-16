@@ -1,0 +1,174 @@
+/* Base styles remain the same */
+.newsletter-section {
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  text-align: left;
+  flex-wrap: wrap;
+  padding: 100px 150px;
+   font-family: 'Dosis', sans-serif !important;
+}
+
+.newsletter-content {
+  flex: 1 1 400px;
+}
+.newsletter-content  h2{
+    font-size: 40px;
+    font-weight: bold !important;
+}
+
+.newsletter-form-wrapper {
+  flex: 1 1 300px;
+}
+
+.highlight-row {
+  margin: 0.4rem 0 2rem;
+}
+
+.subscribe-form {
+  max-width: 100%;
+  margin: 0;
+}
+.newsletter_input{
+  border: none !important;
+  padding: 25px !important;
+
+}
+.input-wrapper {
+  display: flex;
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  padding: 1rem 1.5rem;
+  font-size: 1.05rem;
+  outline: none;
+}
+
+.subscribe-btn {
+  background: #000;
+  color: white;
+  border: none;
+  padding: 0 2.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.subscribe-btn:hover {
+  background: #222;
+}
+
+.newsletter-description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
+}
+
+.success-message {
+  margin-top: 1rem;
+  color: #2e7d32;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Medium devices */
+@media (max-width: 768px) {
+  .newsletter-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .newsletter-content,
+  .newsletter-form-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .input-wrapper {
+    flex-direction: column;
+  }
+
+  .subscribe-btn {
+    padding: 1rem;
+    border-radius: 0 0 50px 50px;
+  }
+
+  .highlight-text {
+    font-size: 1.8rem;
+    padding: 0.3rem 0.9rem;
+  }
+}
+
+/* Small devices (480px and below) */
+@media (max-width: 480px) {
+  .newsletter-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .newsletter-content,
+  .newsletter-form-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .highlight-row {
+    margin-bottom: 1.2rem;
+  }
+
+  .highlight-text {
+    font-size: 1.6rem;
+    padding: 0.25rem 0.8rem;
+  }
+
+  .subscribe-form {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  /* KEEP INPUT & BUTTON IN SAME LINE */
+  .input-wrapper {
+    display: flex;
+    flex-direction: row;   /* 👈 key fix */
+    align-items: center;
+    border-radius: 50px;
+  }
+
+  .input-wrapper input {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    min-width: 0; /* prevents overflow on small screens */
+  }
+
+  .subscribe-btn {
+    font-size: 0.95rem;
+    white-space: nowrap; /* keeps text in one line */
+    border-radius: 0 50px 50px 0;
+  }
+
+  .description {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 1rem;
+  }
+
+  .success-message {
+    font-size: 0.95rem;
+    margin-top: 0.8rem;
+  }
+}
+

@@ -1,0 +1,85 @@
+.review-slider-container {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Dosis', sans-serif;
+    overflow: hidden; /* Important for slider */
+    cursor: grab; /* Change cursor for drag */
+    user-select: none; /* Prevent text selection while dragging */
+}
+
+.review-slider-container.dragging {
+    cursor: grabbing;
+}
+
+.review-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.10s ease-in-out; /* smooth slide */
+}
+
+.review-slider-container h2 {
+    font-weight: 600 !important;
+    font-size: 50px;
+    margin-bottom: 40px;
+    color: #1a1a19;
+}
+
+.review-rating {
+    margin: 15px 0;
+    color: #ffc107;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.review-text {
+    font-weight: 600;
+    font-size: 25px;
+    color: #000000;
+    line-height: 1.6;
+    margin: 0 0 30px 0;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.review-author img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.review-author-info {
+    text-align: left;
+}
+
+.review-author-info strong {
+    display: block;
+}
+
+.review-author-info span {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .review-slider-container {
+        padding: 30px 15px;
+    }
+
+    .review-text {
+        font-size: 14px;
+    }
+
+    .review-author img {
+        width: 40px;
+        height: 40px;
+    }
+}

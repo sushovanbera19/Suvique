@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');
+
+.be-inspired {
+   padding: 20px 30px !important;
+    background-color: #ffffff;
+}
+
+.be-inspired__container {
+    display: flex;
+    gap: 100px;
+    align-items: center; /* vertically align content */
+    flex-wrap: wrap; /* allows items to wrap on smaller screens */
+}
+
+.be-inspired__image img {
+    border-radius: 24px;
+    object-fit: cover;
+    width: 100%; /* ensures image scales responsively */
+    max-width: 600px; /* optional max width */
+    height: auto;
+}
+
+.be-inspired__content {
+    max-width: 520px;
+    flex: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+.be-inspired__content h2 {
+    font-size: 50px;
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: 400 !important;
+    margin-bottom: 20px;
+    margin-top: 0;
+    color: #111;
+}
+
+.be-inspired__content p {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #111;
+    padding-bottom: 145px;
+    font-family: 'Dosis', sans-serif !important;
+    font-weight: 500 !important;
+}
+
+.be-inspired__list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 32px;
+}
+
+.be-inspired__list li {
+    font-size: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 28px;
+}
+
+.be-inspired__list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #111;
+    font-weight: bold;
+}
+
+/* Responsive Styling */
+@media (max-width: 1024px) {
+    .be-inspired__container {
+        gap: 32px; /* reduce gap on tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .be-inspired__container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .be-inspired__content {
+        max-width: 100%;
+    }
+
+    .be-inspired__list li {
+        padding-left: 0; /* remove left padding */
+    }
+
+    .be-inspired__list li::before {
+        position: static;
+        display: inline-block;
+        margin-right: 8px; /* spacing between checkmark and text */
+    }
+
+    .be-inspired__image img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 24px; /* spacing between image and content */
+    }
+
+    .be-inspired__content h2 {
+        font-size: 28px; /* smaller font on mobile */
+    }
+
+    .be-inspired__content p {
+        font-size: 16px;
+        padding-bottom: 32px;
+    }
+
+    .be-inspired__list li {
+        font-size: 16px;
+    }
+}
+/* Medium devices (tablets / small laptops) */
+@media (max-width: 992px) {
+    .be-inspired__container {
+        gap: 48px; /* reduce gap slightly for medium devices */
+    }
+
+    .be-inspired__content h2 {
+        font-size: 36px; /* scale down heading */
+    }
+
+    .be-inspired__content p {
+        font-size: 18px; /* slightly smaller text */
+        padding-bottom: 80px; /* adjust padding */
+    }
+
+    .be-inspired__list li {
+        font-size: 18px; /* slightly smaller list text */
+        padding-left: 20px;
+    }
+
+    .be-inspired__list li::before {
+        left: 0;
+        font-size: 18px;
+    }
+
+    .be-inspired__image img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .be-inspired {
+        padding: 60px 15px; /* smaller padding on small screens */
+    }
+
+    .be-inspired__content h2 {
+        font-size: 24px;
+    }
+
+    .be-inspired__content p {
+        font-size: 14px;
+        line-height: 1.5;
+        padding-bottom: 24px;
+    }
+
+    .be-inspired__list li {
+        font-size: 14px;
+    }
+
+    /* Responsive Button for Mobile */
+    .be-inspired__content button {
+        padding: clamp(0.4rem, 2vw, 0.8rem) clamp(0.8rem, 4vw, 1.8rem);
+        font-size: clamp(0.9rem, 3vw, 1.2rem);
+        width: 100%; /* full width for easier tap on mobile */
+        justify-content: center;
+        gap: 0.4rem;
+    }
+}
+
+

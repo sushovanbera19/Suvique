@@ -1,0 +1,261 @@
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.signup-content {
+  display: flex;
+  max-width: 1400px;
+  width: 100%;
+  background: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.form-side {
+  flex: 1;
+  padding: 40px 20px;
+}
+
+.image-side {
+  flex: 1;
+  background: #f0ede8;
+}
+
+.image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-side h1 {
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: #3a2f27;
+  margin: 0 0 40px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #5c4f44;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 95%;
+  padding: 14px 16px;
+  border: 1px solid #a6a4a3;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fdfcfb;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #a6a4a3;
+  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0;
+}
+
+.checkbox-group label {
+  margin: 0;
+  cursor: pointer;
+}
+
+a {
+  color: #8b6f47;
+  text-decoration: underline;
+}
+
+.signup-btn {
+  width: 95%;
+  padding: 16px;
+  background: #1a1a19;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.signup-btn:hover {
+  background: #050505;
+}
+
+.divider {
+  text-align: center;
+  margin: 32px 0;
+  color: #565554;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.divider span {
+  background: #fafafa;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e0dbd1;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.social-btn {
+  flex: 1;
+  padding: 14px;
+  border: 2px solid #a6a4a3;
+  border-radius: 8px;
+  background: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.social-btn:hover {
+  background: #f8f7f5;
+}
+
+.icon {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.google .icon { color: #4285f4; }
+.facebook .icon { color: #1877f2; }
+
+.login-link {
+  text-align: center;
+  color: #565554;
+  font-size: 0.95rem;
+}
+
+.login-link a {
+  font-weight: 500;
+  color:#1a1a19;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .signup-content {
+    flex-direction: column;
+  }
+
+  .image-side {
+    height: 320px;
+  }
+
+  .form-side {
+    padding: 50px 30px;
+  }
+}
+
+@media (max-width: 500px) {
+  h1 { font-size: 2rem; }
+  .social-buttons { flex-direction: column; gap: 12px; }
+}
+.signup-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.signup-modal-box {
+  background: white;
+  width: 300px;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  position: relative;
+  animation: signup-pop 0.3s ease;
+}
+
+.signup-modal-icon {
+  width: 60px;
+  height: 60px;
+  background: green;
+  color: white;
+  font-size: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: -60px auto 10px;
+}
+
+.signup-modal-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes signup-pop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.signup-error-box {
+  border-top: 5px solid red;
+}
+
+.signup-error-icon {
+  background: red;
+}
+
+.signup-error-btn {
+  background: red;
+}

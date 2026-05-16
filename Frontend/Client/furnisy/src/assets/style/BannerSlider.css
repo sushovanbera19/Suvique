@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');
+
+
+
+/* Banner Slider Container */
+.banner-slider {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+  cursor: grab;
+}
+
+/* Each slide */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 100%; /* hidden by default */
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.5s ease; /* smooth slide */
+  opacity: 0;
+}
+
+/* Active slide */
+.slide.active {
+  left: 0;
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Overlay container */
+.banner-slider_overlay {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  transform: translateY(-50%);
+  color: #fff;
+  max-width: 600px;
+}
+
+/* Slide title */
+.banner-slider_overlay h4,
+.banner-slider_overlay h2 {
+  font-size: 70px;
+  margin-bottom: 1rem;
+  color: #1a1a19;
+  line-height: 1.2;
+  font-family: 'Dosis', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+
+
+/* Slide subtitle */
+.banner-slider_overlay p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a19;
+  line-height: 1.4;
+   font-family: 'Dosis', sans-serif !important;
+  font-weight:  400 !important;
+  
+}
+
+/* Responsive - Large Tablets */
+@media (max-width: 1200px) {
+  .banner-slider_overlay h2, .banner-slider_overla h4 {
+    font-size: 3.5rem;
+  }
+  .banner-slider_overlay p {
+    font-size: 1.3rem;
+  }
+}
+
+/* Responsive - Tablets */
+@media (max-width: 992px) {
+  .banner-slider {
+    height: 500px;
+  }
+  .banner-slider_overlay h2, .banner-slider_overlay h4 {
+    font-size: 2.8rem;
+  }
+  .banner-slider_overlay p {
+    font-size: 1.2rem;
+  }
+  .banner-slider_overlayy {
+    left: 8%;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .banner-slider {
+    height: 400px;
+  }
+  .banner-slider_overlay {
+    left: 5%;
+    max-width: 90%;
+  }
+  .banner-slider_overlay h2, .banner-slider_overlay h4 {
+    font-size: 2rem;
+  }
+  .banner-slider_overlay p {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+  .banner-slider {
+    height: 300px;
+  }
+  .banner-slider_overlay h2, .banner-slider_overlay h4 {
+    font-size: 1.5rem;
+  }
+  .banner-slider_overlay p {
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,32 @@
+/* VideoSlider.css */
+.slider-container {
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  cursor: grab;
+  gap: 20px;
+  padding: 20px;
+  user-select: none;
+
+  /* Hide scrollbar for all browsers */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.slider-container::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+.slider-container:active {
+  cursor: grabbing;
+}
+
+.slider-item {
+  min-width: 1000px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  
+ 
+}
+

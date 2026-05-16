@@ -1,0 +1,40 @@
+
+/* ===== Common Blog Card ===== */
+
+.blog-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.blog-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+.blog-info {
+  padding: 20px;
+}
+
+.blog-meta {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.blog-info h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  color: #222;
+}
+
+.blog-info p {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}

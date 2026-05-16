@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap');
+.custom-button {
+  padding: 10px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  background-color: #1a1a19;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid black;
+}
+
+.custom-button:hover {
+  background-color: transparent;
+  color:black;
+}
+
+.custom-button.secondary {
+  background-color: #333;
+}
+
+.custom-button.secondary:hover {
+  background-color: #555;
+}

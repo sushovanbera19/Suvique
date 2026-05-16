@@ -1,0 +1,212 @@
+/* ---------------- Faq Section Wrapper ---------------- */
+.FaqSectionWrapper {
+  width: 100%;
+  padding-bottom: 50px;
+}
+
+/* Container */
+.FaqContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Row */
+.FaqRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Image */
+.FaqImageWrapper {
+  flex: 1 1 40%;
+}
+
+.FaqImage {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+}
+
+.FaqSupport {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+
+.FaqSupport p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+  line-height: 0.4;
+}
+
+.FaqSupport h5 {
+  font-size: 20px;
+  font-weight: 300;
+  color: #000000;
+  line-height: 0.4;
+  margin: 0;
+}
+
+/* Accordion Wrapper */
+.FaqAccordionWrapper {
+  flex: 1 1 50%;
+}
+
+/* Heading */
+.FaqHeading h1 {
+  font-size: 38px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+/* Accordion Items */
+.FaqItem {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Accordion Button */
+.FaqButton {
+  width: 100%;
+  text-align: left;
+  padding: 20px;
+  font-size: 26px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: #1a1a19;
+}
+
+/* Icon */
+.FaqIcon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 38px;
+  transition: transform 0.3s;
+}
+
+/* Collapse Panel */
+.FaqCollapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 20px;
+}
+
+.FaqCollapse.open {
+  max-height: 400px;
+  padding: 10px 20px;
+}
+
+/* Accordion Body */
+.FaqBody {
+  font-size: 20px;
+  color: #8f8d8d;
+  line-height: 1.6;
+}
+
+/* ===============================
+   TABLET RESPONSIVE (≤ 1024px)
+   =============================== */
+@media (max-width: 1024px) {
+  .FaqContainer {
+    gap: 30px;
+  }
+
+  .FaqImageWrapper {
+    flex: 1 1 45%;
+  }
+
+  .FaqAccordionWrapper {
+    flex: 1 1 55%;
+  }
+
+  .FaqHeading h1 {
+    font-size: 32px;
+  }
+.FaqImage {
+    max-width: 800px;
+  }
+  .FaqButton {
+    font-size: 22px;
+    padding: 16px;
+  }
+
+  .FaqIcon {
+    font-size: 30px;
+  }
+
+  .FaqBody {
+    font-size: 16px;
+  }
+}
+
+/* ===============================
+   MOBILE RESPONSIVE (≤ 768px)
+   =============================== */
+@media (max-width: 768px) {
+  .FaqContainer {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .FaqImageWrapper,
+  .FaqAccordionWrapper {
+    flex: 1 1 100%;
+  }
+
+  .FaqImage {
+    max-width: 100%;
+  }
+
+  .FaqHeading h1 {
+    font-size: 26px;
+  }
+
+  .FaqButton {
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .FaqIcon {
+    font-size: 24px;
+    right: 10px;
+  }
+
+  .FaqBody {
+    font-size: 15px;
+  }
+
+  .FaqSupport p,
+  .FaqSupport h5 {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+}
+
+/* ===============================
+   SMALL MOBILE (≤ 480px)
+   =============================== */
+@media (max-width: 480px) {
+  .FaqHeading h1 {
+    font-size: 22px;
+  }
+
+  .FaqButton {
+    font-size: 16px;
+  }
+
+  .FaqBody {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,204 @@
+/* =========================
+   Base Layout
+========================= */
+.blog-details-page {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 30px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.blog-details-content {
+  background: #fff;
+}
+
+.blog-cover {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+/* =========================
+   Text
+========================= */
+.blog-meta {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.blog-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.blog-text {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+/* =========================
+   Footer & Share
+========================= */
+.blog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.share {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.share span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #555;
+}
+
+.share a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.share a:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* =========================
+   Image Section
+========================= */
+.blog-image-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin: 30px 0;
+}
+
+.blog-image-box img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.image-caption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+/* =========================
+   Sidebar
+========================= */
+.blog-details-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================
+   Related Blogs
+========================= */
+.related-title {
+  margin: 40px 0 20px;
+  padding-left: 40px;
+}
+
+.related-blogs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 30px;
+}
+
+/* =========================
+   Tablet (≤1024px)
+========================= */
+@media (max-width: 1024px) {
+  .blog-details-page {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+
+  .related-blogs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .related-title {
+    padding-left: 0;
+  }
+}
+
+/* =========================
+   Mobile (≤768px)
+========================= */
+@media (max-width: 768px) {
+  .blog-title {
+    font-size: 24px;
+  }
+
+  .blog-image-row {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-image-box img {
+    height: auto;
+  }
+
+  .blog-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .related-blogs {
+    padding: 20px;
+  }
+}
+
+/* =========================
+   Small Mobile (≤480px)
+========================= */
+@media (max-width: 480px) {
+  .blog-details-page {
+    padding: 16px;
+  }
+
+  .blog-title {
+    font-size: 22px;
+  }
+
+  .blog-text {
+    font-size: 15px;
+  }
+
+  .related-blogs {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .share a {
+    width: 36px;
+    height: 36px;
+  }
+}
