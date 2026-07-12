@@ -10,24 +10,6 @@ const furnitureItems = [
     alt: "Cozy bedroom with beige bedding and built-in shelves",
     
   },
-  {
-    id: 2,
-    src: "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800",
-    alt: "Minimal round dining table with wishbone chairs",
-    
-  },
-  {
-    id: 3,
-    src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
-    alt: "Round wooden table with books and vase in bright room",
-    
-  },
-  {
-    id: 4,
-    src: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800",
-    alt: "Close-up of wooden chair with woven seat detail",
-    
-  }
 ];
 
 function FurnitureGallery() {

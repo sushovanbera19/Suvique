@@ -10,16 +10,6 @@ const slides = [
         title: "Modern Furniture For \nEvery Space",
         subtitle: "Showcase your furniture collections most appealing way \ndriving customer engagement and boosting sales.",
     },
-    {
-        img: "../../../public/images/Topbanner1.jpg",
-        title: "Modern & Elegant\n Furniture",
-        subtitle: "Showcase your furniture collections most appealing way\n  driving customer engagement and boosting sales.",
-    },
-    {
-        img: "../../../public/images/Topbanner2.jpg",
-        title: "Furniture That Speaks Quality",
-        subtitle: "Explore our collection of chairs and sofas, crafted for comfort and elegance in your home spaces.",
-    },
 ];
 
 const BannerSlider = () => {

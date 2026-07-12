@@ -1,34 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import {
-  FiHome,
-  FiFileText,
-  FiCheckSquare,
-  FiShield,
-  FiAlertTriangle,
-  FiChevronRight,
-  FiChevronDown,
-  FiBox,
-  FiLayers,
-  FiLayout,
-  FiPieChart,
-  FiBriefcase,
-  FiImage,
-  FiTrendingUp,
-  FiBarChart2,
-  FiFolder,
-  FiUsers,
-  FiActivity,
-  FiBookOpen,
-  FiUser,
-  FiGrid,
-  FiMapPin,
-  FiStar,
-  FiCreditCard,
-  FiPackage,
-  FiSettings,
-} from "react-icons/fi";
-
+import { FiHome, FiFileText, FiCheckSquare, FiShield, FiAlertTriangle, FiChevronRight, FiChevronDown, FiBox, FiLayers, FiLayout, FiPieChart, FiBriefcase, FiImage, FiTrendingUp, FiBarChart2, FiFolder, FiUsers, FiActivity, FiBookOpen, FiUser, FiGrid, FiMapPin, FiStar, FiCreditCard, FiPackage, FiSettings, } from "react-icons/fi";
 import "../../assets/style/Sidebar.css";
 
 const Sidebar = ({ collapsed }) => {
@@ -104,7 +76,7 @@ const Sidebar = ({ collapsed }) => {
             },
 
             {
-              name: "Inventory",
+              name: "Variations",
               icon: <FiActivity />,
               path: "/dashboard/inventory",
             },
@@ -125,6 +97,44 @@ const Sidebar = ({ collapsed }) => {
               name: "Settings",
               icon: <FiSettings />,
               path: "/dashboard/settings",
+            },
+          ],
+        },
+      ],
+    },
+    // ================= CATEGORY MANAGEMENT =================
+    {
+      section: "CATEGORY MANAGEMENT",
+
+      menus: [
+        {
+          title: "Category",
+          icon: <FiFolder />,
+
+          children: [
+            {
+              name: "Category List",
+              path: "/dashboard/categories",
+            },
+            {
+              name: "Add Category",
+              path: "/dashboard/categories/create",
+            },
+          ],
+        },
+
+        {
+          title: "Sub Category",
+          icon: <FiLayers />,
+
+          children: [
+            {
+              name: "Sub Category List",
+              path: "/dashboard/sub-categories",
+            },
+            {
+              name: "Add Sub Category",
+              path: "/dashboard/sub-categories/create",
             },
           ],
         },
@@ -220,8 +230,8 @@ const Sidebar = ({ collapsed }) => {
           icon: <FiShield />,
 
           children: [
-            { name: "Login" },
-            { name: "Register" },
+            { name: "Login", path: "/" },
+            { name: "Register", path: "/signup" },
             { name: "Forgot Password" },
           ],
         },
@@ -237,6 +247,7 @@ const Sidebar = ({ collapsed }) => {
         },
       ],
     },
+
 
     // ================= GENERAL =================
     {

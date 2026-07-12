@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaHeart, FaShoppingCart, FaEye, FaExchangeAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -109,7 +110,6 @@ const Info = styled.div`
     font-weight: bold;
     color: #191918;
     margin: 0;
-    line-height: 1.9;
   }
 
   p {
@@ -142,23 +142,101 @@ const Info = styled.div`
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const imageUrl = product.main_image?.replace(/\\/g, "/");
+  const tag = product.tags ? JSON.parse(product.tags)[0] : null;
+
+  const addToWishlist = async () => {
+    
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/wishlist/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          product_id: product.id,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Added to wishlist");
+        navigate("/wishlist");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+const addToCart = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first");
+      return;
+    }
+
+    const res = await fetch("http://localhost:5000/api/cart/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        product_id: product.product_id || product.id,
+      }),
+    });
+
+    const text = await res.text(); // 🔥 IMPORTANT
+
+    console.log("RAW RESPONSE:", text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.log("NOT JSON RESPONSE:", text);
+      return;
+    }
+
+    if (data.success) {
+      alert("Added to cart");
+    } else {
+      alert(data.message || "Failed to add to cart");
+    }
+  } catch (err) {
+    console.log("Cart error:", err);
+  }
+};
   return (
     <Card>
       <ImageWrapper>
-        {product.tag && <Tag>{product.tag}</Tag>}
-        <ProductImage src={product.img} alt={product.name} />
+        {tag && <Tag>{tag}</Tag>}
+
+        <ProductImage
+          src={`http://localhost:5000/${imageUrl}`}
+          alt={product.product_name}
+        />
 
         <Overlay>
-          <Icon data-tooltip="Add to Wishlist" onClick={() => navigate("/wishlist")}><FaHeart /></Icon>
-          <Icon data-tooltip="Add to Cart" onClick={() => navigate("/cart")}><FaShoppingCart /></Icon>
-          <Icon data-tooltip="Quick View" onClick={() => navigate("/product-details-1")}><FaEye /></Icon>
+          <Icon data-tooltip="Add to Wishlist" onClick={addToWishlist}><FaHeart /></Icon>
+          <Icon data-tooltip="Add to Cart" onClick={addToCart}><FaShoppingCart /></Icon>
+          <Icon data-tooltip="Quick View" onClick={() => navigate(`/product-details-1/${product.id}`)}><FaEye /></Icon>
           <Icon data-tooltip="Compare" onClick={() => navigate("/compare")}><FaExchangeAlt /></Icon>
         </Overlay>
       </ImageWrapper>
 
       <Info>
-        <h4>{product.name}</h4>
-        <p>{product.price}</p>
+        <h4 style={{ cursor: "pointer" }}
+          onClick={() => navigate(`/product-details-1/${product.id}`)}>{product.product_name}</h4>
+        <p>{product.base_price}</p>
       </Info>
     </Card>
   );

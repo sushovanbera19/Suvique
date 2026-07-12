@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
 import Topnav from './components/topnav'
-import Header from './components/Header'
+import Header from './components/Header/Header'
 import Footer from './components/Footer'
 import Home from './components/Home'
-import Login from './Auth/Login'  
+import Login from './Auth/Login'
 import NewsletterSubscribe from "./Common/NewsletterSubscribe";
 import FurnitureGallery from "./Common/FurnitureGallery";
 import SignUpPage from "./Auth/SignupPage"
@@ -45,9 +45,9 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/faq" element={<FAQSection />} />
-        <Route path="/product-details-1" element={<ProductPage />} />
-        <Route path="/product-details-3" element={<ProductPage />} />
-        <Route path="/product-details-4" element={<ProductPage />} />
+        <Route path="/product-details-1/:id" element={<ProductPage />} />
+        <Route path="/product-details-3/:id" element={<ProductPage />} />
+        <Route path="/product-details-4/:id" element={<ProductPage />} />
         <Route path="/compare" element={<ComparePage />} />
         <Route path="/location" element={<ShowroomPage />} />
         <Route path="/blog-1" element={<Blog1 />} />

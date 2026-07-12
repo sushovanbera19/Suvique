@@ -95,6 +95,7 @@
   padding: 13px;
   outline: none;
   font-size: 14px;
+  color: black !important;
 }
 
 .details-grid {
@@ -332,4 +333,477 @@ body.dark .product-meta-info span {
     width: 100%;
     height: 220px;
   }
+}
+
+/* =========================
+   PRODUCT CARD ACTIONS
+========================= */
+
+.product-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.product-edit-btn,
+.product-delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.product-edit-btn {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.product-edit-btn:hover {
+  background: #bae6fd;
+}
+
+.product-delete-btn {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.product-delete-btn:hover {
+  background: #fecaca;
+}
+
+/* =========================
+   TOGGLE SWITCH
+========================= */
+
+.product-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.product-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.product-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #d1d5db;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.product-toggle-switch input:checked + .product-toggle-slider {
+  background: #22c55e;
+}
+
+.product-toggle-switch input:checked + .product-toggle-slider::before {
+  transform: translateX(18px);
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.product-status-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-inactive {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+body.dark .status-active {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+body.dark .status-inactive {
+  background: #450a0a;
+  color: #fca5a5;
+}
+
+body.dark .product-edit-btn {
+  background: #1e3a5f;
+  color: #7dd3fc;
+}
+
+body.dark .product-edit-btn:hover {
+  background: #1e4070;
+}
+
+body.dark .product-delete-btn {
+  background: #451a1a;
+  color: #fca5a5;
+}
+
+body.dark .product-delete-btn:hover {
+  background: #5c1e1e;
+}
+
+body.dark .product-toggle-slider {
+  background: #4b5563;
+}
+
+body.dark .product-toggle-switch input:checked + .product-toggle-slider {
+  background: #16a34a;
+}
+
+/* =========================
+   EXCEL IMPORT MODAL
+========================= */
+
+.excel-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.excel-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.excel-modal-header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.excel-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.excel-modal-title h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.excel-modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: #f3f4f6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.excel-modal-close:hover {
+  background: #e5e7eb;
+}
+
+.excel-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.excel-file-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.excel-row-count {
+  margin-left: auto;
+  background: #dcfce7;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.excel-preview h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.excel-preview-scroll {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.excel-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.excel-preview-table thead {
+  background: #f9fafb;
+  position: sticky;
+  top: 0;
+}
+
+.excel-preview-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.excel-preview-table td {
+  padding: 10px 14px;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.excel-more-rows {
+  text-align: center;
+  padding: 10px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.excel-format-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.excel-format-hint svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.excel-modal-footer {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.excel-cancel-btn,
+.excel-import-btn {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.excel-cancel-btn {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.excel-cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+.excel-import-btn {
+  background: #16a34a;
+  color: #fff;
+}
+
+.excel-import-btn:hover {
+  background: #15803d;
+}
+
+.excel-import-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   DRAFT
+========================= */
+
+.draft-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.draft-restore-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+.draft-restore-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.draft-restore-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.draft-restore-btn,
+.draft-clear-btn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.draft-restore-btn {
+  background: #f59e0b;
+  color: #fff;
+}
+
+.draft-restore-btn:hover {
+  background: #d97706;
+}
+
+.draft-clear-btn {
+  background: transparent;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.draft-clear-btn:hover {
+  background: #fef3c7;
+}
+
+/* DARK MODE */
+body.dark .excel-modal {
+  background: #1e1e2e;
+}
+
+body.dark .excel-modal-header {
+  border-color: #334155;
+}
+
+body.dark .excel-modal-title h3,
+body.dark .excel-preview h4 {
+  color: #f1f5f9;
+}
+
+body.dark .excel-modal-close {
+  background: #334155;
+}
+
+body.dark .excel-preview-table thead {
+  background: #111827;
+}
+
+body.dark .excel-preview-table th {
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+body.dark .excel-preview-table td {
+  color: #cbd5e1;
+  border-color: #1e293b;
+}
+
+body.dark .excel-cancel-btn {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+body.dark .draft-restore-banner {
+  background: #1e1e2e;
+  border-color: #334155;
+}
+
+body.dark .draft-restore-info {
+  color: #fbbf24;
+}
+
+body.dark .draft-clear-btn {
+  color: #fbbf24;
+  border-color: #334155;
 }

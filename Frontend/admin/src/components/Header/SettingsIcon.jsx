@@ -1,12 +1,12 @@
-// =========================
-// SettingsIcon.jsx
-// =========================
-
 import { FiSettings } from "react-icons/fi";
 
-const SettingsIcon = () => {
+const SettingsIcon = ({ onClick }) => {
   return (
-    <div className="header-icon settings-rotate">
+    <div
+      className="header-icon settings-rotate"
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
+    >
       <FiSettings />
     </div>
   );

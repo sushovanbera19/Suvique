@@ -22,7 +22,6 @@ const Home = () => {
       <VideoSlider />
       <BlogSlider />
       <ReviewSlider />
-      
    </div>
   );
 };

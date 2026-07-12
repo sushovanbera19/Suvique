@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../assets/style/AdminLogin.css";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF, FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const AdminLogin = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState("");
@@ -59,11 +60,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
                 setMessage("Login Successful");
                 setMessageType("success");
 
-                setTimeout(() => {
-                    navigate("/dashboard");
-                }, 1500);
-
-                // redirect
+                // 🔥 IMPORTANT: navigate immediately after state update
                 navigate("/dashboard");
 
             } else {
@@ -88,8 +85,6 @@ const AdminLogin = ({ setIsLoggedIn }) => {
         <div className="admin_login_form">
             <div className="login-card">
                 <div className="brand">MAXTON ADMIN</div>
-
-                <h2>Get Started Now</h2>
                 <p>Enter your credentials to login your account</p>
                 {message && (
                     <div className={`custom-alert ${messageType}`}>
@@ -137,7 +132,9 @@ const AdminLogin = ({ setIsLoggedIn }) => {
 
                     <button type="submit">Login</button>
                     <p className="signup-text">
-                        Don’t have an account yet? <span>Sign up here</span>
+                        Don’t have an account yet? <span> <Link to="/signup" className="signup-link">
+                            Sign up here
+                        </Link></span>
                     </p>
                     <div className="or-divider">
                         <span>OR SIGN IN WITH</span>

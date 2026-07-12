@@ -19,27 +19,37 @@ const UserProfile = () => {
   // get admin data from localStorage
   const adminName = localStorage.getItem("adminName");
   const adminEmail = localStorage.getItem("adminEmail");
+  const profileImage = localStorage.getItem("adminImage");
+  const firstLetter = adminName
+    ? adminName
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase()
+    : "A";
   // logout function
   const handleLogout = () => {
 
-  localStorage.removeItem("adminAuth");
-  localStorage.removeItem("adminName");
-  localStorage.removeItem("adminEmail");
+    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("adminName");
+    localStorage.removeItem("adminEmail");
 
-  navigate("/", { replace: true });
+    navigate("/", { replace: true });
 
-  window.location.reload();
-};
+    window.location.reload();
+  };
   return (
     <Dropdown
       width="200px"
       trigger={
         <div className="user-profile">
-          <img
-            src="https://i.pravatar.cc/150?img=12"
-            alt="user"
-          />
-
+          {profileImage ? (
+            <img src={profileImage} alt="user" />
+          ) : (
+            <div className="avatar-letter">
+              {firstLetter}
+            </div>
+          )}
           <div>
             <h4>{adminName}</h4>
             <p>Web Designer</p>
@@ -64,7 +74,8 @@ const UserProfile = () => {
             <FiCheckSquare /> Task Manager
           </li>
 
-          <li>
+          <li onClick={() => navigate("/dashboard/settings")}
+            style={{ cursor: "pointer" }}>
             <FiSettings /> Settings
           </li>
 
@@ -78,13 +89,13 @@ const UserProfile = () => {
 
           {/* Logout */}
           <li
-            
-              type="button"
-              onClick={handleLogout}
-            >
-              <FiLogOut />
-              <span>Log Out</span>
-            
+
+            type="button"
+            onClick={handleLogout}
+          >
+            <FiLogOut />
+            <span>Log Out</span>
+
           </li>
         </ul>
       </div>

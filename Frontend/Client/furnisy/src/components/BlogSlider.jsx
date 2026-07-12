@@ -10,44 +10,7 @@ const blogs = [
         category: "Office Furniture",
         author: "Anna Maria",
         title: "Comfortable Chairs Can Help You Create Your Own Home Office",
-        description:
-            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
-        image: Blog1,
-    },
-    {
-        date: "14 Aug 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
-        description:
-            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
-        image: Blog1,
-    },
-    {
-        date: "18 Aug 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
-        description:
-            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
-        image: Blog1,
-    },
-    {
-        date: "18 Aug 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
-        description:
-            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
-        image: Blog1,
-    },
-    {
-        date: "18 Aug 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
-        description:
-            "Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
+        description:"Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
         image: Blog1,
     },
 ];

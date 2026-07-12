@@ -1,0 +1,187 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
+const SearchModal = ({ open, onClose }) => {
+
+    const [categories, setCategories] = useState([]);
+    const [keyword, setKeyword] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [products, setProducts] = useState([]);
+
+    // Load Categories
+    useEffect(() => {
+
+        fetch("http://localhost:5000/api/product-category/all")
+            .then((res) => res.json())
+            .then((data) => {
+
+                setCategories(data.categories || []);
+
+            })
+            .catch(console.error);
+
+    }, []);
+
+    // Search Products
+    const searchProduct = async () => {
+
+        try {
+
+            const res = await fetch(
+                `http://localhost:5000/api/products/search?category=${selectedCategory}&keyword=${encodeURIComponent(keyword)}`
+            );
+
+            const data = await res.json();
+
+            if (data.success) {
+
+                setProducts(data.data);
+
+            } else {
+
+                setProducts([]);
+
+            }
+
+        } catch (err) {
+
+            console.log(err);
+            setProducts([]);
+
+        }
+
+    };
+
+    // Live Search
+    useEffect(() => {
+
+        if (!open) return;
+
+        const timer = setTimeout(() => {
+
+            searchProduct();
+
+        }, 300);
+
+        return () => clearTimeout(timer);
+
+    }, [keyword, selectedCategory, open]);
+
+    if (!open) return null;
+
+    return (
+        <div
+            className="search-modal-overlay"
+            onClick={onClose}
+        >
+            <div
+                className="search-modal"
+                onClick={(e) => e.stopPropagation()}
+            >
+
+                <div className="search-modal-header">
+
+                    <h3>Search Products</h3>
+
+                    <button onClick={onClose}>
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
+
+                </div>
+
+                <div className="search-modal-row">
+
+                    <select
+                        className="category-dropdown"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+
+                        <option value="">All Categories</option>
+
+                        {categories.map((cat) => (
+
+                            <option
+                                key={cat.category_id}
+                                value={cat.category_id}
+                            >
+                                {cat.category_name}
+                            </option>
+
+                        ))}
+
+                    </select>
+
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+
+                </div>
+
+                <div className="search-results">
+
+                    {products.length > 0 ? (
+
+                        products.map((product) => (
+
+                            <Link
+                                to={`/product/${product.id}`}
+                                key={product.id}
+                                className="search-item"
+                                onClick={onClose}
+                            >
+
+                                <img
+                                    src={`http://localhost:5000/${product.main_image.replace(/\\/g, "/")}`}
+                                    alt={product.product_name}
+                                    width="70"
+                                    height="70"
+                                />
+
+                                <div>
+
+                                    <h4>{product.product_name}</h4>
+
+                                    <p>{product.category_name}</p>
+
+                                    <strong>
+                                        ₹ {product.sale_price || product.base_price}
+                                    </strong>
+
+                                </div>
+
+                            </Link>
+
+                        ))
+
+                    ) : (
+
+                        (keyword || selectedCategory) && (
+
+                            <div
+                                style={{
+                                    textAlign: "center",
+                                    padding: "20px"
+                                }}
+                            >
+                                No Products Found
+                            </div>
+
+                        )
+
+                    )}
+
+                </div>
+
+            </div>
+        </div>
+    );
+
+};
+
+export default SearchModal;

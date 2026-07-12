@@ -1,3 +1,4 @@
+import { useState } from "react";
 import React from 'react';
 import '../assets/style/ContactUs.css';
 import AccountHeader from '../Common/AccountHeader';
@@ -6,6 +7,45 @@ import Reuseablebutton from '../Common/Commonbutton';
 import { LocateFixed, Mail, Phone } from "lucide-react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Message sent successfully");
+
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+        });
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Server error");
+    }
+  };
   return (
     <>
       <AccountHeader />
@@ -19,28 +59,23 @@ const Contact = () => {
             <div className="name-email-row">
               <div className="field">
                 <label>Name</label>
-                <input type="text" placeholder="" />
+                <input type="text" placeholder="" name="name" value={formData.name} onChange={handleChange} />
               </div>
               <div className="field">
                 <label>Email</label>
-                <input type="email" placeholder="" />
+                <input type="email" name="email"
+                  value={formData.email}
+                  onChange={handleChange} placeholder="" />
               </div>
             </div>
 
             <div className="field message-field">
               <label>Message</label>
-              <textarea rows="5" placeholder=""></textarea>
+              <textarea rows="5" name="message"
+                value={formData.message}
+                onChange={handleChange} placeholder=""></textarea>
             </div>
-            <Reuseablebutton text="Submit" style={{
-              padding: "clamp(0.4rem, 1.0vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",
-              fontSize: "clamp(1rem, 2vw, 1.5rem)",
-              borderRadius: "0.5rem",
-              fontWeight: 300,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-            }} />
+            <Reuseablebutton text="Submit" style={{ padding: "clamp(0.4rem, 1.0vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)", fontSize: "clamp(1rem, 2vw, 1.5rem)", borderRadius: "0.5rem", fontWeight: 300, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem", }} onClick={handleSubmit} />
           </div>
 
           {/* Right - Info area */}

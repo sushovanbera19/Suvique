@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/style/CheckoutForm.css";
 import AccountHeader from "./AccountHeader";
 import Reuseablebutton from "../Common/Commonbutton";
@@ -7,11 +7,195 @@ export default function CheckoutForm() {
     const [shippingMethod, setShippingMethod] = useState("free");
     const [paymentMethod, setPaymentMethod] = useState("direct");
     const [agreeTerms, setAgreeTerms] = useState(false);
+    const [cartItems, setCartItems] = useState([]);
+    const [addresses, setAddresses] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState("");
+    const [showAddressForm, setShowAddressForm] = useState(false);
+    const [addressId, setAddressId] = useState(null);
 
+    // const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
+
+    const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        country: "",
+        city: "",
+        street: "",
+        zip_code: "",
+        additional_info: "",
+    });
+    useEffect(() => {
+        fetchCart();
+        fetchAddresses();
+    }, []);
+
+    const fetchAddresses = async () => {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("http://localhost:5000/api/address", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            setAddresses(data.data);
+
+            if (data.data.length > 0) {
+                setSelectedAddress(data.data[0].id);
+            } else {
+                setShowAddressForm(true);
+            }
+        }
+    };
+    const fetchCart = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await fetch("http://localhost:5000/api/cart", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                setCartItems(data.data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const subtotal = cartItems.reduce(
+        (sum, item) => sum + Number(item.base_price) * item.quantity,
+        0
+    );
+
+    const total = subtotal + (shippingMethod === "fat" ? 10 : 0);
+    const saveAddress = async () => {
+
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(
+            "http://localhost:5000/api/address/add",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+
+                body: JSON.stringify(formData)
+            }
+        );
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            return data.addressId;
+
+        }
+
+        return null;
+
+    }
+
+   const placeOrder = async () => {
+
+    const token = localStorage.getItem("token");
+
+    let id = selectedAddress;
+
+    if (!id) {
+
+        id = await saveAddress();
+
+        if (!id) return;
+
+    }
+
+    const res = await fetch(
+        "http://localhost:5000/api/orders/place-order",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+
+                address_id: id,
+                payment_method: "Cash On Delivery"
+
+            })
+        }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+
+        alert("Order placed successfully");
+
+        window.location.href = "/";
+
+    } else {
+
+        alert(data.message);
+
+    }
+
+};
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        });
+    };
     return (
         <>
             <AccountHeader />
             <div className="container">
+                {addresses.length > 0 && (
+                    <>
+                        <div className="field">
+                            <label>Saved Address</label>
+
+                            <select
+                                className="Checkout_select"
+                                value={selectedAddress}
+                                onChange={(e) => setSelectedAddress(e.target.value)}
+                            >
+                                {addresses.map(address => (
+                                    <option
+                                        key={address.id}
+                                        value={address.id}
+                                    >
+                                        {address.first_name} {address.last_name} -
+                                        {address.street}, {address.city}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* <button
+                            type="button"
+                            onClick={() => setShowAddressForm(true)}
+                        >
+                            + Add New Address
+                        </button> */}
+                    </>
+                )}
+                {(addresses.length === 0 || showAddressForm) && (
                 <form className="form-wrapper">
                     <p className="info-text">
                         Returning customer? <a href="#">Click here to login</a>
@@ -25,13 +209,15 @@ export default function CheckoutForm() {
                             <label htmlFor="firstName" className="label">
                                 First name <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input id="firstName" type="text" required className="input" />
+                            <input id="first_name" type="text" required className="input" value={formData.first_name}
+                                onChange={handleChange} />
                         </div>
                         <div className="field">
                             <label htmlFor="lastName" className="label">
                                 Last name <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input id="lastName" type="text" required className="input" />
+                            <input id="last_name" type="text" required className="input" value={formData.last_name}
+                                onChange={handleChange} />
                         </div>
                     </div>
 
@@ -40,13 +226,15 @@ export default function CheckoutForm() {
                             <label htmlFor="email" className="label">
                                 Email address <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input id="email" type="email" required className="input" />
+                            <input id="email" type="email" required className="input" value={formData.email}
+                                onChange={handleChange} />
                         </div>
                         <div className="field">
                             <label htmlFor="phone" className="label">
                                 Phone <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input id="phone" type="tel" required className="input" />
+                            <input id="phone" type="tel" required className="input" value={formData.phone}
+                                onChange={handleChange} />
                         </div>
                     </div>
 
@@ -54,7 +242,8 @@ export default function CheckoutForm() {
                         <label htmlFor="country" className="label">
                             Country/Region <span style={{ color: "red" }}>*</span>
                         </label>
-                        <select id="country" required defaultValue="" className="Checkout_select">
+                        <select id="country" required defaultValue="" className="Checkout_select" value={formData.country}
+                            onChange={handleChange}>
                             <option value="" disabled>
                                 Select a country
                             </option>
@@ -69,28 +258,32 @@ export default function CheckoutForm() {
                         <label htmlFor="city" className="label">
                             Town / City <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input id="city" type="text" required className="input" />
+                        <input id="city" type="text" required className="input" value={formData.city}
+                            onChange={handleChange} />
                     </div>
 
                     <div className="field">
                         <label htmlFor="street" className="label">
                             Street address <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input id="street" type="text" required className="input" />
+                        <input id="street" type="text" required className="input" value={formData.street}
+                            onChange={handleChange} />
                     </div>
 
                     <div className="field">
                         <label htmlFor="zip" className="label">
                             ZIP Code <span style={{ color: "red" }}>*</span>
                         </label>
-                        <input id="zip" type="text" required className="input" />
+                        <input id="zip_code" type="text" required className="input" value={formData.zip_code}
+                            onChange={handleChange} />
                     </div>
 
                     <div className="field">
                         <label htmlFor="additional" className="label">
                             Additional information (optional)
                         </label>
-                        <textarea id="additional" className="textarea" />
+                        <textarea id="additional_info" className="textarea" value={formData.additional_info}
+                            onChange={handleChange} />
                     </div>
 
                     <div className="checkbox-wrapper">
@@ -99,6 +292,7 @@ export default function CheckoutForm() {
                         </label>
                     </div>
                 </form>
+                )}
 
                 <div className="order-summary">
                     <div className="summary-top">
@@ -120,27 +314,27 @@ export default function CheckoutForm() {
                             <div>Product</div>
                             <div>Subtotal</div>
                         </div>
-
-                        <div className="summary-row">
-                            <div className="product-info">
-                                <img
-                                    className="product-image"
-                                    src="https://images.unsplash.com/photo-1567016543092-9b136507b062?auto=format&fit=crop&w=50&q=80"
-                                    alt="Modern Tolik Chair"
-                                />
-                                <div className="product-details">
-                                  <p  style={{fontSize: '25px',}}>Modern Tolik Chair</p> 
-                                    <div style={{ fontSize: "12px", color: "#666", marginTop: 3 }}>
-                                        Qty: 2
+                        {cartItems.map((item) => (
+                            <div className="summary-row" key={item.id}>
+                                <div className="product-info">
+                                    <img
+                                        className="product-image"
+                                        src={`http://localhost:5000/${item.main_image.replace(/\\/g, "/")}`}
+                                        alt={item.product_name}
+                                    />
+                                    <div className="product-details">
+                                        <p style={{ fontSize: '25px', }}> {item.product_name}</p>
+                                        <div style={{ fontSize: "12px", color: "#666", marginTop: 3 }}>
+                                            Qty: {item.quantity}
+                                        </div>
                                     </div>
                                 </div>
+                                <div style={{ fontWeight: "600" }}>  ${(Number(item.base_price) * item.quantity).toFixed(2)}</div>
                             </div>
-                            <div style={{ fontWeight: "600" }}>$350.00</div>
-                        </div>
-
+                        ))}
                         <div className="summary-row">
                             <div>Subtotal</div>
-                            <div>$1000.00</div>
+                            <div>${subtotal.toFixed(2)}</div>
                         </div>
 
                         <div className="summary-row">
@@ -173,7 +367,7 @@ export default function CheckoutForm() {
 
                         <div className="summary-row bold">
                             <div>Total</div>
-                            <div>$1025.00</div>
+                            <div>${total.toFixed(2)}</div>
                         </div>
                     </div>
 
@@ -263,6 +457,7 @@ export default function CheckoutForm() {
 
                     <Reuseablebutton
                         text="Place Order"
+                        onClick={placeOrder}
                         style={{
                             padding: "clamp(0.4rem, 0.9vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",
                             fontSize: "clamp(1rem, 2vw, 1.5rem)",

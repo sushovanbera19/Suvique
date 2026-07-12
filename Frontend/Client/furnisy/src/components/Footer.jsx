@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="footer-container">
                 {/* Column 1 */}
                 <div className="footer-column">
-                    <img src="/images/logo.png" alt="Logo" />
+                    <img src="/images/logo.png" alt="Logo" style={{ height: "100px" }} />
                     <div className="footer-text">
                         <p>Furnisy provides you with the essential</p>
                         <p>pieces to build a stunning online store for</p>

@@ -11,20 +11,6 @@ const reviews = [
     avatar: ReviewAvatar,
     rating: 5,
   },
-  {
-    text: "Furnisy made furnishing my new apartment a breeze! Their online selection is huge, and the website is so easy to navigate. I found the perfect sofa and dining table at great prices. The whole process, from ordering to delivery, was seamless.",
-    name: "Sophia Johnson",
-    role: "Designer",
-    avatar: ReviewAvatar,
-    rating: 5,
-  },
-  {
-    text: "Furnisy made furnishing my new apartment a breeze! Their online selection is huge, and the website is so easy to navigate. I found the perfect sofa and dining table at great prices. The whole process, from ordering to delivery, was seamless.",
-    name: "Ethan Williams",
-    role: "Entrepreneur",
-    avatar: ReviewAvatar,
-    rating: 5,
-  },
 ];
 
 const ReviewSlider = () => {

@@ -31,20 +31,17 @@
   font-size: 18px;
   font-weight: bold;
   color: #ff2d95;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   letter-spacing: 1px;
+  text-align: center;
 }
 
-/* Title */
-.admin_login_form h2 {
-  margin: 10px 0;
-  font-size: 24px;
-}
 
 /* Subtitle */
 .admin_login_form p {
   font-size: 13px;
   opacity: 0.8;
+  text-align: center;
 }
 
 /* Form */

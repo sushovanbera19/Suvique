@@ -14,46 +14,6 @@ const blogData = [
     author: "Anna Maria",
     description: "Make your database provisioning cloud-native using our database generation. Make your..."
   },
-  {
-    image: Blogimage,
-    title: "Teak Wood 2 Drawer Modern Style Large Sideboard Cabinet With lamp",
-    date: "15 Jun 2025",
-    category: "Office Furniture",
-    author: "Anna Maria",
-    description: "Make your database provisioning cloud-native using our database generation. Make your..."
-  },
-  {
-    image: Blogimage,
-    title: "Teak Wood 2 Drawer Modern Style Large Sideboard Cabinet With lamp",
-    date: "15 Jun 2025",
-    category: "Office Furniture",
-    author: "Anna Maria",
-    description: "Make your database provisioning cloud-native using our database generation. Make your..."
-  },
-  {
-    image: Blogimage,
-    title: "Teak Wood 2 Drawer Modern Style Large Sideboard Cabinet With lamp",
-    date: "15 Jun 2025",
-    category: "Office Furniture",
-    author: "Anna Maria",
-    description: "Make your database provisioning cloud-native using our database generation. Make your..."
-  },
-  {
-    image: Blogimage,
-    title: "Teak Wood 2 Drawer Modern Style Large Sideboard Cabinet With lamp",
-    date: "15 Jun 2025",
-    category: "Office Furniture",
-    author: "Anna Maria",
-    description: "Make your database provisioning cloud-native using our database generation. Make your..."
-  },
-  {
-    image: Blogimage,
-    title: "Teak Wood 2 Drawer Modern Style Large Sideboard Cabinet With lamp",
-    date: "15 Jun 2025",
-    category: "Office Furniture",
-    author: "Anna Maria",
-    description: "Make your database provisioning cloud-native using our database generation. Make your..."
-  }
 ];
 
 const Blog1 = () => {

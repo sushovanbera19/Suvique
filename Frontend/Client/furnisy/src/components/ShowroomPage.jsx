@@ -20,13 +20,7 @@ const showroomData = [
         phone: "+1 559-278-4240",
         image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80",
     },
-    {
-        id: 3,
-        name: "Furnisy Furniture Chicago",
-        address: "City Hall 121 N.LaSalle Street Chicago, IL",
-        phone: "+1 559-278-4240",
-        image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=400&q=80",
-    },
+    
     {
         id: 4,
         name: "Furnisy Furniture Phoenix",

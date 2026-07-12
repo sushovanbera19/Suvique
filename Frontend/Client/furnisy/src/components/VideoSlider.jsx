@@ -5,8 +5,6 @@ import thumb1 from "../../public/images/video-thumblan-1.webp";
 
 const videos = [
     { id: 1, video: video1, thumbnail: thumb1 },
-    { id: 2, video: video1, thumbnail: thumb1 },
-    { id: 3, video: video1, thumbnail: thumb1 },
 ];
 
 const VideoSlider = () => {

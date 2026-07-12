@@ -18,8 +18,7 @@ const blogData = Array.from({ length: 8 }, (_, i) => ({
   date: "18 Aug 2025",
   category: "Office Furniture",
   author: "Anna Maria",
-  description:
-    "Make your database provisioning cloud-native using our database generation. Make your..."
+  description: "Make your database provisioning cloud-native using our database generation. Make your..."
 }));
 
 const Blog2 = () => {

@@ -1,111 +1,137 @@
 import React from "react";
-import '../assets/style/ComparePage.css';
-import product from "../../public/images/product4.webp"
 
-const products = [
-  {
-    id: 1,
-    name: "Modern Dark Wood Chair",
-    sku: "office-chair-01020304",
-    price: 299,
-    availability: "In Stock",
-    image: product,
-  },
-  {
-    id: 2,
-    name: "Modern Tolik Chair",
-    sku: product,
-    price: 199,
-    availability: "In Stock",
-    image: product,
-  },
-  {
-    id: 3,
-    name: "Modern Accent Chair",
-    sku: product,
-    price: 199,
-    availability: "In Stock",
-    image: product,
-  },
-  {
-    id: 4,
-    name: "Cherie Chair",
-    sku: "office-chair-01020304",
-    price: 199,
-    availability: "In Stock",
-    image: product,
-  },
-];
-
-const ComparePage = () => {
-
-  const handleRemove = (id) => {
-    console.log("Remove product with id:", id);
-    // You can implement remove logic here
-  }
-
-  const handleAddToCart = (product) => {
-    console.log("Add to cart:", product);
-    // You can implement add to cart logic here
-  }
+import "../assets/style/ComparePage.css";
+import AccountHeader from "./AccountHeader";
+import { FiEye } from "react-icons/fi";
+const ProductCompare = () => {
+  const products = [
+    {
+      id: 1,
+      name: "Modern Tolik Chair",
+      sku: "office-chair-01020304",
+      price: "$199.00",
+      stock: "In Stock",
+      image:
+        "../../public/images/detail5.webp",
+    },
+    {
+      id: 2,
+      name: "Modern Accent Chair",
+      sku: "office-chair-01020304",
+      price: "$199.00",
+      stock: "In Stock",
+      image:
+        "https://images.unsplash.com/photo-1549187774-b4e9b0445b41?w=600",
+    },
+    {
+      id: 3,
+      name: "Cherie Chair",
+      sku: "office-chair-01020304",
+      price: "$199.00",
+      stock: "In Stock",
+      image:
+        "https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=600",
+    },
+  ];
 
   return (
-    <div className="ComparePageWrapper">
-      <div className="CompareTable">
+    <>
+      <AccountHeader />
+      <section className="compare-section">
+        <div className="compare-container">
+          <table className="compare-table">
+            <tbody>
+              <tr>
+                <td className="compare-label">
+                  Products
+                </td>
 
-        {/* Product Images and Names */}
-        <div className="CompareRow CompareHeader">
-          <div className="CompareCell">Products</div>
-          {products.map((product) => (
-            <div key={product.id} className="CompareCell ProductCell">
-              <button className="RemoveButton" onClick={() => handleRemove(product.id)}>× Remove</button>
-              <img src={product.image} alt={product.name} className="CompareImage" />
-              <p className="ProductName">{product.name}</p>
-            </div>
-          ))}
+                {products.map((product) => (
+                  <td
+                    key={product.id}
+                    className="product-column"
+                  >
+                    <button className="remove-btn">
+                      ✕ Remove
+                    </button>
+
+                    <div className="product-card">
+                      <div className="product-image">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <div className="product-info">
+                        <span className="product-title">
+                          {product.name}
+                        </span>
+
+                        <button className="view-btn">
+                          <FiEye />
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+
+              <tr>
+                <td className="compare-label">SKU</td>
+
+                {products.map((product) => (
+                  <td key={product.id}>
+                    {product.sku}
+                  </td>
+                ))}
+              </tr>
+
+              <tr>
+                <td className="compare-label">Price</td>
+
+                {products.map((product) => (
+                  <td key={product.id}>
+                    {product.price}
+                  </td>
+                ))}
+              </tr>
+
+              <tr>
+                <td className="compare-label">
+                  Availability
+                </td>
+
+                {products.map((product) => (
+                  <td
+                    key={product.id}
+                    className="stock"
+                  >
+                    {product.stock}
+                  </td>
+                ))}
+              </tr>
+
+              <tr>
+                <td className="compare-label">
+                  Add to cart
+                </td>
+
+                {products.map((product) => (
+                  <td key={product.id}>
+                    <button className="cart-btn">
+                      Add to Cart
+                    </button>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-        {/* SKU */}
-        <div className="CompareRow">
-          <div className="CompareCell">SKU</div>
-          {products.map((product) => (
-            <div key={product.id} className="CompareCell">{product.sku}</div>
-          ))}
-        </div>
-
-        {/* Price */}
-        <div className="CompareRow">
-          <div className="CompareCell">Price</div>
-          {products.map((product) => (
-            <div key={product.id} className="CompareCell">${product.price.toFixed(2)}</div>
-          ))}
-        </div>
-
-        {/* Availability */}
-        <div className="CompareRow">
-          <div className="CompareCell">Availability</div>
-          {products.map((product) => (
-            <div key={product.id} className="CompareCell">
-              <span className={product.availability === "In Stock" ? "InStock" : "OutOfStock"}>
-                {product.availability}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Add to Cart */}
-        <div className="CompareRow">
-          <div className="CompareCell">Add to Cart</div>
-          {products.map((product) => (
-            <div key={product.id} className="CompareCell">
-              <button className="AddToCartButton" onClick={() => handleAddToCart(product)}>Add to Cart</button>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 
-export default ComparePage;
+export default ProductCompare;

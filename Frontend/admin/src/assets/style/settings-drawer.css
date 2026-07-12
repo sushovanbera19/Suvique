@@ -1,0 +1,79 @@
+/* =========================
+   RIGHT SIDEBAR SETTINGS
+========================= */
+
+.right-sidebar-settings {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  z-index: 9999;
+}
+
+.right-sidebar-settings.open {
+  visibility: visible;
+}
+
+/* overlay */
+.right-sidebar-settings-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.right-sidebar-settings.open .right-sidebar-settings-overlay {
+  opacity: 1;
+}
+
+/* panel */
+.right-sidebar-settings-panel {
+  position: absolute;
+  right: -420px;
+  top: 0;
+  width: 420px;
+  height: 100%;
+  background: #fff;
+  transition: 0.3s ease;
+  box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.right-sidebar-settings.open .right-sidebar-settings-panel {
+  right: 0;
+}
+
+/* header */
+.right-sidebar-settings-header {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* body */
+.right-sidebar-settings-body {
+  padding: 16px;
+  overflow-y: auto;
+}
+/* =========================
+   Right Sidebar Settings
+========================= */
+body.dark .right-sidebar-settings-panel {
+  background-color: #101011;
+  color: #e5e7eb !important;
+}
+
+body.dark .right-sidebar-settings-header {
+  border-bottom: 1px solid #374151;
+}
+
+body.dark .right-sidebar-settings-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}

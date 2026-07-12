@@ -1,0 +1,509 @@
+/* ========================================
+   SETTINGS PAGE
+======================================== */
+
+.settings-page-body {
+  width: 100%;
+    padding: 0px 10px 0px 10px;
+}
+
+.settings-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+/* ========================================
+   PAGE TOP
+======================================== */
+
+.settings-page-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 0px 10px 0px 10px;
+
+}
+
+.settings-page-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* ========================================
+   CARD
+======================================== */
+
+.settings-page-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #edf1f7;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.03);
+  transition: 0.3s ease;
+}
+
+.settings-page-card:hover {
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* ========================================
+   CARD HEADER
+======================================== */
+
+.settings-page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.settings-page-header svg {
+  font-size: 20px;
+  color: #5b6dfa;
+}
+
+.settings-page-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ========================================
+   GRID
+======================================== */
+
+.settings-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.settings-page-full-width {
+  grid-column: span 2;
+}
+
+/* ========================================
+   FORM GROUP
+======================================== */
+
+.settings-page-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-page-form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.settings-page-form-group input,
+.settings-page-form-group textarea,
+.settings-page-form-group select {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #dbe3ee;
+  border-radius: 12px;
+  padding: 0 16px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.settings-page-form-group textarea {
+  min-height: 120px;
+  resize: none;
+  padding: 14px 16px;
+}
+
+.settings-page-form-group input:focus,
+.settings-page-form-group textarea:focus,
+.settings-page-form-group select:focus {
+  border-color: #5b6dfa;
+  box-shadow: 0 0 0 4px rgba(91, 109, 250, 0.1);
+}
+
+/* ========================================
+   SELECT
+======================================== */
+
+.settings-page-form-group select {
+  cursor: pointer;
+}
+
+/* ========================================
+   COLOR INPUT
+======================================== */
+
+/* ================================
+   COLOR INPUT - FULL WIDTH STYLE
+   (KEEP JSX SAME)
+================================ */
+
+.settings-page-form-group input[type="color"] {
+  width: 50px;
+  height: 48px;
+  padding: 6px;
+  /* border-radius: 12px; */
+  border: none !important;
+  background: #ffffff;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* remove default color square styling */
+.settings-page-form-group input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  /* border-radius: 10px; */
+}
+
+.settings-page-form-group input[type="color"]::-webkit-color-swatch {
+  border: none;
+  /* border-radius: 10px; */
+}
+
+
+
+/* focus effect */
+.settings-page-form-group input[type="color"]:focus {
+  outline: none;
+  border-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+/* ========================================
+   CHECKBOX GRID
+======================================== */
+
+.settings-page-switch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.settings-page-switch-grid label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #edf2f7;
+  background: #f8fafc;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  transition: 0.3s ease;
+}
+
+.settings-page-switch-grid label:hover {
+  background: #f1f5f9;
+}
+
+.settings-page-switch-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #5b6dfa;
+  cursor: pointer;
+}
+
+/* ========================================
+   ACTION BUTTONS
+======================================== */
+
+.settings-page-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+/* CANCEL BUTTON */
+
+.settings-page-btn-cancel {
+  border: none;
+  height: 48px;
+  padding: 0 26px;
+  border-radius: 12px;
+  background: #fffefe;
+  color: black;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  border: 1px solid  black;
+}
+
+.settings-page-btn-cancel:hover {
+  background: #ffffff;
+}
+
+/* SAVE BUTTON */
+
+.settings-section-actions {
+    grid-column: 1 / -1;   /* Full row */
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* Right side */
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+.settings-page-btn-save {
+    padding: 12px 24px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.settings-page-btn-save:hover {
+    background: #2563eb;
+}
+.offer-products-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.offer-product-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    background:#fff;
+}
+
+.offer-product-info{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.offer-product-info img{
+    width:70px;
+    height:70px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.offer-product-info h4{
+    margin:0;
+    font-size:16px;
+}
+
+.offer-product-info p{
+    margin-top:6px;
+    color:#666;
+}
+
+.offer-options{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.offer-checkbox{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+}
+
+.offer-options input[type="number"],
+.offer-options input[type="text"]{
+    width:140px;
+    padding:8px 10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+/* ===========================
+   OFFER SETTINGS - DARK MODE
+=========================== */
+
+.dark .offer-product-card,
+.dark-theme .offer-product-card{
+    background:#1a1a1a;
+    border:1px solid #334155;
+    color:#f8fafc;
+}
+
+.dark .offer-product-info h4,
+.dark-theme .offer-product-info h4{
+    color:#f8fafc;
+}
+
+.dark .offer-product-info p,
+.dark-theme .offer-product-info p{
+    color:#94a3b8;
+}
+
+.dark .offer-checkbox,
+.dark-theme .offer-checkbox{
+    color:#e2e8f0;
+}
+
+.dark .offer-options input[type="text"],
+.dark .offer-options input[type="number"],
+.dark-theme .offer-options input[type="text"],
+.dark-theme .offer-options input[type="number"]{
+    background:#0f172a;
+    border:1px solid #334155;
+    color:#fff;
+}
+
+.dark .offer-options input::placeholder,
+.dark-theme .offer-options input::placeholder{
+    color:#94a3b8;
+}
+
+.dark .offer-options input:focus,
+.dark-theme .offer-options input:focus{
+    border-color:#3b82f6;
+    outline:none;
+    box-shadow:0 0 0 3px rgba(59,130,246,.25);
+}
+
+.dark .offer-product-info img,
+.dark-theme .offer-product-info img{
+    border:1px solid #334155;
+}
+
+.dark .offer-product-card:hover,
+.dark-theme .offer-product-card:hover{
+    border-color:#3b82f6;
+}
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 992px) {
+
+  .settings-page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-page-full-width {
+    grid-column: span 1;
+  }
+
+  .settings-page-switch-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .settings-page-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .settings-page-title {
+    font-size: 24px;
+  }
+
+  .settings-page-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .settings-page-actions {
+    flex-direction: column;
+  }
+
+  .settings-page-btn-cancel,
+  .settings-page-btn-save {
+    width: 100%;
+  }
+
+  .settings-page-card {
+    padding: 18px;
+  }
+
+  .settings-page-header h3 {
+    font-size: 16px;
+  }
+}
+/* ================================
+   DARK MODE FORM FIELDS
+================================ */
+
+.dark .settings-page-form-group input,
+.dark .settings-page-form-group textarea,
+.dark .settings-page-form-group select {
+  background: #212225;          /* dark background */
+  color: #e5e7eb;               /* light text */
+  border: 1px solid #2d3748;   /* soft border */
+}
+
+/* Placeholder color */
+.dark .settings-page-form-group input::placeholder,
+.dark .settings-page-form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus state */
+.dark .settings-page-form-group input:focus,
+.dark .settings-page-form-group textarea:focus,
+.dark .settings-page-form-group select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  outline: none;
+}
+
+/* Select dropdown arrow fix (optional polish) */
+.dark .settings-page-form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='white' height='10' viewBox='0 0 20 20' width='10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+.dark .settings-page-switch-grid label {
+  background: #212225;        /* dark card background */
+  border: 1px solid #2d3748;  /* subtle border */
+  color: #e5e7eb;             /* light text */
+}
+
+/* Hover effect */
+.dark .settings-page-switch-grid label:hover {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+/* Checkbox styling */
+.dark .settings-page-switch-grid input[type="checkbox"] {
+  accent-color: #6366f1;
+}
+
+.dark .settings-page-header h3 {
+  color: #f3f4f6;   /* light gray text */
+}
+body.dark .settings-page-title {
+  color: #f3f4f6; /* light text for dark background */
+}

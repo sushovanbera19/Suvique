@@ -1,11 +1,42 @@
 import { Link, useLocation } from "react-router-dom";
 import { FiChevronRight } from "react-icons/fi";
 
-const Breadcrumb = () => {
+const Breadcrumb = ({ items }) => {
 
   const location = useLocation();
 
-  // split route
+  // IF CUSTOM ITEMS EXIST
+  if (items) {
+    return (
+      <div className="breadcrumb">
+
+        {items.map((item, index) => (
+
+          <div
+            key={index}
+            className="breadcrumb-item"
+          >
+
+            {index !== 0 && (
+              <FiChevronRight className="crumb-icon" />
+            )}
+
+            {index === items.length - 1 ? (
+              <span className="active">
+                {item}
+              </span>
+            ) : (
+              <span>{item}</span>
+            )}
+
+          </div>
+        ))}
+
+      </div>
+    );
+  }
+
+  // DEFAULT ROUTE BREADCRUMB
   const pathnames = location.pathname
     .split("/")
     .filter((x) => x);
@@ -18,7 +49,6 @@ const Breadcrumb = () => {
         const to =
           "/" + pathnames.slice(0, index + 1).join("/");
 
-        // format text
         const name =
           value.charAt(0).toUpperCase() +
           value.slice(1);
@@ -28,15 +58,19 @@ const Breadcrumb = () => {
             key={to}
             className="breadcrumb-item"
           >
+
             {index !== 0 && (
               <FiChevronRight className="crumb-icon" />
             )}
 
             {index === pathnames.length - 1 ? (
-              <span className="active">{name}</span>
+              <span className="active">
+                {name}
+              </span>
             ) : (
               <Link to={to}>{name}</Link>
             )}
+
           </div>
         );
       })}

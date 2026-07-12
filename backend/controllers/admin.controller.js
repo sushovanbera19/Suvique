@@ -1,49 +1,72 @@
-import { findAdminByEmail } from "../models/admin.model.js";
+import { findAdminByEmail, createAdmin, } from "../models/admin.model.js";
 
-export const adminLogin = (req, res) => {
+// Register Admin
+export const registerAdmin = async (req, res) => {
+  try {
+    const { name, email, password, confirmPassword, agreeTerms, } = req.body;
+    // check email
+    const [existingAdmin] = await findAdminByEmail(email);
 
+    if (existingAdmin.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists",
+      });
+    }
+
+    // create admin
+    await createAdmin(name, email, password, confirmPassword, agreeTerms ? 1 : 0);
+    return res.status(201).json({
+      success: true,
+      message: "Admin registered successfully",
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Server Error",
+    });
+  }
+};
+
+// LOGIN (UNCHANGED - your working code)
+export const adminLogin = async (req, res) => {
+  try {
     const { email, password } = req.body;
 
-    // check email
-    findAdminByEmail(email, (err, result) => {
+    const [result] = await findAdminByEmail(email);
 
-        // db error
-        if (err) {
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Admin not found",
+      });
+    }
 
-            return res.status(500).json({
-                success: false,
-                message: err.message,
-            });
-        }
+    const admin = result[0];
 
-        // admin not found
-        if (result.length === 0) {
+    if (admin.password !== password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Password",
+      });
+    }
 
-            return res.status(404).json({
-                success: false,
-                message: "Admin not found",
-            });
-        }
-
-        const admin = result[0];
-
-        // password check
-        if (admin.password !== password) {
-
-            return res.status(401).json({
-                success: false,
-                message: "Invalid Password",
-            });
-        }
-
-        // success
-        return res.status(200).json({
-            success: true,
-            message: "Admin Login Successful",
-            admin: {
-                name: admin.name,
-                email: admin.email,
-            },
-        });
+    return res.status(200).json({
+      success: true,
+      message: "Admin Login Successful",
+      admin: {
+        name: admin.name,
+        email: admin.email,
+      },
     });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

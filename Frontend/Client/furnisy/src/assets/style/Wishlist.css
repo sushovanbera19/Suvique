@@ -42,7 +42,7 @@
 /* Product info */
 .wishlist_product-info {
     display: flex !important;
-    align-items: baseline;
+    /* align-items: baseline; */
     gap: 8px;
     flex-direction: row;
     /* space between image & text */

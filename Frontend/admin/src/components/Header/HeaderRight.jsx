@@ -12,7 +12,7 @@ import FullscreenIcon from "./FullscreenIcon";
 import UserProfile from "./UserProfile";
 import SettingsIcon from "./SettingsIcon";
 
-const HeaderRight = () => {
+const HeaderRight = ({ onSettingsClick }) => {
   return (
     <div className="header-right">
       <SearchIcon />
@@ -23,7 +23,7 @@ const HeaderRight = () => {
       <AppsIcon />
       <FullscreenIcon />
       <UserProfile />
-      <SettingsIcon />
+      <SettingsIcon onClick={onSettingsClick} />
     </div>
   );
 };

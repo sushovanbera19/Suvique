@@ -7,7 +7,6 @@ import AccountHeader from "./AccountHeader";
 const ShopPage1 = () => {
   return (
     <>
-      {/* 🔥 Only for ShopPage2 */}
       <AccountHeader />
       <ShopPage />
     </>

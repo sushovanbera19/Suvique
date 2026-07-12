@@ -1,0 +1,342 @@
+.add_category_header {
+  margin-bottom: 20px;
+}
+
+.add_category_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 20px 10px 20px;
+}
+
+.add_category_title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.add_category_content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+.add_category_card {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  margin: 10px 19px 10px 19px !important;
+}
+
+.add_category_heading {
+  margin-bottom: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.add_category_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.add_category_field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.add_category_field label {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.add_category_field input,
+.add_category_field select,
+.add_category_field textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+  background: transparent;
+  outline: none;
+}
+
+.add_category_field textarea {
+  resize: vertical;
+}
+
+.add_category_upload {
+  min-height: 180px;
+  border: 2px dashed #dcdfe4;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.add_category_upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.add_category_upload img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.add_category_upload p {
+  color: #6b7280;
+  z-index: 1;
+}
+
+.add_category_actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+.add_category_btn_primary {
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.add_category_btn_primary:hover {
+  background: #222;
+}
+
+.add_category_btn_danger {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.add_category_btn_danger:hover {
+  background: #f5f5f5;
+}
+
+/* ===========================
+   IMPORT CATEGORY
+=========================== */
+
+.add_category_import {
+  margin: 20px;
+  padding: 25px;
+  border: 2px dashed #d8d8d8;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.add_category_import h4 {
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.add_category_import input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.add_category_import input[type="file"]::-webkit-file-upload-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.add_category_import input[type="file"]::file-selector-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.import_btn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.import_btn:hover {
+  background: #333;
+}
+
+@media (max-width: 768px) {
+  .add_category_import {
+    padding: 18px;
+  }
+
+  .import_btn {
+    width: 100%;
+  }
+}
+/* Dark Mode */
+
+body.dark .add_category_card {
+  background: #1a1a1a;
+;
+  border: 1px solid #2a2a3c;
+}
+
+body.dark .add_category_heading,
+body.dark .add_category_title,
+body.dark .add_category_field label {
+  color: #ffffff;
+}
+
+body.dark .add_category_field input,
+body.dark .add_category_field select,
+body.dark .add_category_field textarea {
+  background: #2a2a2a;
+
+  border: 1px solid #2f2f45;
+  color: #ffffff;
+}
+
+body.dark .add_category_field input::placeholder,
+body.dark .add_category_field textarea::placeholder {
+  color: #9ca3af;
+}
+
+body.dark .add_category_field input:focus,
+body.dark .add_category_field select:focus,
+body.dark .add_category_field textarea:focus {
+  border-color: #7367f0;
+}
+
+body.dark .add_category_upload {
+  background: #2a2a2a;
+
+  border: 2px dashed #2f2f45;
+}
+
+body.dark .add_category_upload p {
+  color: #b0b0b0;
+}
+
+body.dark .add_category_btn_primary {
+  background: #7367f0;
+  color: #fff;
+}
+
+body.dark .add_category_btn_primary:hover {
+  background: #6254e8;
+}
+
+body.dark .add_category_btn_danger {
+  background: #ea5455;
+  color: #fff;
+}
+
+body.dark .add_category_btn_danger:hover {
+  background: #d94344;
+}
+body.dark .add_category_btn_primary {
+  background: #fff;
+  color: #000;
+  border: 1px solid #fff;
+}
+
+body.dark .add_category_btn_primary:hover {
+  background: #e5e5e5;
+}
+
+body.dark .add_category_btn_danger {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+body.dark .add_category_btn_danger:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+/* ===========================
+   DARK MODE
+=========================== */
+
+body.dark .add_category_import,
+.dark .add_category_import {
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+body.dark .add_category_import h4,
+.dark .add_category_import h4 {
+  color: #fff;
+}
+
+body.dark .add_category_import input[type="file"],
+.dark .add_category_import input[type="file"] {
+  background: #111827;
+  border-color: #374151;
+  color: #fff;
+}
+
+body.dark .add_category_import input[type="file"]::file-selector-button,
+body.dark .add_category_import input[type="file"]::-webkit-file-upload-button,
+.dark .add_category_import input[type="file"]::file-selector-button,
+.dark .add_category_import input[type="file"]::-webkit-file-upload-button {
+  background: #2563eb;
+  color: #fff;
+}
+
+body.dark .import_btn,
+.dark .import_btn {
+  background: #2563eb;
+}
+
+body.dark .import_btn:hover,
+.dark .import_btn:hover {
+  background: #1d4ed8;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 768px) {
+  .add_category_import {
+    padding: 18px;
+  }
+
+  .import_btn {
+    width: 100%;
+  }
+}

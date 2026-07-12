@@ -1,0 +1,612 @@
+/* =========================================================
+   ANALYTICS PAGE
+========================================================= */
+
+.analytics-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.analytics-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.analytics-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.analytics-top-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 420px;
+  gap: 24px;
+}
+
+.analytics-left-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.analytics-right-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   TOP STATS
+========================================================= */
+
+.analytics-top-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.analytics-top-stat-card {
+  padding: 22px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+.analytics-stat-title {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.analytics-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.analytics-growth {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.analytics-growth.green {
+  color: #22c55e;
+}
+
+.analytics-growth.red {
+  color: #ef4444;
+}
+
+.analytics-growth.orange {
+  color: #f59e0b;
+}
+
+/* =========================================================
+   PROMO CARD
+========================================================= */
+
+.analytics-promo-wrapper {
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.analytics-promo-card {
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  padding: 24px;
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.analytics-promo-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.analytics-promo-text {
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.analytics-promo-btn {
+  width: fit-content;
+  background: white;
+  color: #7c3aed;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.analytics-promo-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   CARD COMMON
+========================================================= */
+
+.analytics-audience-card,
+.analytics-device-wrapper,
+.analytics-small-wrapper,
+.analytics-country-report-card,
+.analytics-traffic-card,
+.analytics-session-card,
+.analytics-channel-card,
+.analytics-country-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+/* =========================================================
+   AUDIENCE REPORT
+========================================================= */
+
+.analytics-audience-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.analytics-chart-legends {
+  display: flex;
+  gap: 24px;
+}
+
+.analytics-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.purple {
+  background: #7c3aed;
+}
+
+.legend-dot.blue {
+  background: #0ea5e9;
+}
+
+.analytics-export-btn {
+  border: none;
+  background: #f3f4f6;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.analytics-audience-chart {
+  height: 320px;
+}
+
+.analytics-chart-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px dashed #cbd5e1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* =========================================================
+   DEVICE CARD
+========================================================= */
+
+.analytics-device-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.analytics-device-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.analytics-view-all {
+  color: #7c3aed;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.analytics-donut-chart {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  margin: auto;
+  background:
+    conic-gradient(
+      #7c3aed 0% 68%,
+      #22c55e 68% 86%,
+      #f59e0b 86% 100%
+    );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.analytics-donut-inner {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.analytics-donut-inner h3 {
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.analytics-donut-inner p {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.analytics-device-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+}
+
+.analytics-device-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.analytics-device-item strong {
+  font-size: 15px;
+}
+
+.analytics-device-item span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* =========================================================
+   SMALL CARDS
+========================================================= */
+
+.analytics-small-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analytics-small-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.analytics-progress-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.analytics-progress-circle.blue {
+  background: #0ea5e9;
+}
+
+.analytics-progress-circle.orange {
+  background: #f59e0b;
+}
+
+.analytics-small-info p {
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.analytics-small-info h3 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   LOWER SECTION
+========================================================= */
+
+.analytics-lower-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.analytics-country-chart,
+.analytics-session-chart {
+  height: 260px;
+}
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.analytics-table thead {
+  background: #f8fafc;
+}
+
+.analytics-table th {
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.analytics-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+/* =========================================================
+   TRAFFIC BARS
+========================================================= */
+
+.analytics-traffic-bar {
+  height: 8px;
+  border-radius: 999px;
+}
+
+.analytics-traffic-bar.purple {
+  width: 80%;
+  background: #7c3aed;
+}
+
+.analytics-traffic-bar.blue {
+  width: 60%;
+  background: #0ea5e9;
+}
+
+.analytics-traffic-bar.green {
+  width: 40%;
+  background: #22c55e;
+}
+
+/* =========================================================
+   BOTTOM SECTION
+========================================================= */
+
+.analytics-bottom-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* =========================================================
+   COUNTRY LIST
+========================================================= */
+
+.analytics-country-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.analytics-country-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.analytics-country-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.analytics-flag {
+  font-size: 22px;
+}
+
+.analytics-country-name {
+  color: #111827;
+  font-weight: 500;
+}
+
+.analytics-country-value {
+  color: #111827;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1400px) {
+
+  .analytics-top-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-lower-section {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 992px) {
+
+  .analytics-top-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-device-stats {
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .analytics-page {
+    padding: 16px;
+  }
+
+  .analytics-top-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-table {
+    min-width: 900px;
+  }
+
+  .analytics-channel-table-wrapper {
+    overflow-x: auto;
+  }
+}
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+
+
+/* Page */
+body.dark .analytics-page {
+  background: #121212;
+}
+
+/* Headings */
+body.dark .analytics-page-title,
+body.dark .analytics-stat-value,
+body.dark .analytics-country-name,
+body.dark .analytics-country-value,
+body.dark .analytics-device-title,
+body.dark .analytics-small-info h3 {
+  color: #f8fafc;
+}
+
+/* Secondary text */
+body.dark .analytics-stat-title,
+body.dark .analytics-small-info p,
+body.dark .analytics-device-item span,
+body.dark .analytics-legend-item,
+body.dark .analytics-donut-inner h3 {
+  color: #94a3b8;
+}
+
+/* Cards */
+body.dark .analytics-top-stat-card,
+body.dark .analytics-audience-card,
+body.dark .analytics-device-wrapper,
+body.dark .analytics-small-wrapper,
+body.dark .analytics-country-report-card,
+body.dark .analytics-traffic-card,
+body.dark .analytics-session-card,
+body.dark .analytics-channel-card,
+body.dark .analytics-country-card {
+  background: #1a1a1a;
+  box-shadow: none;
+  border: 1px solid #334155;
+}
+
+/* Donut Center */
+body.dark .analytics-donut-inner {
+  background: #1a1a1a;;
+}
+
+/* Chart Placeholder */
+body.dark .analytics-chart-placeholder {
+  background: #1a1a1a;;
+  border: 1px dashed #475569;
+  color: #94a3b8;
+}
+
+/* Buttons */
+body.dark .analytics-export-btn {
+  background: #334155;
+  color: #f8fafc;
+}
+
+body.dark .analytics-promo-btn {
+  background: #f8fafc;
+  color: #7c3aed;
+}
+
+/* Tables */
+body.dark .analytics-table thead {
+  background: #1a1a1a;
+}
+
+body.dark .analytics-table th {
+  color: #cbd5e1;
+}
+
+body.dark .analytics-table td {
+  color: #f8fafc;
+  border-bottom: 1px solid #334155;
+}
+
+/* Country Items */
+body.dark .analytics-country-item {
+  border-bottom: 1px solid #334155;
+  padding-bottom: 12px;
+}
+
+/* View All */
+body.dark .analytics-view-all {
+  color: #a78bfa;
+}
+
+/* Progress Circles */
+body.dark .analytics-progress-circle {
+  box-shadow: 0 0 10px rgba(255,255,255,0.05);
+}

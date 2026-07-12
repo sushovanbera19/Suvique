@@ -29,22 +29,6 @@ const relatedBlogs = [
         author: "Anna Maria",
         description: "Short description here..."
     },
-    {
-        image: Blogimage,
-        title: "The Ultimate Guide to Choosing a Perfect Furniture for Your Home",
-        date: "18 Aug 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        description: "Short description here..."
-    },
-    {
-        image: Blogimage,
-        title: "Modern Wooden Storage Ideas for Living Room",
-        date: "22 Aug 2025",
-        category: "Living Room",
-        author: "Anna Maria",
-        description: "Short description here..."
-    }
 ];
 
 const BlogDetails = () => {

@@ -44,15 +44,21 @@ function SignupPage() {
 
       const data = await res.json();
 
+      console.log("Status:", res.status);
       console.log("Response:", data);
 
       if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        setShowSuccess(true);
+        setShowError(false);
         setShowSuccess(true);
         setShowError(false);
       } else {
+        setShowSuccess(false);
         setErrorMessage(data.message || "Signup failed");
         setShowError(true);
-        setShowSuccess(false);
       }
     } catch (error) {
       console.log("Error:", error);
@@ -71,69 +77,30 @@ function SignupPage() {
             <form onSubmit={handleSubmit} className="signup-form">
               <div className="form-group">
                 <label htmlFor="name">Name*</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" id="name" name="name" placeholder="Your name" value={formData.name} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Email*</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="email" id="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
                 <label htmlFor="password">Password*</label>
 
                 <div style={{ position: "relative" }}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    placeholder="Create password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type={showPassword ? "text" : "password"} id="password" name="password" placeholder="Create password" value={formData.password} onChange={handleChange} required />
 
                   <span
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                      position: "absolute",
-                      right: "50px",
-                      top: "55%",
-                      transform: "translateY(-50%)",
-                      cursor: "pointer",
-                      fontSize: "14px",
-                    }}
-                  >
+                    style={{ position: "absolute", right: "50px", top: "55%", transform: "translateY(-50%)", cursor: "pointer", fontSize: "14px", }} >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
               </div>
 
               <div className="form-group checkbox-group">
-                <input
-                  type="checkbox"
-                  id="agreeTerms"
-                  name="agreeTerms"
-                  checked={formData.agreeTerms}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="checkbox" id="agreeTerms" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} required />
                 <label htmlFor="agreeTerms">
                   I agree to all <a href="#terms">Terms & Conditions</a>
                 </label>

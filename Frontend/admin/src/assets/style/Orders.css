@@ -1,0 +1,730 @@
+/* =========================
+   Orders Page
+========================= */
+
+.orders-page {
+    width: 100%;
+}
+
+.orders-page-body {
+    margin-top: 24px;
+    padding: 0px 10px 0px 10px;
+
+}
+
+/* =========================
+   Page Top
+========================= */
+
+.orders-page-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 20px;
+    padding: 0px 10px 0px 10px;
+
+}
+
+.orders-page-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* =========================
+   Stats Cards
+========================= */
+
+.orders-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.orders-card {
+    padding: 24px;
+    border-radius: 16px;
+}
+
+.orders-card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orders-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 12px;
+}
+
+.orders-card-count {
+    font-size: 30px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.orders-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: #fdeee7;
+}
+
+/* =========================
+   Table Wrapper
+========================= */
+
+.orders-table-wrapper {
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+/* =========================
+   Table Header
+========================= */
+
+.orders-table-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.orders-table-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.orders-table-select {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    outline: none;
+    background: #fff;
+    font-size: 14px;
+    color: #475569;
+    cursor: pointer;
+}
+
+/* =========================
+   Table
+========================= */
+
+.orders-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table thead {
+    background: #f8fafc;
+}
+
+.orders-table th {
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.orders-table td {
+    padding: 18px 20px;
+    font-size: 14px;
+    color: #64748b;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.orders-customer-name {
+    color: #ff6b35;
+    font-weight: 600;
+}
+
+/* =========================
+   Payment Badge
+========================= */
+
+.orders-badge {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.orders-paid {
+    background: #22c55e;
+    color: #fff;
+}
+
+.orders-refund {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* =========================
+   Status Badge
+========================= */
+
+.orders-status {
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+.orders-completed {
+    background: #f0fdf4;
+    color: #16a34a;
+    border-color: #22c55e;
+}
+
+.orders-canceled {
+    background: #fef2f2;
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+.orders-progress {
+    background: #fff7ed;
+    color: #ea580c;
+    border-color: #f97316;
+}
+
+/* =========================
+   Action Buttons
+========================= */
+
+.orders-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.orders-action-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.orders-action-btn:hover {
+    background: #ff6b35;
+    color: #fff;
+}
+
+/* =========================
+   Pagination
+========================= */
+
+.orders-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 24px;
+}
+
+.orders-pagination-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    background: #fff;
+    color: #475569;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.orders-pagination-btn:hover {
+    background: #ff6b35;
+    color: #fff;
+    border-color: #ff6b35;
+}
+
+.orders-active-page {
+    background: #ff6b35;
+    color: #fff;
+    border-color: #ff6b35;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1200px) {
+    .orders-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .orders-page-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .orders-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .orders-table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .orders-pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+.dark .orders-page-title {
+    color: #f1f5f9;
+}
+
+/* =========================
+   Cards
+========================= */
+
+.dark .orders-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+}
+
+.dark .orders-card-title {
+    color: #cbd5e1;
+}
+
+.dark .orders-card-count {
+    color: #f8fafc;
+}
+
+.dark .orders-card-icon {
+    background: rgba(255, 107, 53, 0.12);
+}
+
+/* =========================
+   Table Wrapper
+========================= */
+
+.dark .orders-table-wrapper {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+}
+
+/* =========================
+   Table Header
+========================= */
+
+.dark .orders-table-header {
+    border-bottom: 1px solid #1e293b;
+}
+
+.dark .orders-table-title {
+    color: #f8fafc;
+}
+
+.dark .orders-table-select {
+    background: #1a1a1a;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+}
+
+/* =========================
+   Table
+========================= */
+
+.dark .orders-table thead {
+    background: #1a1a1a;
+}
+
+.dark .orders-table th {
+    color: #94a3b8;
+    border-bottom: 1px solid #1e293b;
+}
+
+.dark .orders-table td {
+    color: #cbd5e1;
+    border-bottom: 1px solid #1e293b;
+}
+
+.dark .orders-customer-name {
+    color: #ff8c66;
+}
+
+/* =========================
+   Payment Badge
+========================= */
+
+.dark .orders-paid {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.dark .orders-refund {
+    background: rgba(79, 70, 229, 0.15);
+    color: #818cf8;
+}
+
+/* =========================
+   Status Badge
+========================= */
+
+.dark .orders-completed {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: #22c55e;
+    color: #4ade80;
+}
+
+.dark .orders-canceled {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: #ef4444;
+    color: #f87171;
+}
+
+.dark .orders-progress {
+    background: rgba(249, 115, 22, 0.12);
+    border-color: #f97316;
+    color: #fb923c;
+}
+
+/* =========================
+   Action Buttons
+========================= */
+
+.dark .orders-action-btn {
+    background: #020617;
+    border: 1px solid #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .orders-action-btn:hover {
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: #ffffff;
+}
+
+/* =========================
+   Pagination
+========================= */
+
+.dark .orders-pagination-btn {
+    background: #020617;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+}
+
+.dark .orders-pagination-btn:hover {
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: #ffffff;
+}
+
+.dark .orders-active-page {
+    background: #ff6b35;
+    border-color: #ff6b35;
+    color: #ffffff;
+}
+
+.orders-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: #fdeee7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.orders-card-icon svg {
+    font-size: 28px;
+    color: #ff6b35;
+}
+
+/* =========================
+   Actions
+========================= */
+
+.orders-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.orders-view-btn,
+.orders-menu-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.orders-view-btn svg,
+.orders-menu-btn svg {
+    font-size: 18px;
+}
+
+.orders-view-btn:hover,
+.orders-menu-btn:hover {
+    background: #ff6b35;
+    color: #fff;
+}
+
+/* =========================
+   Dropdown
+========================= */
+
+.orders-dropdown-wrapper {
+    position: relative;
+}
+
+.orders-dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 150px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 8px;
+    z-index: 100;
+}
+
+.orders-dropdown-menu button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #475569;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.orders-dropdown-menu button svg {
+    font-size: 16px;
+}
+
+.orders-dropdown-menu button:hover {
+    background: #f8fafc;
+    color: #ff6b35;
+}
+
+/* =========================
+   Dark Mode
+========================= */
+
+.dark .orders-view-btn,
+.dark .orders-menu-btn {
+    background: #1a1a1a;
+    border: 1px solid #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .orders-dropdown-menu {
+    background: #1a1a1a;
+    border: 1px solid #1e293b;
+}
+
+.dark .orders-dropdown-menu button {
+    color: #cbd5e1;
+    background-color: #1a1a1a;
+}
+
+.dark .orders-dropdown-menu button:hover {
+    background: #020617;
+    color: #ff8c66;
+}
+
+/* =========================
+   EDIT FORM
+========================= */
+
+.orders-edit-form {
+    padding: 30px;
+}
+
+.orders-edit-header {
+    margin-bottom: 25px;
+}
+
+.orders-edit-header h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.orders-edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.orders-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.orders-edit-field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.orders-edit-field input,
+.orders-edit-field select {
+    height: 44px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #fff;
+    outline: none;
+    transition: 0.3s;
+}
+
+.orders-edit-field select {
+    cursor: pointer;
+}
+
+.orders-edit-field input:focus,
+.orders-edit-field select:focus {
+    border-color: #ff6b35;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.orders-edit-disabled {
+    background: #f8fafc !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed;
+}
+
+.orders-edit-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.orders-edit-cancel-btn,
+.orders-edit-save-btn {
+    height: 42px;
+    padding: 0 22px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.orders-edit-cancel-btn {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e5e7eb;
+}
+
+.orders-edit-cancel-btn:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.orders-edit-save-btn {
+    background: #ff6b35;
+    color: #fff;
+}
+
+.orders-edit-save-btn:hover {
+    background: #e55a2b;
+    transform: translateY(-1px);
+}
+
+.orders-edit-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 992px) {
+    .orders-edit-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dark .orders-edit-header h3 {
+    color: #f8fafc;
+}
+
+.dark .orders-edit-field label {
+    color: #94a3b8;
+}
+
+.dark .orders-edit-field input,
+.dark .orders-edit-field select {
+    background: #1a1a1a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+.dark .orders-edit-disabled {
+    background: #111827 !important;
+    color: #64748b !important;
+}
+
+.dark .orders-edit-cancel-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+.dark .orders-edit-cancel-btn:hover {
+    background: #334155;
+    color: #fff;
+}
