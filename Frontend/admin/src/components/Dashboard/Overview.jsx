@@ -7,8 +7,10 @@ import { FaDollarSign, FaWallet, FaUsers, FaShoppingCart, FaChevronDown, FaEllip
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, } from "recharts";
 // IMPORTS
 import { RiEyeLine, RiMore2Line, RiEditLine, RiDeleteBinLine, RiFileListLine, } from "react-icons/ri";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const Overview = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("active");
   // STATES
   const [openMenu, setOpenMenu] = useState(null);
@@ -32,15 +34,15 @@ const Overview = () => {
   const items = [
     {
       key: "1",
-      label: "Download",
+      label: t("overview.download"),
     },
     {
       key: "2",
-      label: "Import",
+      label: t("overview.import"),
     },
     {
       key: "3",
-      label: "Export",
+      label: t("overview.export"),
     },
   ];
   const recentOrders = [
@@ -54,7 +56,7 @@ const Overview = () => {
   const menuItems = [
     {
       key: "1",
-      label: "Action",
+      label: t("overview.action"),
     },
     {
       key: "2",
@@ -114,14 +116,14 @@ const Overview = () => {
       id: 1,
       productName: "Ethnic School Bag",
       category: "Bags",
-      stock: "In Stock",
+      stock: t("overview.inStock"),
       totalSales: "5,093",
     },
     {
       id: 2,
       productName: "Ethnic School Bag",
       category: "Bags",
-      stock: "Out Of Stock",
+      stock: t("overview.outOfStock"),
       totalSales: "5,093",
     },
   ];
@@ -131,7 +133,7 @@ const Overview = () => {
     <div className="content">
       {/* PAGE HEADER */}
       <div className="page-top">
-        <h1 className="page-title">Overview</h1>
+        <h1 className="page-title">{t("overview.title")}</h1>
         <Breadcrumb />
       </div>
       <div className="dashboard-layout">
@@ -140,30 +142,30 @@ const Overview = () => {
           {/* STATS */}
           <div className="stats-grid">
             <Card
-              title="Total Sales"
+              title={t("overview.totalSales")}
               value="14,732"
-              subtitle="Increase by +4.2% this month"
+              subtitle={`${t("overview.increase")} by +4.2% ${t("overview.thisMonth")}`}
               icon={<FaDollarSign />}
               iconClass="purple"
             />
             <Card
-              title="Total Expenses"
+              title={t("overview.totalExpenses")}
               value="$28,346"
-              subtitle="Increase by +12.0% this month"
+              subtitle={`${t("overview.increase")} by +12.0% ${t("overview.thisMonth")}`}
               icon={<FaWallet />}
               iconClass="blue"
             />
             <Card
-              title="Total Visitors"
+              title={t("overview.totalVisitors")}
               value="1,29,368"
-              subtitle="Decreased by -7.6% this month"
+              subtitle={`${t("overview.decrease")} by -7.6% ${t("overview.thisMonth")}`}
               icon={<FaUsers />}
               iconClass="green"
             />
             <Card
-              title="Total Orders"
+              title={t("overview.totalOrders")}
               value="35,367"
-              subtitle="Increased by +2.5% this month"
+              subtitle={`${t("overview.increase")} by +2.5% ${t("overview.thisMonth")}`}
               icon={<FaShoppingCart />}
               iconClass="orange"
             />
@@ -171,17 +173,17 @@ const Overview = () => {
 
           {/* PROMO + RECENT ORDERS */}
           <div className="small-grid">
-            <Card title="Big Saving Days">
+            <Card title={t("overview.bigSavingDays")}>
               <div className="promo-box">
-                <h3>Biggest sale is back.</h3>
+                <h3>{t("overview.biggestSale")}</h3>
                 <p>Lorem ipsum dolor sit amet.</p>
-                <button>Notify Me</button>
+                <button>{t("overview.notifyMe")}</button>
               </div>
             </Card>
             <Card
               title={
                 <div className="card-title-row">
-                  <span>Recent Orders</span>
+                  <span>{t("overview.recentOrders")}</span>
                   <Dropdown
                     menu={{ items: menuItems }}
                     trigger={["click"]}
@@ -214,19 +216,19 @@ const Overview = () => {
                   className={activeTab === "active" ? "tab active" : "tab"}
                   onClick={() => setActiveTab("active")}
                 >
-                  Active Orders
+                  {t("overview.activeOrders")}
                 </button>
                 <button
                   className={activeTab === "completed" ? "tab active" : "tab"}
                   onClick={() => setActiveTab("completed")}
                 >
-                  Completed
+                  {t("overview.completed")}
                 </button>
                 <button
                   className={activeTab === "cancelled" ? "tab active" : "tab"}
                   onClick={() => setActiveTab("cancelled")}
                 >
-                  Cancelled
+                  {t("overview.cancelled")}
                 </button>
               </div>
             </div>
@@ -234,9 +236,9 @@ const Overview = () => {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Customer</th>
-                  <th>Price</th>
-                  <th>Date</th>
+                  <th>{t("overview.customer")}</th>
+                  <th>{t("overview.price")}</th>
+                  <th>{t("overview.date")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,11 +261,11 @@ const Overview = () => {
             title={
               <div className="earnings-header">
                 <div className="earnings-title">
-                  Earnings
+                  {t("overview.earnings")}
                 </div>
                 <div className="earnings-actions">
                   <span className="view-all">
-                    View All
+                    {t("overview.viewAll")}
                   </span>
                   <Dropdown
                     menu={{ items }}
@@ -286,7 +288,7 @@ const Overview = () => {
               <div className="earning-box">
                 <div className="earning-label purple-light">
                   <span className="dot"></span>
-                  First Half
+                  {t("overview.firstHalf")}
                 </div>
                 <div className="earning-price">
                   <h2>$51.94k</h2>
@@ -298,7 +300,7 @@ const Overview = () => {
               <div className="earning-box">
                 <div className="earning-label purple">
                   <span className="dot"></span>
-                  Top Gross
+                  {t("overview.topGross")}
                 </div>
                 <div className="earning-price">
                   <h2>$18.32k</h2>
@@ -310,7 +312,7 @@ const Overview = () => {
               <div className="earning-box">
                 <div className="earning-label gray">
                   <span className="dot"></span>
-                  Second Half
+                  {t("overview.secondHalf")}
                 </div>
                 <div className="earning-price">
                   <h2>$38k</h2>
@@ -357,16 +359,16 @@ const Overview = () => {
           {/* BOTTOM CARDS */}
           <div className="right-bottom-section">
             {/* TOP FULL WIDTH */}
-            <Card title="Top Selling Products">
+            <Card title={t("overview.topSellingProducts")}>
               <table className="table">
 
                 <thead>
                   <tr>
-                    <th>S.No</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Stock</th>
-                    <th>Total Sales</th>
+                    <th>{t("overview.sNo")}</th>
+                    <th>{t("overview.productName")}</th>
+                    <th>{t("overview.category")}</th>
+                    <th>{t("overview.stock")}</th>
+                    <th>{t("overview.totalSales")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -378,7 +380,7 @@ const Overview = () => {
                       <td>
                         <span
                           className={
-                            product.stock === "In Stock"
+                            product.stock === t("overview.inStock")
                               ? "stock in-stock"
                               : "stock out-of-stock"
                           }
@@ -401,7 +403,7 @@ const Overview = () => {
               <Card
                 title={
                   <div className="card-title-row">
-                    <span>Top Countries By Sales</span>
+                    <span>{t("overview.topCountriesBySales")}</span>
 
                     <Dropdown
                       menu={{ items: menuItems }}
@@ -422,7 +424,7 @@ const Overview = () => {
 
                     <div className="country-growth">
                       <span className="growth-badge">12.24%</span>
-                      <p>Since last week</p>
+                      <p>{t("overview.sinceLastWeek")}</p>
                     </div>
 
                   </div>
@@ -456,7 +458,7 @@ const Overview = () => {
               <Card
                 title={
                   <div className="card-title-row">
-                    <span>Top Customers</span>
+                    <span>{t("overview.topCustomers")}</span>
 
                     <Dropdown
                       menu={{ items: menuItems }}
@@ -496,17 +498,17 @@ const Overview = () => {
       </div>
 
       {/* PRODUCTS OVERVIEW */}
-      <Card title="Products Overview" className="products-card">
+      <Card title={t("overview.productsOverview")} className="products-card">
         <table className="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Product Id</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Sales</th>
-              <th>Revenue</th>
-              <th>Actions</th>
+              <th>{t("overview.name")}</th>
+              <th>{t("overview.productId")}</th>
+              <th>{t("overview.price")}</th>
+              <th>{t("overview.status")}</th>
+              <th>{t("overview.sales")}</th>
+              <th>{t("overview.revenue")}</th>
+              <th>{t("overview.actions")}</th>
             </tr>
           </thead>
 
@@ -558,7 +560,7 @@ const Overview = () => {
                             }}
                           >
                             <RiFileListLine />
-                            Overview
+                            {t("overview.title")}
                           </button>
 
                           {/* EDIT */}
@@ -566,11 +568,11 @@ const Overview = () => {
                             onClick={() => alert(`Edit ${product.name}`)}
                           >
                             <RiEditLine />
-                            Edit
+                            {t("overview.edit")}
                           </button>
 
                           {/* DELETE */}
-                          <button onClick={() => alert(`Delete ${product.name}`)}><RiDeleteBinLine /> Delete</button>
+                          <button onClick={() => alert(`Delete ${product.name}`)}><RiDeleteBinLine /> {t("overview.delete")}</button>
                         </div>
                       )}
                     </div>

@@ -21,6 +21,8 @@ import AddSubCategory from "./components/subcategory/AddSubCategory";
 import EditSubCategory from "./components/subcategory/EditSubCategory";
 import Signup from "./pages/AdminSignup";
 import EditCategory from "./components/category/EditCategory";
+import AboutUs from "./components/Dashboard/AboutUs";
+import { SettingsProvider } from "./context/SettingsContext";
 import "./App.css";
 
 const App = () => {
@@ -38,8 +40,9 @@ const App = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
+    <SettingsProvider>
+      <BrowserRouter>
+        <Routes>
 
         {/* Login */}
         <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : (<AdminLogin setIsLoggedIn={setIsLoggedIn} />)} />
@@ -61,6 +64,7 @@ const App = () => {
           <Route path="vendors" element={<Vendors />} />
           <Route path="support" element={<Support />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="about-us" element={<AboutUs />} />
           {/* Category */}
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/create" element={<AddCategory />} />
@@ -76,7 +80,8 @@ const App = () => {
 
         </Route>
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </SettingsProvider>
   );
 };
 

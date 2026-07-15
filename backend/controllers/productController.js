@@ -93,7 +93,7 @@ export const addProduct = (req, res) => {
       // STEP 5: INSERT INTO VARIATION MAP
       const insertSql = `
         INSERT INTO product_variation_map
-        (product_id, variation_id, stock, price)
+        (product_id, variation_id, quantity, base_price)
         VALUES ?
       `;
 
@@ -380,7 +380,7 @@ export const searchProductController = (req, res) => {
 
 export const shopProducts = (req, res) => {
 
-  getShopProducts(req.query, (err, result) => {
+  getShopProducts(req.query, (err, result, totalCount) => {
 
     if (err) {
 
@@ -391,10 +391,20 @@ export const shopProducts = (req, res) => {
 
     }
 
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 9;
+    const totalPages = Math.ceil((totalCount || 0) / limit);
+
     res.json({
 
       success: true,
-      data: result
+      data: result,
+      pagination: {
+        page,
+        limit,
+        totalPages,
+        total: totalCount || 0
+      }
 
     });
 

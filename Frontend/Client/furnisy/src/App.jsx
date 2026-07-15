@@ -24,9 +24,15 @@ import ShopPage2 from "./components/ShopPage2";
 import ShopPage3 from "./components/Shoppage3"
 import NotFound from "./Common/404-1";
 import ProductPage from "./components/ProductPage1";
+import { CompareProvider } from "./context/CompareContext";
+import { CountryProvider } from "./context/CountryContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   return (
+    <CountryProvider>
+    <LanguageProvider>
+    <CompareProvider>
     <BrowserRouter>
       {/* Topnav + Header always visible */}
       <div className="sticky-wrapper">
@@ -75,6 +81,9 @@ function App() {
       <FurnitureGallery />
       <Footer />
     </BrowserRouter>
+    </CompareProvider>
+    </LanguageProvider>
+    </CountryProvider>
   );
 }
 

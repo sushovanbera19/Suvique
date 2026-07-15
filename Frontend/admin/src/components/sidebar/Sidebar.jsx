@@ -1,399 +1,264 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { FiHome, FiFileText, FiCheckSquare, FiShield, FiAlertTriangle, FiChevronRight, FiChevronDown, FiBox, FiLayers, FiLayout, FiPieChart, FiBriefcase, FiImage, FiTrendingUp, FiBarChart2, FiFolder, FiUsers, FiActivity, FiBookOpen, FiUser, FiGrid, FiMapPin, FiStar, FiCreditCard, FiPackage, FiSettings, } from "react-icons/fi";
+import { useTranslation } from "../../hooks/useTranslation";
 import "../../assets/style/Sidebar.css";
 
 const Sidebar = ({ collapsed }) => {
-
+  const { t } = useTranslation();
   const [active, setActive] = useState("Ecommerce");
   const [openMenu, setOpenMenu] = useState("Dashboards");
   const [openSubMenus, setOpenSubMenus] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
-  // functions 
+
   const toggleSubMenu = (name) => {
-    setOpenSubMenus((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
+    setOpenSubMenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
   const menuData = [
-    // ================= MAIN =================
     {
-      section: "MAIN",
+      section: t("sidebar.main"),
       menus: [
         {
-          title: "Dashboards",
+          title: t("sidebar.dashboards"),
           icon: <FiHome />,
           badge: "12",
-
           children: [
-            {
-              name: "Overview",
-              icon: <FiLayout />,
-              path: "/dashboard/overview",
-            },
-
-            {
-              name: "Sales",
-              icon: <FiTrendingUp />,
-              path: "/dashboard/sales",
-            },
-
-            {
-              name: "Orders",
-              icon: <FiPackage />,
-              path: "/dashboard/orders",
-            },
-
-            {
-              name: "Products",
-              icon: <FiBox />,
-              path: "/dashboard/products",
-            },
-            {
-              name: "Customers",
-              icon: <FiUsers />,
-              path: "/dashboard/customers",
-            },
-
-            {
-              name: "Analytics",
-              icon: <FiBarChart2 />,
-              path: "/dashboard/analytics",
-            },
-
-            {
-              name: "Marketing",
-              icon: <FiPieChart />,
-              path: "/dashboard/marketing",
-            },
-
-            {
-              name: "Finance",
-              icon: <FiCreditCard />,
-              path: "/dashboard/finance",
-            },
-
-            {
-              name: "Variations",
-              icon: <FiActivity />,
-              path: "/dashboard/inventory",
-            },
-
-            {
-              name: "Vendors",
-              icon: <FiBriefcase />,
-              path: "/dashboard/vendors",
-            },
-
-            {
-              name: "Support",
-              icon: <FiBookOpen />,
-              path: "/dashboard/support",
-            },
-
-            {
-              name: "Settings",
-              icon: <FiSettings />,
-              path: "/dashboard/settings",
-            },
+            { name: t("sidebar.overview"), icon: <FiLayout />, path: "/dashboard/overview" },
+            { name: t("sidebar.sales"), icon: <FiTrendingUp />, path: "/dashboard/sales" },
+            { name: t("sidebar.orders"), icon: <FiPackage />, path: "/dashboard/orders" },
+            { name: t("sidebar.products"), icon: <FiBox />, path: "/dashboard/products" },
+            { name: t("sidebar.customers"), icon: <FiUsers />, path: "/dashboard/customers" },
+            { name: t("sidebar.analytics"), icon: <FiBarChart2 />, path: "/dashboard/analytics" },
+            { name: t("sidebar.marketing"), icon: <FiPieChart />, path: "/dashboard/marketing" },
+            { name: t("sidebar.finance"), icon: <FiCreditCard />, path: "/dashboard/finance" },
+            { name: t("sidebar.variations"), icon: <FiActivity />, path: "/dashboard/inventory" },
+            { name: t("sidebar.vendors"), icon: <FiBriefcase />, path: "/dashboard/vendors" },
+            { name: t("sidebar.support"), icon: <FiBookOpen />, path: "/dashboard/support" },
+            { name: t("sidebar.settings"), icon: <FiSettings />, path: "/dashboard/settings" },
           ],
         },
       ],
     },
-    // ================= CATEGORY MANAGEMENT =================
     {
-      section: "CATEGORY MANAGEMENT",
-
+      section: t("sidebar.categoryManagement"),
       menus: [
         {
-          title: "Category",
+          title: t("sidebar.category"),
           icon: <FiFolder />,
-
           children: [
-            {
-              name: "Category List",
-              path: "/dashboard/categories",
-            },
-            {
-              name: "Add Category",
-              path: "/dashboard/categories/create",
-            },
+            { name: t("sidebar.categoryList"), path: "/dashboard/categories" },
+            { name: t("sidebar.addCategory"), path: "/dashboard/categories/create" },
           ],
         },
-
         {
-          title: "Sub Category",
+          title: t("sidebar.subCategory"),
           icon: <FiLayers />,
-
           children: [
-            {
-              name: "Sub Category List",
-              path: "/dashboard/sub-categories",
-            },
-            {
-              name: "Add Sub Category",
-              path: "/dashboard/sub-categories/create",
-            },
+            { name: t("sidebar.subCategoryList"), path: "/dashboard/sub-categories" },
+            { name: t("sidebar.addSubCategory"), path: "/dashboard/sub-categories/create" },
           ],
         },
       ],
     },
-
-    // ================= PAGES =================
     {
-      section: "PAGES",
-
+      section: t("sidebar.pages"),
       menus: [
         {
-          title: "Pages",
+          title: t("sidebar.pages"),
           icon: <FiFileText />,
-          badge: "New",
-
+          badge: t("sidebar.new"),
           children: [
-            { name: "About Us" },
-
+            { name: t("sidebar.aboutUs"), path: "/dashboard/about-us" },
             {
-              name: "Blog",
-
+              name: t("sidebar.blog"),
               children: [
-                { name: "Blog" },
-                { name: "Blog Details" },
-                { name: "Create Blog" },
+                { name: t("sidebar.blog") },
+                { name: t("sidebar.blogDetails") },
+                { name: t("sidebar.createBlog") },
               ],
             },
-
-            { name: "Chat" },
-            { name: "Contacts" },
-            { name: "Contact Us" },
-
+            { name: t("sidebar.chat") },
+            { name: t("sidebar.contacts") },
+            { name: t("sidebar.contactUs") },
             {
-              name: "Ecommerce",
-
+              name: t("sidebar.ecommerce"),
               children: [
-                { name: "Shop" },
-                { name: "Product Details" },
-                { name: "Cart" },
+                { name: t("sidebar.shop") },
+                { name: t("sidebar.productDetails") },
+                { name: t("sidebar.cart") },
               ],
             },
-
             {
-              name: "Email",
-
+              name: t("sidebar.email"),
               children: [
-                { name: "Inbox" },
-                { name: "Read Mail" },
+                { name: t("sidebar.inbox") },
+                { name: t("sidebar.readMail") },
               ],
             },
-
-            { name: "Empty" },
-            { name: "FAQ's" },
-
+            { name: t("sidebar.empty") },
+            { name: t("sidebar.faqs") },
             {
-              name: "File Manager",
-
+              name: t("sidebar.fileManager"),
               children: [
-                { name: "Files" },
-                { name: "Recent Files" },
+                { name: t("sidebar.files") },
+                { name: t("sidebar.recentFiles") },
               ],
             },
-
             {
-              name: "Invoice",
-
+              name: t("sidebar.invoice"),
               children: [
-                { name: "Invoice List" },
-                { name: "Invoice Details" },
+                { name: t("sidebar.invoiceList") },
+                { name: t("sidebar.invoiceDetails") },
               ],
             },
-
-            { name: "Landing" },
-            { name: "Jobs Landing" },
+            { name: t("sidebar.landing") },
+            { name: t("sidebar.jobsLanding") },
           ],
         },
-
         {
-          title: "Task",
+          title: t("sidebar.task"),
           icon: <FiCheckSquare />,
-          badge: "New",
-
+          badge: t("sidebar.new"),
           children: [
-            { name: "Task List" },
-            { name: "Task Details" },
-            { name: "Create Task" },
+            { name: t("sidebar.taskList") },
+            { name: t("sidebar.taskDetails") },
+            { name: t("sidebar.createTask") },
           ],
         },
-
         {
-          title: "Authentication",
+          title: t("sidebar.authentication"),
           icon: <FiShield />,
-
           children: [
-            { name: "Login", path: "/" },
-            { name: "Register", path: "/signup" },
-            { name: "Forgot Password" },
+            { name: t("sidebar.login"), path: "/" },
+            { name: t("sidebar.register"), path: "/signup" },
+            { name: t("sidebar.forgotPassword") },
           ],
         },
-
         {
-          title: "Error",
+          title: t("sidebar.error"),
           icon: <FiAlertTriangle />,
-
           children: [
-            { name: "404 Error" },
-            { name: "500 Error" },
+            { name: t("sidebar.page404") },
+            { name: t("sidebar.page500") },
           ],
         },
       ],
     },
-
-
-    // ================= GENERAL =================
     {
-      section: "GENERAL",
-
+      section: t("sidebar.general"),
       menus: [
         {
-          title: "UI Elements",
+          title: t("sidebar.uiElements"),
           icon: <FiBox />,
-
           children: [
-            { name: "Buttons" },
-            { name: "Cards" },
-            { name: "Modal" },
+            { name: t("sidebar.buttons") },
+            { name: t("sidebar.cards") },
+            { name: t("sidebar.modal") },
           ],
         },
-
         {
-          title: "Utilities",
+          title: t("sidebar.utilities"),
           icon: <FiActivity />,
-
           children: [
-            { name: "Colors" },
-            { name: "Borders" },
-            { name: "Typography" },
+            { name: t("sidebar.colors") },
+            { name: t("sidebar.borders") },
+            { name: t("sidebar.typography") },
           ],
         },
-
         {
-          title: "Forms",
+          title: t("sidebar.forms"),
           icon: <FiFileText />,
-
           children: [
-            { name: "Form Elements" },
-            { name: "Form Validation" },
+            { name: t("sidebar.formElements") },
+            { name: t("sidebar.formValidation") },
           ],
         },
-
         {
-          title: "Advanced UI",
+          title: t("sidebar.advancedUI"),
           icon: <FiLayers />,
-
           children: [
-            { name: "Drag & Drop" },
-            { name: "Range Slider" },
+            { name: t("sidebar.dragDrop") },
+            { name: t("sidebar.rangeSlider") },
           ],
         },
-
         {
-          title: "Widgets",
+          title: t("sidebar.widgets"),
           icon: <FiPieChart />,
-          badge: "Hot",
-
+          badge: t("sidebar.hot"),
           children: [
-            { name: "Statistics" },
-            { name: "Charts Widget" },
+            { name: t("sidebar.statistics") },
+            { name: t("sidebar.chartsWidget") },
           ],
         },
       ],
     },
-
-    // ================= WEB APPS =================
     {
-      section: "WEB APPS",
-
+      section: t("sidebar.webApps"),
       menus: [
         {
-          title: "Apps",
+          title: t("sidebar.apps"),
           icon: <FiGrid />,
-          badge: "New",
-
+          badge: t("sidebar.new"),
           children: [
-            { name: "Kanban" },
-            { name: "Calendar" },
-            { name: "Chat App" },
+            { name: t("sidebar.kanban") },
+            { name: t("sidebar.calendar") },
+            { name: t("sidebar.chatApp") },
           ],
         },
-
         {
-          title: "Nested Menu",
+          title: t("sidebar.nestedMenu"),
           icon: <FiLayers />,
-
           children: [
             {
-              name: "Level 1",
-
+              name: t("sidebar.level1"),
               children: [
-                { name: "Level 2" },
-                { name: "Level 2.1" },
+                { name: t("sidebar.level2") },
+                { name: t("sidebar.level21") },
               ],
             },
           ],
         },
       ],
     },
-
-    // ================= TABLES =================
     {
-      section: "TABLES & CHARTS",
-
+      section: t("sidebar.tablesCharts"),
       menus: [
         {
-          title: "Tables",
+          title: t("sidebar.tables"),
           icon: <FiGrid />,
           badge: "3",
-
           children: [
-            { name: "Basic Tables" },
-            { name: "Data Tables" },
+            { name: t("sidebar.basicTables") },
+            { name: t("sidebar.dataTables") },
           ],
         },
-
         {
-          title: "Charts",
+          title: t("sidebar.charts"),
           icon: <FiBarChart2 />,
-
           children: [
-            { name: "Apex Charts" },
-            { name: "Chart JS" },
+            { name: t("sidebar.apexCharts") },
+            { name: t("sidebar.chartJs") },
           ],
         },
       ],
     },
-
-    // ================= MAPS =================
     {
-      section: "MAPS & ICONS",
-
+      section: t("sidebar.mapsIcons"),
       menus: [
         {
-          title: "Maps",
+          title: t("sidebar.maps"),
           icon: <FiMapPin />,
-
           children: [
-            { name: "Google Maps" },
-            { name: "Vector Maps" },
+            { name: t("sidebar.googleMaps") },
+            { name: t("sidebar.vectorMaps") },
           ],
         },
-
         {
-          title: "Icons",
+          title: t("sidebar.icons"),
           icon: <FiStar />,
-
           children: [
-            { name: "Font Awesome" },
-            { name: "Bootstrap Icons" },
+            { name: t("sidebar.fontAwesome") },
+            { name: t("sidebar.bootstrapIcons") },
           ],
         },
       ],
@@ -401,140 +266,71 @@ const Sidebar = ({ collapsed }) => {
   ];
 
   return (
-
-    <div
-      className={
-        collapsed
-          ? "sidebar collapsed"
-          : "sidebar"
-      }
-    >
-      {/* LOGO */}
+    <div className={collapsed ? "sidebar collapsed" : "sidebar"}>
       <div className="sidebar-logo">
         <div className="logo-icon">✦</div>
-
-        {!collapsed && (
-          <h2>
-            Y<span>nex</span>
-          </h2>
-        )}
+        {!collapsed && <h2>Y<span>nex</span></h2>}
       </div>
 
-      {/* MENU */}
       <div className="sidebar-content">
         {menuData.map((section, idx) => (
           <div key={idx}>
-            {!collapsed && (
-              <p className="section-title">
-                {section.section}
-              </p>
-            )}
-
+            {!collapsed && <p className="section-title">{section.section}</p>}
             {section.menus.map((menu, i) => (
               <div key={i}>
-                {/* PARENT */}
                 <div
-                  className={`menu-item ${openMenu === menu.title ? "active-parent" : ""
-                    }`}
-                  onClick={() =>
-                    setOpenMenu(
-                      openMenu === menu.title ? "" : menu.title
-                    )
-                  }
+                  className={`menu-item ${openMenu === menu.title ? "active-parent" : ""}`}
+                  onClick={() => setOpenMenu(openMenu === menu.title ? "" : menu.title)}
                 >
                   <div className="menu-left">
                     <span className="menu-icon">{menu.icon}</span>
-
-                    {!collapsed && (
-                      <span className="menu-text">
-                        {menu.title}
-                      </span>
-                    )}
-
+                    {!collapsed && <span className="menu-text">{menu.title}</span>}
                     {!collapsed && menu.badge && (
-                      <span
-                        className={
-                          menu.badge === "New"
-                            ? "badge-new"
-                            : "badge-count"
-                        }
-                      >
+                      <span className={menu.badge === t("sidebar.new") || menu.badge === t("sidebar.hot") ? "badge-new" : "badge-count"}>
                         {menu.badge}
                       </span>
                     )}
                   </div>
-
                   {!collapsed && (
                     <span className="arrow">
-                      {openMenu === menu.title ? (
-                        <FiChevronDown />
-                      ) : (
-                        <FiChevronRight />
-                      )}
+                      {openMenu === menu.title ? <FiChevronDown /> : <FiChevronRight />}
                     </span>
                   )}
                 </div>
 
-                {/* SUBMENU */}
                 {openMenu === menu.title && menu.children && (
                   <ul className="submenu">
                     {menu.children.map((sub, index) => (
                       <li key={index}>
-                        {/* SIMPLE ITEM */}
                         {!sub.children ? (
                           <NavLink
                             to={sub.path}
-                            className={({ isActive }) =>
-                              isActive
-                                ? "submenu-item active-submenu"
-                                : "submenu-item"
-                            }
+                            className={({ isActive }) => isActive ? "submenu-item active-submenu" : "submenu-item"}
                           >
                             <span className="dot"></span>
-
-                            {/* ICON */}
-                            {sub.icon && (
-                              <span className="menu-icon">{sub.icon}</span>
-                            )}
-
+                            {sub.icon && <span className="menu-icon">{sub.icon}</span>}
                             {!collapsed && <span>{sub.name}</span>}
                           </NavLink>
                         ) : (
                           <>
-                            {/* PARENT ITEM */}
-                            <div
-                              className="submenu-item"
-                              onClick={() => toggleSubMenu(sub.name)}
-                            >
+                            <div className="submenu-item" onClick={() => toggleSubMenu(sub.name)}>
                               <div className="submenu-left">
                                 <span className="dot"></span>
-
-                                {/* FIX 2: show icon */}
-                                {sub.icon && (
-                                  <span className="menu-icon">{sub.icon}</span>
-                                )}
-
+                                {sub.icon && <span className="menu-icon">{sub.icon}</span>}
                                 {!collapsed && <span>{sub.name}</span>}
                               </div>
-
                               {openSubMenus[sub.name] ? (
                                 <FiChevronDown className="mini-arrow" />
                               ) : (
                                 <FiChevronRight className="mini-arrow" />
                               )}
                             </div>
-
-                            {/* NESTED */}
                             {openSubMenus[sub.name] && (
                               <ul className="nested-submenu">
                                 {sub.children.map((nested, i) => (
                                   <li
                                     key={i}
-                                    className={
-                                      active === nested.name
-                                        ? "nested-item nested-active"
-                                        : "nested-item"
-                                    }
+                                    className={active === nested.name ? "nested-item nested-active" : "nested-item"}
                                     onClick={() => setActive(nested.name)}
                                   >
                                     <span className="dot"></span>

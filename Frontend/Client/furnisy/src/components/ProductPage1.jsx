@@ -7,6 +7,8 @@ import "../assets/style/ProductPage1.css";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FiMaximize2, FiX, FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import ProductCard from "../Common/ProductCard";
+import { toastSuccess, toastError, toastLoginRequired } from "../utils/toast";
+import { useTranslation } from "../context/LanguageContext";
 
 
 const relatedProducts = [
@@ -38,6 +40,7 @@ const ProductPage = () => {
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
+    const { t } = useTranslation();
 
     const nextImage = () => {
         if (!product?.images?.length) return;
@@ -62,13 +65,13 @@ const ProductPage = () => {
             body: JSON.stringify({ product_id: product.id }),
         });
         const data = await res.json();
-        if (data.success) alert("Added to Wishlist");
+        if (data.success) toastSuccess(t("product.addedToWishlist"));
     };
 
     const addToCart = async (productId) => {
         try {
             const token = localStorage.getItem("token");
-            if (!token) { alert("Please login first"); return; }
+            if (!token) { toastLoginRequired(); return; }
             const res = await fetch("http://localhost:5000/api/cart/add", {
                 method: "POST",
                 headers: {
@@ -78,7 +81,11 @@ const ProductPage = () => {
                 body: JSON.stringify({ product_id: productId }),
             });
             const data = await res.json();
-            alert(data.message);
+            if (data.success) {
+              toastSuccess(data.message);
+            } else {
+              toastError(data.message);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -106,7 +113,7 @@ const ProductPage = () => {
                         description: p.description,
                         shortDescription: p.description,
                         price: p.sale_price || p.base_price,
-                        stock: p.quantity > 0 ? "In Stock" : "Out of Stock",
+                        stock: p.quantity > 0 ? t("product.inStock") : t("product.outOfStock"),
                         sku: p.sku,
                         quantity: p.quantity,
                         weight: p.weight,
@@ -140,8 +147,8 @@ const ProductPage = () => {
         }
     }, [product]);
 
-    if (loading) return <div>Loading...</div>;
-    if (!product) return <div>Product not found</div>;
+    if (loading) return <div>{t("product.loading")}</div>;
+    if (!product) return <div>{t("product.notFound")}</div>;
 
     /* ===================== */
     /* SHARED: Gallery Section */
@@ -206,19 +213,19 @@ const ProductPage = () => {
     const renderDetails = () => (
         <div className="ProductPage1-details">
             <div className="ProductPage1-breadcrumb">
-                <a href="/">Home</a> <span>&gt;</span>
-                <a href="/shop">Shop</a> <span>&gt;</span>
+                <a href="/">{t("common.home")}</a> <span>&gt;</span>
+                <a href="/shop">{t("common.shop")}</a> <span>&gt;</span>
             </div>
             <h1>{product.name}</h1>
             <div className="rating-stock">
                 <span>⭐ {product.rating} ({product.reviewsCount})</span>
-                <span>Stock: {product.stock}</span>
+                <span>{t("product.stock")} {product.stock}</span>
             </div>
             <p className="price">{product.price}</p>
             <p className="short-description">{product.shortDescription}</p>
 
             <div className="ProductPage1-color-selector">
-                <p>Color:</p>
+                <p>{t("product.color")}</p>
                 {product.colors?.map((color) => (
                     <span
                         key={color}
@@ -230,7 +237,7 @@ const ProductPage = () => {
             </div>
 
             <div className="ProductPage1-size-selector">
-                <p>Size:</p>
+                <p>{t("product.size")}</p>
                 {product.sizes?.map((size) => (
                     <button
                         key={size}
@@ -249,21 +256,21 @@ const ProductPage = () => {
                     <button onClick={() => setQuantity(quantity + 1)}>+</button>
                 </div>
                 <button className="ProductPage1-add-to-cart-btn" onClick={() => addToCart(product.id)}>
-                    Add To Cart
+                    {t("product.addToCartBtn")}
                 </button>
             </div>
 
             <div className="ProductPage1-actions">
-                <button onClick={() => addWishlist(product.id)}><FiHeart /> Add to Wishlist</button>
-                <button><BiShuffle /> Compare</button>
+                <button onClick={() => addWishlist(product.id)}><FiHeart /> {t("product.addToWishlist")}</button>
+                <button><BiShuffle /> {t("product.compare")}</button>
             </div>
 
             <div className="ProductPage1-meta">
-                <p>SKU: {product.sku}</p>
-                <p>Categories: {product.categories.join(", ")}</p>
-                <p>Tags: {product.tags.join(", ")}</p>
+                <p>{t("product.sku")} {product.sku}</p>
+                <p>{t("product.categories")} {product.categories.join(", ")}</p>
+                <p>{t("product.tags")} {product.tags.join(", ")}</p>
                 <div className="ProductPage1-share">
-                    <span>Share:</span>
+                    <span>{t("product.share")}</span>
                     <div className="ProductPage1-share-icons">
                         <a href="#"><FaFacebookF /></a>
                         <a href="#"><FaTwitter /></a>
@@ -282,13 +289,13 @@ const ProductPage = () => {
         <div className="ProductPage1-tabs">
             <div className="ProductPage1-tab-buttons">
                 <button className={activeTab === "description" ? "active" : ""} onClick={() => setActiveTab("description")}>
-                    Description
+                    {t("product.description")}
                 </button>
                 <button className={activeTab === "additional" ? "active" : ""} onClick={() => setActiveTab("additional")}>
-                    Additional Information
+                    {t("product.additionalInfo")}
                 </button>
                 <button className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")}>
-                    Review ({product.reviews.length})
+                    {t("product.reviews")} ({product.reviews.length})
                 </button>
             </div>
 
@@ -326,9 +333,9 @@ const ProductPage = () => {
                         ))}
 
                         <div className="ProductPage1-review-form">
-                            <h3>Write a Review for this product</h3>
+                            <h3>{t("product.writeReview")}</h3>
                             <div className="ProductPage1-rating-input">
-                                <span>Your Rating</span>
+                                <span>{t("product.yourRating")}</span>
                                 <div className="stars">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <span
@@ -343,9 +350,9 @@ const ProductPage = () => {
                                     ))}
                                 </div>
                             </div>
-                            <label>Your Review</label>
+                            <label>{t("product.yourReview")}</label>
                             <textarea rows="6"></textarea>
-                            <button className="ProductPage1-submit-btn">Submit</button>
+                            <button className="ProductPage1-submit-btn">{t("product.submit")}</button>
                         </div>
                     </div>
                 )}
@@ -355,7 +362,7 @@ const ProductPage = () => {
 
     const renderRelated = () => (
         <div className="related-products">
-            <h3>Related Product</h3>
+            <h3>{t("product.relatedProducts")}</h3>
             <div className="related-products-grid">
                 {relatedProducts.map((item) => (
                     <ProductCard key={item.id} product={item} />

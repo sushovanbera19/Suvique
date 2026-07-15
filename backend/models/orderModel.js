@@ -25,11 +25,11 @@ export const getCartItems = (userId) => {
 };
 
 // Create Order
-export const createOrder = (userId, addressId, total, paymentMethod) => {
+export const createOrder = (userId, addressId, total, paymentMethod, country = "India", currency = "INR") => {
   return new Promise((resolve, reject) => {
-    const sql = `  INSERT INTO orders  (  user_id,  address_id,  total,  payment_method,  payment_status,  order_status  )  VALUES (?, ?, ?, ?, 'Pending', 'Pending')   `;
+    const sql = `INSERT INTO orders (user_id, address_id, total, payment_method, payment_status, order_status, country, currency) VALUES (?, ?, ?, ?, 'Pending', 'Pending', ?, ?)`;
 
-    db.query(sql, [userId, addressId, total, paymentMethod],
+    db.query(sql, [userId, addressId, total, paymentMethod, country, currency],
       (err, result) => {
 
         if (err) return reject(err);
@@ -116,6 +116,8 @@ export const getAllOrders = (callback) => {
             o.payment_method,
             o.payment_status,
             o.order_status,
+            o.country,
+            o.currency,
 
             u.name AS customer_name,
             u.email,

@@ -1,177 +1,107 @@
-// =========================
-// Language.jsx
-// =========================
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select from "react-select";
 import CommonModal from "../Common/CommonModal";
-// import i18n from "../../i18n";
+import { useSettings } from "../../context/SettingsContext";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const Language = () => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+  const {
+    countries,
+    selectedCountry,
+    setSelectedCountry,
+    selectedLanguage,
+    setSelectedLanguage,
+    languages,
+  } = useSettings();
 
-  const [countries, setCountries] = useState([]);
-  const [languages, setLanguages] = useState([]);
+  const [tempCountry, setTempCountry] = useState(selectedCountry.name);
+  const [tempLanguage, setTempLanguage] = useState(selectedLanguage);
 
-  const [country, setCountry] = useState("India");
-  const [language, setLanguage] = useState("English");
+  const selectedCountryData = countries.find((c) => c.name === tempCountry);
+  const activeCountryData = countries.find((c) => c.name === selectedCountry.name);
 
-  // =========================
-  // Fetch Online API
-  // =========================
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "https://restcountries.com/v3.1/all?fields=name,flags,languages"
-        );
-
-        const data = await response.json();
-
-        // Countries
-        
-        const countryList = data
-          .map((item) => ({
-            name: item.name?.common,
-            flag: item.flags?.png,
-          }))
-          .filter((item) => item.name)
-          .sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
-
-        setCountries(countryList);
-
-        // Languages
-        const langSet = new Set();
-
-        data.forEach((item) => {
-          if (item.languages) {
-            Object.values(item.languages).forEach(
-              (lang) => langSet.add(lang)
-            );
-          }
-        });
-
-        setLanguages([...langSet].sort());
-
-      } catch (error) {
-        console.log("API Error:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Selected Country Flag
-  const selectedCountry = countries.find(
-    (c) => c.name === country
-  );
   const countryOptions = countries.map((item) => ({
     value: item.name,
     label: item.name,
     flag: item.flag,
   }));
+
+  const handleOpen = () => {
+    setTempCountry(selectedCountry.name);
+    setTempLanguage(selectedLanguage);
+    setOpen(true);
+  };
+
+  const handleSave = () => {
+    const countryData = countries.find((c) => c.name === tempCountry);
+    if (countryData) {
+      setSelectedCountry({
+        name: countryData.name,
+        flag: countryData.flag,
+      });
+    }
+    setSelectedLanguage(tempLanguage);
+    setOpen(false);
+  };
+
+  const displayLang = languages.find((l) => l.code === selectedLanguage);
+
   return (
     <>
-      {/* Language Button */}
-      <div
-        className="language-box"
-        onClick={() => setOpen(true)}
-      >
+      <div className="language-box" onClick={handleOpen}>
         <img
-          src={
-            selectedCountry?.flag ||
-            "https://flagcdn.com/w40/in.png"
-          }
+          src={activeCountryData?.flag || "https://flagcdn.com/w40/in.png"}
           alt="flag"
         />
-
-        <span>
-          {country.slice(0, 2).toUpperCase()}
-        </span>
+        <span>{selectedLanguage.toUpperCase()}</span>
       </div>
 
-      {/* Modal */}
-      <CommonModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        width="550px"
-      >
+      <CommonModal isOpen={open} onClose={() => setOpen(false)} width="550px">
         <div className="language-modal">
-
-          {/* Country Dropdown */}
           <div className="modal-field">
-            <label>Select Location</label>
-
+            <label>{t("header.selectCountry")}</label>
             <Select
               options={countryOptions}
-              value={countryOptions.find(
-                (item) => item.value === country
-              )}
-              onChange={(selected) =>
-                setCountry(selected.value)
-              }
+              value={countryOptions.find((item) => item.value === tempCountry)}
+              onChange={(selected) => setTempCountry(selected.value)}
               className="react-select-container"
               classNamePrefix="react-select"
               formatOptionLabel={(item) => (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <img
                     src={item.flag}
                     alt={item.label}
-                    style={{
-                      width: "20px",
-                      height: "15px",
-                      objectFit: "cover",
-                      borderRadius: "2px",
-                    }}
+                    style={{ width: "20px", height: "15px", objectFit: "cover", borderRadius: "2px" }}
                   />
-
                   <span>{item.label}</span>
                 </div>
               )}
             />
           </div>
 
-          {/* Language Dropdown */}
           <div className="modal-field">
-            <label>Select Language</label>
-
+            <label>{t("header.selectLanguage")}</label>
             <select
-              value={language}
-              onChange={(e) =>
-                setLanguage(e.target.value)
-              }
+              value={tempLanguage}
+              onChange={(e) => setTempLanguage(e.target.value)}
               className="custom-select"
             >
-              {languages.map((lang, index) => (
-                <option
-                  key={index}
-                  value={lang}
-                >
-                  {lang}
+              {languages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.name}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Footer */}
           <div className="language-footer">
-            <button
-              className="close-btn"
-              onClick={() => setOpen(false)}
-            >
-              Close
+            <button className="close-btn" onClick={() => setOpen(false)}>
+              {t("header.close")}
             </button>
-
-            <button className="save-btn">
-              Save changes
+            <button className="save-btn" onClick={handleSave}>
+              {t("header.saveChanges")}
             </button>
           </div>
         </div>

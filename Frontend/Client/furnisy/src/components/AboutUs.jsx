@@ -1,12 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import "../assets/style/AboutUs.css";
 import AccountHeader from "./AccountHeader";
-import HeroImg from "../../public/images/about 1.webp";
-import AboutImg from "/images/about2.webp";
-import LivingImg from "../../public/images/about 3.webp";
 import ReviewSlider from "../Common/ReviewSlider";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import AboutVideoBanner from "../../public/images/AboutVideo.jpg";
+import { useTranslation } from "../context/LanguageContext";
 
 
 /* ---------------- COUNTER COMPONENT ---------------- */
@@ -85,9 +83,8 @@ const ExperienceSection = ({ title, text, features, image }) => (
     </section>
 );
 
-/* ---------------- BANNER SECTION ---------------- */
 /* ---------------- VIDEO BANNER SECTION ---------------- */
-const Aboutus_Video_BannerSection = ({ image }) => {
+const Aboutus_Video_BannerSection = ({ image, videoUrl }) => {
     const [isPlaying, setIsPlaying] = useState(false);
 
     return (
@@ -114,11 +111,10 @@ const Aboutus_Video_BannerSection = ({ image }) => {
                                 ✕
                             </button>
 
-                            {/* Replace with your real video */}
                             <iframe
                                 width="100%"
                                 height="400"
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                src={videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
                                 title="Video"
                                 frameBorder="0"
                                 allowFullScreen
@@ -189,38 +185,57 @@ const BrandsSection = () => {
 
 /* ---------------- MAIN COMPONENT ---------------- */
 const AboutUs = () => {
+    const { t, lang } = useTranslation();
+    const [aboutContent, setAboutContent] = useState(null);
+
+    useEffect(() => {
+        const fetchAbout = async () => {
+            try {
+                const res = await fetch("http://localhost:5000/api/about");
+                const data = await res.json();
+                if (data.success && data.data) {
+                    setAboutContent(data.data);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchAbout();
+    }, []);
+
+    const isEnglish = lang === "en";
+
     const aboutData = {
-        heroImage: HeroImg,
+        heroImage: aboutContent?.hero_image || "",
         about: {
-            title: "About Furnisy",
-            description: [
-                "Our goal is to provide you with furniture that not only looks stunning but also serves your needs and lasts for years to come. We prioritize quality in everything we do. From the materials we use to the craftsmanship of our products, we ensure that every piece meets our high standards of excellence.",
-                "you with furniture that not only looks stunning but also serves your needs and lasts for years to come. We prioritize quality in everything we do. From the materials we use to the craftsmanship of our products, we ensure that every piece meets our high standards of excellence.",
-            ],
+            title: isEnglish && aboutContent?.heading ? aboutContent.heading : t("about.heading"),
+            description: [isEnglish && aboutContent?.description ? aboutContent.description : t("about.desc")],
             stats: [
-                { value: 12000, label: "Premium products" },
-                { value: 25000, label: "Years experience" },
-                { value: 20000, label: "Happy customers" },
+                { value: aboutContent?.stat1_value || 12000, label: isEnglish && aboutContent?.stat1_label ? aboutContent.stat1_label : t("about.premiumProducts") },
+                { value: aboutContent?.stat2_value || 25000, label: isEnglish && aboutContent?.stat2_label ? aboutContent.stat2_label : t("about.yearsExperience") },
+                { value: aboutContent?.stat3_value || 20000, label: isEnglish && aboutContent?.stat3_label ? aboutContent.stat3_label : t("about.happyCustomers") },
             ],
-            image: AboutImg,
+            image: aboutContent?.about_image || "",
         },
         experience: {
-            title: "Discover The Furnisy Shopping Experience",
-            text: "Explore our carefully curated collections, featuring the latest furniture design home decor. Our diverse range of styles fits every taste and space.",
+            title: isEnglish && aboutContent?.experience_title ? aboutContent.experience_title : t("about.experienceTitle"),
+            text: isEnglish && aboutContent?.experience_text ? aboutContent.experience_text : t("about.explore"),
             features: [
-                "User-Friendly Website",
-                "Fast & Free Shipping",
-                "24/7 Customer Support",
-                "High-Quality Furniture",
-                "Easy Exchanges & Returns",
+                isEnglish && aboutContent?.feature1 ? aboutContent.feature1 : t("about.userFriendly"),
+                isEnglish && aboutContent?.feature2 ? aboutContent.feature2 : t("about.fastShipping"),
+                isEnglish && aboutContent?.feature3 ? aboutContent.feature3 : t("about.customerSupport"),
+                isEnglish && aboutContent?.feature4 ? aboutContent.feature4 : t("about.highQuality"),
+                isEnglish && aboutContent?.feature5 ? aboutContent.feature5 : t("about.easyReturns"),
             ],
-            image: LivingImg,
+            image: aboutContent?.experience_image || "",
         },
+        videoBanner: aboutContent?.video_banner_image || "",
+        videoUrl: aboutContent?.video_url || "",
     };
 
     return (
         <>
-            <AccountHeader />
+            <AccountHeader title={t("about.title")} breadcrumb="Home → About Us" />
             <div className="about-wrapper">
                 <HeroSection image={aboutData.heroImage} />
                 <AboutSection
@@ -235,7 +250,7 @@ const AboutUs = () => {
                     features={aboutData.experience.features}
                     image={aboutData.experience.image}
                 />
-                <Aboutus_Video_BannerSection image={AboutVideoBanner} />
+                <Aboutus_Video_BannerSection image={aboutData.videoBanner} videoUrl={aboutData.videoUrl} />
                 <ReviewSlider />
                 <BrandsSection />
             </div>

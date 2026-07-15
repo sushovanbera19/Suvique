@@ -292,121 +292,92 @@ export const searchProducts = (categoryId, keyword, callback) => {
 
 export const getShopProducts = (filters, callback) => {
 
-  let sql = `
-    SELECT
-      p.*,
-      c.category_name,
-      s.subcategory_name
-    FROM products p
+  let whereClauses = [`p.status = 'active'`];
+  let values = [];
 
-    LEFT JOIN product_category c
-      ON p.category_id = c.category_id
-
-    LEFT JOIN product_subcategory s
-      ON p.sub_category_id = s.subcategory_id
-
-    LEFT JOIN product_variation_map pvm
-      ON p.id = pvm.product_id
-
-    LEFT JOIN product_variation pv
-      ON pvm.variation_id = pv.variation_id
-
-    WHERE 1=1
-  `;
-
-  const values = [];
-
-  // Category
   if (filters.category) {
-    sql += ` AND p.category_id = ?`;
+    whereClauses.push(`p.category_id = ?`);
     values.push(filters.category);
   }
 
-  // Sub Category
   if (filters.subcategory) {
-    sql += ` AND p.sub_category_id = ?`;
+    whereClauses.push(`p.sub_category_id = ?`);
     values.push(filters.subcategory);
   }
 
-  // Search
   if (filters.search) {
-
-    sql += `
-      AND (
-        p.product_name LIKE ?
-        OR p.description LIKE ?
-        OR p.tags LIKE ?
-        OR p.sku LIKE ?
-      )
-    `;
-
+    whereClauses.push(`(p.product_name LIKE ? OR p.description LIKE ? OR p.tags LIKE ? OR p.sku LIKE ?)`);
     const keyword = `%${filters.search}%`;
-
-    values.push(
-      keyword,
-      keyword,
-      keyword,
-      keyword
-    );
+    values.push(keyword, keyword, keyword, keyword);
   }
 
-  // Color
   if (filters.color) {
-    sql += ` AND pv.color_code = ?`;
+    whereClauses.push(`pv.color_code = ?`);
     values.push(filters.color);
   }
 
-  // Size
   if (filters.size) {
-    sql += ` AND pv.size = ?`;
+    whereClauses.push(`pv.size = ?`);
     values.push(filters.size);
   }
 
-  // Price
   if (filters.minPrice) {
-    sql += ` AND p.base_price >= ?`;
+    whereClauses.push(`p.base_price >= ?`);
     values.push(filters.minPrice);
   }
 
-  if (filters.maxPrice) {
-    sql += ` AND p.base_price <= ?`;
+  if (filters.maxPrice && Number(filters.maxPrice) > 0) {
+    whereClauses.push(`p.base_price <= ?`);
     values.push(filters.maxPrice);
   }
 
-  // Sorting
-  switch (filters.sort) {
+  const needsVariationJoin = whereClauses.some(c => c.includes('pv.'));
 
-    case "price_low":
-      sql += ` ORDER BY p.base_price ASC`;
-      break;
+  const fromSql = `
+    FROM products p
+    LEFT JOIN product_category c ON p.category_id = c.category_id
+    LEFT JOIN product_subcategory s ON p.sub_category_id = s.sub_category_id
+    ${needsVariationJoin ? 'LEFT JOIN product_variation_map pvm ON p.id = pvm.product_id LEFT JOIN product_variation pv ON pvm.variation_id = pv.variation_id' : ''}
+  `;
 
-    case "price_high":
-      sql += ` ORDER BY p.base_price DESC`;
-      break;
+  const whereSql = whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
 
-    case "newest":
-      sql += ` ORDER BY p.created_at DESC`;
-      break;
+  const orderSql = (() => {
+    switch (filters.sort) {
+      case "low":  return ` ORDER BY p.base_price ASC`;
+      case "high": return ` ORDER BY p.base_price DESC`;
+      default:     return ` ORDER BY p.id DESC`;
+    }
+  })();
 
-    case "oldest":
-      sql += ` ORDER BY p.created_at ASC`;
-      break;
-
-    default:
-      sql += ` ORDER BY p.id DESC`;
-  }
-
-  // Pagination
   const page = Number(filters.page) || 1;
   const limit = Number(filters.limit) || 9;
-
   const offset = (page - 1) * limit;
 
-  sql += ` LIMIT ?, ?`;
+  const distinct = needsVariationJoin ? 'DISTINCT ' : '';
 
-  values.push(offset, limit);
+  const countSql = `SELECT COUNT(${distinct}p.id) AS total ${fromSql}${whereSql}`;
 
-  db.query(sql, values, callback);
+  db.query(countSql, [...values], (err, countResult) => {
+    if (err) {
+      console.error("Shop count query error:", err.message);
+      return callback(err);
+    }
+
+    const totalCount = countResult[0]?.total || 0;
+
+    const dataSql = `SELECT ${distinct}p.id, p.product_name, p.description, p.category_id, p.sub_category_id, p.base_price, p.sku, p.quantity, p.vat, p.width, p.height, p.weight, p.shipping_cost, p.tags, p.main_image, p.gallery_images, c.category_name, s.subcategory_name ${fromSql}${whereSql}${orderSql} LIMIT ?, ?`;
+
+    values.push(offset, limit);
+
+    db.query(dataSql, values, (err, result) => {
+      if (err) {
+        console.error("Shop data query error:", err.message);
+        return callback(err);
+      }
+      callback(null, result, totalCount);
+    });
+  });
 
 };
 
@@ -481,10 +452,9 @@ export const getShopSidebar = (callback) => {
                         id,
                         product_name,
                         base_price,
-                        sale_price,
                         main_image
                     FROM products
-                    WHERE is_best_seller=1
+                    ORDER BY id DESC
                     LIMIT 5
                 `;
 

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaHeart, FaShoppingCart, FaEye, FaExchangeAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useCompare } from "../context/CompareContext";
+import { toastSuccess, toastError, toastLoginRequired, toastWarning } from "../utils/toast";
+import { useCountry } from "../context/CountryContext";
+import { useTranslation } from "../context/LanguageContext";
 
 
 const Card = styled.div`
@@ -142,8 +146,16 @@ const Info = styled.div`
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const { addToCompare, isInCompare } = useCompare();
+  const { formatPrice } = useCountry();
+  const { t } = useTranslation();
   const imageUrl = product.main_image?.replace(/\\/g, "/");
-  const tag = product.tags ? JSON.parse(product.tags)[0] : null;
+  let tag = null;
+  try {
+    tag = product.tags ? JSON.parse(product.tags)[0] : null;
+  } catch (e) {
+    tag = null;
+  }
 
   const addToWishlist = async () => {
     
@@ -164,10 +176,10 @@ const ProductCard = ({ product }) => {
       const data = await res.json();
 
       if (data.success) {
-        alert("Added to wishlist");
+        toastSuccess(t("product.addedToWishlist"));
         navigate("/wishlist");
       } else {
-        alert(data.message);
+        toastError(data.message);
       }
     } catch (err) {
       console.log(err);
@@ -179,7 +191,7 @@ const addToCart = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Please login first");
+      toastLoginRequired();
       return;
     }
 
@@ -207,14 +219,24 @@ const addToCart = async () => {
     }
 
     if (data.success) {
-      alert("Added to cart");
+      toastSuccess(t("product.addedToCart"));
+      window.dispatchEvent(new Event("cartUpdated"));
     } else {
-      alert(data.message || "Failed to add to cart");
+      toastError(data.message || t("product.failedToAdd"));
     }
   } catch (err) {
     console.log("Cart error:", err);
   }
 };
+  const handleCompare = () => {
+    const result = addToCompare(product);
+    if (!result.success) {
+      toastWarning(result.message);
+      return;
+    }
+    toastSuccess(result.message);
+  };
+
   return (
     <Card>
       <ImageWrapper>
@@ -226,17 +248,21 @@ const addToCart = async () => {
         />
 
         <Overlay>
-          <Icon data-tooltip="Add to Wishlist" onClick={addToWishlist}><FaHeart /></Icon>
-          <Icon data-tooltip="Add to Cart" onClick={addToCart}><FaShoppingCart /></Icon>
-          <Icon data-tooltip="Quick View" onClick={() => navigate(`/product-details-1/${product.id}`)}><FaEye /></Icon>
-          <Icon data-tooltip="Compare" onClick={() => navigate("/compare")}><FaExchangeAlt /></Icon>
+          <Icon data-tooltip={t("product.addToWishlist")} onClick={addToWishlist}><FaHeart /></Icon>
+          <Icon data-tooltip={t("product.addToCart")} onClick={addToCart}><FaShoppingCart /></Icon>
+          <Icon data-tooltip={t("product.quickView")} onClick={() => navigate(`/product-details-1/${product.id}`)}><FaEye /></Icon>
+          <Icon
+            data-tooltip={isInCompare(product.id) ? t("product.alreadyInCompare") : t("product.compare")}
+            onClick={handleCompare}
+            style={isInCompare(product.id) ? { background: "#040404", color: "#fff" } : {}}
+          ><FaExchangeAlt /></Icon>
         </Overlay>
       </ImageWrapper>
 
       <Info>
         <h4 style={{ cursor: "pointer" }}
           onClick={() => navigate(`/product-details-1/${product.id}`)}>{product.product_name}</h4>
-        <p>{product.base_price}</p>
+        <p>{formatPrice(product.sale_price || product.base_price)}</p>
       </Info>
     </Card>
   );

@@ -301,6 +301,8 @@ const Orders = () => {
                       <th>Phone</th>
                       <th>City</th>
                       <th>Total</th>
+                      <th>Country</th>
+                      <th>Currency</th>
                       <th>Payment Status</th>
                       <th>Items</th>
                       <th>Order Status</th>
@@ -321,7 +323,9 @@ const Orders = () => {
                         <td>{order.email || "N/A"}</td>
                         <td>{order.phone || "N/A"}</td>
                         <td>{order.city || "N/A"}</td>
-                        <td>₹ {order.total}</td>
+                        <td>{order.currency || "INR"} {order.total}</td>
+                        <td>{order.country || "N/A"}</td>
+                        <td>{order.currency || "INR"}</td>
                         <td>
                           <span
                             className={`orders-badge ${

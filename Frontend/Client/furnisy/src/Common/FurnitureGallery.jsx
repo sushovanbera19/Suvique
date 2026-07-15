@@ -2,6 +2,7 @@ import React from 'react';
 import '../assets/style/FurnitureGallery.css';
 import ReusableButton from '../Common/Commonbutton';
 import { FaInstagram } from 'react-icons/fa';
+import { useTranslation } from "../context/LanguageContext";
 
 const furnitureItems = [
   {
@@ -13,17 +14,18 @@ const furnitureItems = [
 ];
 
 function FurnitureGallery() {
+  const { t } = useTranslation();
   return (
     <div className="gallery-container">
       <div className="gallery-header">
-        <h2>Furniture Gallery</h2>
+        <h2>{t("gallery.heading")}</h2>
         
         <ReusableButton
           href="https://instagram.com"
           target="_blank"
           text={
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <FaInstagram /> Follow 
+              <FaInstagram /> {t("gallery.follow")}
             </span>
           }
           style={{
@@ -48,7 +50,7 @@ function FurnitureGallery() {
               />
               <div className="gallery-overlay">
                 <div className="gallery-overlay-content">
-                  <h3>View more in<br></br> @furnisy</h3>
+                  <h3>{t("gallery.viewMore")}</h3>
                 </div>
               </div>
             </div>

@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaStar } from "react-icons/fa";
 import ReviewAvatar from "../../public/images/user-1.webp";
 import "../assets/style/ReviewSlider.css";
+import { useTranslation } from "../context/LanguageContext";
 
 const reviews = [
   {
-    text: "I am thrilled with my new living Furnisy. The quality of furniture is outstanding, the customization option allowed me get exactly what I wanted. Customer support team was incredibly helpful. Highly recommend I couldn't be happier with my purchase!",
+        text: "I am thrilled with my new living Savique. The quality of furniture is outstanding, the customization option allowed me get exactly what I wanted. Customer support team was incredibly helpful. Highly recommend I couldn't be happier with my purchase!",
     name: "Liam Smith",
     role: "Co-Founder",
     avatar: ReviewAvatar,
@@ -14,6 +15,7 @@ const reviews = [
 ];
 
 const ReviewSlider = () => {
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const sliderRef = useRef(null);
@@ -66,7 +68,7 @@ const ReviewSlider = () => {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
     >
-      <h2>What People Are Saying</h2>
+      <h2>{t("review.heading")}</h2>
       <div
         className="review-slides-wrapper"
         style={{

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../assets/style/CheckoutForm.css";
 import AccountHeader from "./AccountHeader";
 import Reuseablebutton from "../Common/Commonbutton";
+import { toastSuccess, toastError } from "../utils/toast";
+import { useCountry } from "../context/CountryContext";
+import { useTranslation } from "../context/LanguageContext";
 
 export default function CheckoutForm() {
     const [shippingMethod, setShippingMethod] = useState("free");
@@ -12,6 +15,8 @@ export default function CheckoutForm() {
     const [selectedAddress, setSelectedAddress] = useState("");
     const [showAddressForm, setShowAddressForm] = useState(false);
     const [addressId, setAddressId] = useState(null);
+    const { formatPrice, selectedCountry } = useCountry();
+    const { t } = useTranslation();
 
     // const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
 
@@ -133,7 +138,9 @@ export default function CheckoutForm() {
             body: JSON.stringify({
 
                 address_id: id,
-                payment_method: "Cash On Delivery"
+                payment_method: "Cash On Delivery",
+                country: selectedCountry.name,
+                currency: selectedCountry.currency
 
             })
         }
@@ -143,13 +150,13 @@ export default function CheckoutForm() {
 
     if (data.success) {
 
-        alert("Order placed successfully");
+        toastSuccess(t("checkout.orderSuccess"));
 
         window.location.href = "/";
 
     } else {
 
-        alert(data.message);
+        toastError(data.message);
 
     }
 
@@ -163,12 +170,12 @@ export default function CheckoutForm() {
     };
     return (
         <>
-            <AccountHeader />
+            <AccountHeader title="Checkout" breadcrumb="Home → Checkout" />
             <div className="container">
                 {addresses.length > 0 && (
                     <>
                         <div className="field">
-                            <label>Saved Address</label>
+                            <label>{t("checkout.savedAddress")}</label>
 
                             <select
                                 className="Checkout_select"
@@ -198,23 +205,23 @@ export default function CheckoutForm() {
                 {(addresses.length === 0 || showAddressForm) && (
                 <form className="form-wrapper">
                     <p className="info-text">
-                        Returning customer? <a href="#">Click here to login</a>
+                        {t("checkout.returningCustomer")} <a href="#">{t("checkout.clickToLogin")}</a>
                     </p>
                     <p className="info-text">
-                        Have a coupon? <a href="#">Click here to enter your code</a>
+                        {t("checkout.haveCoupon")} <a href="#">{t("checkout.enterCode")}</a>
                     </p>
 
                     <div className="field-row">
                         <div className="field">
                             <label htmlFor="firstName" className="label">
-                                First name <span style={{ color: "red" }}>*</span>
+                                {t("checkout.firstName")} <span style={{ color: "red" }}>*</span>
                             </label>
                             <input id="first_name" type="text" required className="input" value={formData.first_name}
                                 onChange={handleChange} />
                         </div>
                         <div className="field">
                             <label htmlFor="lastName" className="label">
-                                Last name <span style={{ color: "red" }}>*</span>
+                                {t("checkout.lastName")} <span style={{ color: "red" }}>*</span>
                             </label>
                             <input id="last_name" type="text" required className="input" value={formData.last_name}
                                 onChange={handleChange} />
@@ -224,14 +231,14 @@ export default function CheckoutForm() {
                     <div className="field-row">
                         <div className="field">
                             <label htmlFor="email" className="label">
-                                Email address <span style={{ color: "red" }}>*</span>
+                                {t("checkout.emailAddress")} <span style={{ color: "red" }}>*</span>
                             </label>
                             <input id="email" type="email" required className="input" value={formData.email}
                                 onChange={handleChange} />
                         </div>
                         <div className="field">
                             <label htmlFor="phone" className="label">
-                                Phone <span style={{ color: "red" }}>*</span>
+                                {t("checkout.phone")} <span style={{ color: "red" }}>*</span>
                             </label>
                             <input id="phone" type="tel" required className="input" value={formData.phone}
                                 onChange={handleChange} />
@@ -240,7 +247,7 @@ export default function CheckoutForm() {
 
                     <div className="field">
                         <label htmlFor="country" className="label">
-                            Country/Region <span style={{ color: "red" }}>*</span>
+                            {t("checkout.countryRegion")} <span style={{ color: "red" }}>*</span>
                         </label>
                         <select id="country" required defaultValue="" className="Checkout_select" value={formData.country}
                             onChange={handleChange}>
@@ -256,7 +263,7 @@ export default function CheckoutForm() {
 
                     <div className="field">
                         <label htmlFor="city" className="label">
-                            Town / City <span style={{ color: "red" }}>*</span>
+                            {t("checkout.townCity")} <span style={{ color: "red" }}>*</span>
                         </label>
                         <input id="city" type="text" required className="input" value={formData.city}
                             onChange={handleChange} />
@@ -264,7 +271,7 @@ export default function CheckoutForm() {
 
                     <div className="field">
                         <label htmlFor="street" className="label">
-                            Street address <span style={{ color: "red" }}>*</span>
+                            {t("checkout.streetAddress")} <span style={{ color: "red" }}>*</span>
                         </label>
                         <input id="street" type="text" required className="input" value={formData.street}
                             onChange={handleChange} />
@@ -272,7 +279,7 @@ export default function CheckoutForm() {
 
                     <div className="field">
                         <label htmlFor="zip" className="label">
-                            ZIP Code <span style={{ color: "red" }}>*</span>
+                            {t("checkout.zipCode")} <span style={{ color: "red" }}>*</span>
                         </label>
                         <input id="zip_code" type="text" required className="input" value={formData.zip_code}
                             onChange={handleChange} />
@@ -280,7 +287,7 @@ export default function CheckoutForm() {
 
                     <div className="field">
                         <label htmlFor="additional" className="label">
-                            Additional information (optional)
+                            {t("checkout.additionalInfo")}
                         </label>
                         <textarea id="additional_info" className="textarea" value={formData.additional_info}
                             onChange={handleChange} />
@@ -297,7 +304,7 @@ export default function CheckoutForm() {
                 <div className="order-summary">
                     <div className="summary-top">
                         <Reuseablebutton
-                            text="Your Order"
+                            text={t("checkout.yourOrder")}
                             style={{
                                 padding: "clamp(0.4rem, 0.9vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",
                                 fontSize: "clamp(1rem, 2vw, 1.5rem)",
@@ -311,8 +318,8 @@ export default function CheckoutForm() {
                         />
 
                         <div className="summary-row bold">
-                            <div>Product</div>
-                            <div>Subtotal</div>
+                            <div>{t("checkout.product")}</div>
+                            <div>{t("cart.subtotal")}</div>
                         </div>
                         {cartItems.map((item) => (
                             <div className="summary-row" key={item.id}>
@@ -329,16 +336,16 @@ export default function CheckoutForm() {
                                         </div>
                                     </div>
                                 </div>
-                                <div style={{ fontWeight: "600" }}>  ${(Number(item.base_price) * item.quantity).toFixed(2)}</div>
+                                <div style={{ fontWeight: "600" }}>  {formatPrice(Number(item.base_price) * item.quantity)}</div>
                             </div>
                         ))}
                         <div className="summary-row">
-                            <div>Subtotal</div>
-                            <div>${subtotal.toFixed(2)}</div>
+                            <div>{t("cart.subtotal")}</div>
+                            <div>{formatPrice(subtotal)}</div>
                         </div>
 
                         <div className="summary-row">
-                            <div>Shipping</div>
+                            <div>{t("cart.shipping")}</div>
                             <div>
                                 <div className="radio-group">
                                     <label>
@@ -349,7 +356,7 @@ export default function CheckoutForm() {
                                             checked={shippingMethod === "free"}
                                             onChange={() => setShippingMethod("free")}
                                         />
-                                        Free Shipping
+                                        {t("cart.freeShipping")}
                                     </label>
                                     <label>
                                         <input
@@ -366,8 +373,8 @@ export default function CheckoutForm() {
                         </div>
 
                         <div className="summary-row bold">
-                            <div>Total</div>
-                            <div>${total.toFixed(2)}</div>
+                            <div>{t("cart.total")}</div>
+                            <div>{formatPrice(total)}</div>
                         </div>
                     </div>
 
@@ -380,7 +387,7 @@ export default function CheckoutForm() {
                                 checked={paymentMethod === "direct"}
                                 onChange={() => setPaymentMethod("direct")}
                             />
-                            Direct bank transfer
+                            {t("checkout.directBank")}
                         </label>
 
                         {paymentMethod === "direct" && (
@@ -399,7 +406,7 @@ export default function CheckoutForm() {
                                 checked={paymentMethod === "check"}
                                 onChange={() => setPaymentMethod("check")}
                             />
-                            Check payments
+                            {t("checkout.checkPayment")}
                         </label>
 
                         <label>
@@ -410,7 +417,7 @@ export default function CheckoutForm() {
                                 checked={paymentMethod === "cod"}
                                 onChange={() => setPaymentMethod("cod")}
                             />
-                            Cash on delivery
+                            {t("checkout.cashOnDelivery")}
                         </label>
 
                         <label>
@@ -421,7 +428,7 @@ export default function CheckoutForm() {
                                 checked={paymentMethod === "paypal"}
                                 onChange={() => setPaymentMethod("paypal")}
                             />
-                            PayPal{" "}
+                            {t("checkout.paypal")}{" "}
                             <img
                                 src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
                                 alt="PayPal"
@@ -437,7 +444,7 @@ export default function CheckoutForm() {
                                 }}
                                 title="What is PayPal?"
                             >
-                                What is paypal?
+                                {t("checkout.whatIsPaypal")}
                             </span>
                         </label>
                     </div>
@@ -450,13 +457,13 @@ export default function CheckoutForm() {
                                 onChange={() => setAgreeTerms((prev) => !prev)}
                             />
                             I have read and agree to the website{" "}
-                            <a href="#">terms and conditions</a>
+                            <a href="#">{t("checkout.termsLink")}</a>
                         </label>
                     </div>
 
 
                     <Reuseablebutton
-                        text="Place Order"
+                        text={t("checkout.placeOrder")}
                         onClick={placeOrder}
                         style={{
                             padding: "clamp(0.4rem, 0.9vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",

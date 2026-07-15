@@ -3,9 +3,14 @@ import "../assets/style/Wishlist.css";
 import { FaTimes } from "react-icons/fa";
 import AccountHeader from "./AccountHeader";
 import Reuseablebutton from "../Common/Commonbutton";
+import { toastSuccess, toastError, toastLoginRequired } from "../utils/toast";
+import { useCountry } from "../context/CountryContext";
+import { useTranslation } from "../context/LanguageContext";
 
 const Wishlist = () => {
     const [wishlistItems, setWishlistItems] = useState([]);
+    const { formatPrice } = useCountry();
+    const { t } = useTranslation();
 
     const removeItem = async (productId) => {
         const token = localStorage.getItem("token");
@@ -54,7 +59,7 @@ const Wishlist = () => {
             const token = localStorage.getItem("token");
 
             if (!token) {
-                alert("Please login first");
+                toastLoginRequired();
                 return;
             }
 
@@ -72,10 +77,10 @@ const Wishlist = () => {
             const data = await res.json();
 
             if (data.success) {
-                alert(data.message);
+                toastSuccess(data.message);
 
             } else {
-                alert(data.message);
+                toastError(data.message);
             }
         } catch (err) {
             console.log(err);
@@ -84,14 +89,14 @@ const Wishlist = () => {
 
     return (
         <>
-            <AccountHeader />
+            <AccountHeader title="Wishlist" breadcrumb="Home → Wishlist" />
 
             <div className="product-table">
                 {/* Header */}
                 <div className="product-header">
-                    <span>Product Name</span>
-                    <span>Price</span>
-                    <span>Stock status</span>
+                    <span>{t("wishlist.productName")}</span>
+                    <span>{t("wishlist.price")}</span>
+                    <span>{t("wishlist.stockStatus")}</span>
                     <span></span>
                     <span></span>
                 </div>
@@ -106,13 +111,13 @@ const Wishlist = () => {
                                 <span className="wishlist_product-name">{item.product_name}</span>
                             </div>
 
-                            <div className="wishlist_product-price">{item.base_price}</div>
+                            <div className="wishlist_product-price">{formatPrice(item.base_price)}</div>
 
                             <div className={`product-stock ${item.stock === "In Stock" ? "in-stock" : "out-stock"}`}  >
-                                {item.quantity > 0 ? "In Stock" : "Out of Stock"}
+                                {item.quantity > 0 ? t("product.inStock") : t("product.outOfStock")}
                             </div>
 
-                            <Reuseablebutton text="Add to cart" onClick={() => addToCart(item.product_id)} style={{
+                            <Reuseablebutton text={t("wishlist.addToCart")} onClick={() => addToCart(item.product_id)} style={{
                                 backgroundColor: "#111", color: "#fff", padding: "20px 12px", borderRadius: "12px", fontSize: "16px", cursor: "pointer", width: "150px"
                             }} />
                             <button className="remove-btn" onClick={() => removeItem(item.product_id)} aria-label="Remove item"    >
@@ -122,7 +127,7 @@ const Wishlist = () => {
                     ))
                 ) : (
                     <p style={{ padding: "40px", textAlign: "center", color: "red" }}>
-                        Your wishlist is empty
+                        {t("wishlist.empty")}
                     </p>
                 )}
             </div>

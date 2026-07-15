@@ -1,5 +1,6 @@
 import React from "react";
 import Blogimage from "../../public/images/blog-3.webp";
+import { useTranslation } from "../context/LanguageContext";
 
 const posts = [
   "Modern Home Furniture",
@@ -9,9 +10,10 @@ const posts = [
 ];
 
 const LatestPosts = () => {
+  const { t } = useTranslation();
   return (
     <div className="sidebar-box">
-      <h4>Latest Posts</h4>
+      <h4>{t("blog.latestPosts")}</h4>
 
       {posts.map((title, i) => (
         <div className="latest-post" key={i}>

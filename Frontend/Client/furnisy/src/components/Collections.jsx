@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../assets/style/Collections.css";
 import ViewAllButton from "../Common/ViewAllButton";
 import ProductSlider from "../Common/ProductSlider";
+import { useTranslation } from "../context/LanguageContext";
 
 const Collections = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -30,10 +32,10 @@ const Collections = () => {
   return (
     <div className="collections-container">
       <div className="collections-header">
-        <h2 className="collections-heading">Top Collections</h2>
+        <h2 className="collections-heading">{t("collections.heading")}</h2>
 
         <ViewAllButton
-          text="View All Collections"
+          text={t("collections.viewAll")}
           onClick={() => console.log("Navigate to Products")}
         />
       </div>

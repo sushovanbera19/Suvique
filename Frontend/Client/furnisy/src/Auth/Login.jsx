@@ -4,9 +4,11 @@ import '../assets/style/SignupPage.css';
 import contact from "../../public/images/contact-img.webp"
 import AccountHeader from '../Common/AccountHeader';
 import { useNavigate } from 'react-router-dom'; // add this
+import { useTranslation } from "../context/LanguageContext";
 
 function LoginPage() {
     const navigate = useNavigate(); // add this
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -64,20 +66,20 @@ function LoginPage() {
     };
 
     return (
-        <> <AccountHeader />
+        <> <AccountHeader title="Login" breadcrumb="Home → Login" />
             <div className="signup-container">
                 <div className="signup-content">
                     <div className="form-side">
-                        <h1>Login your account</h1>
+                        <h1>{t("login.heading")}</h1>
 
                         <form onSubmit={handleSubmit} className="signup-form">
                             <div className="form-group">
-                                <label htmlFor="email">Email*</label>
+                                <label htmlFor="email">{t("login.email")}</label>
                                 <input
                                     type="email"
                                     id="email"
                                     name="email"
-                                    placeholder="Email"
+                                    placeholder={t("login.emailPlaceholder")}
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
@@ -85,12 +87,12 @@ function LoginPage() {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="password">Password*</label>
+                                <label htmlFor="password">{t("login.password")}</label>
                                 <input
                                     type="password"
                                     id="password"
                                     name="password"
-                                    placeholder="Create password"
+                                    placeholder={t("login.passwordPlaceholder")}
                                     value={formData.password}
                                     onChange={handleChange}
                                     required
@@ -123,7 +125,7 @@ function LoginPage() {
                                         onChange={handleChange}
                                         required
                                     />
-                                    I agree to all <a href="#terms">Terms & Conditions</a>
+                                    {t("login.agreePrefix")} <a href="#terms">{t("login.terms")}</a>
                                 </label>
 
                                 {/* Right: Lost password link */}
@@ -131,7 +133,7 @@ function LoginPage() {
                                     href="/reset-password"
                                     style={{ color: "#070707", textDecoration: "none" }}
                                 >
-                                    Lost your password?
+                                {t("login.forgotPassword")}
                                 </a>
                             </div>
 
@@ -139,12 +141,12 @@ function LoginPage() {
 
 
                             <button type="submit" className="signup-btn">
-                                Sign Up
+                                {t("login.signIn")}
                             </button>
                         </form>
 
                         <div className="divider">
-                            <span>Or Sign Up With</span>
+                            <span>{t("login.orSignup")}</span>
                         </div>
 
                         <div className="social-buttons">
@@ -157,7 +159,7 @@ function LoginPage() {
                         </div>
 
                         <p className="login-link">
-                            New customer?  <a href="/register">Sign up</a>
+                            {t("login.newCustomer")}  <a href="/register">{t("login.signupLink")}</a>
                         </p>
                     </div>
 
@@ -174,8 +176,8 @@ function LoginPage() {
 
                                 <div className="signup-modal-icon">✔</div>
 
-                                <h2>Login Success!</h2>
-                                <p>Welcome back 🎉</p>
+                                <h2>{t("login.successTitle")}</h2>
+                                <p>{t("login.welcomeBack")} 🎉</p>
 
                                 <button
                                     className="signup-modal-btn"
@@ -190,7 +192,7 @@ function LoginPage() {
                                         navigate("/"); // redirect to home page
                                     }}
                                 >
-                                    CONTINUE
+                                    {t("login.continue")}
                                 </button>
 
                             </div>
@@ -202,14 +204,14 @@ function LoginPage() {
 
                                 <div className="signup-modal-icon signup-error-icon">✖</div>
 
-                                <h2>Login Failed!</h2>
+                                <h2>{t("login.failedTitle")}</h2>
                                 <p>{errorMessage}</p>
 
                                 <button
                                     className="signup-modal-btn signup-error-btn"
                                     onClick={() => setShowError(false)}
                                 >
-                                    TRY AGAIN
+                                    {t("login.tryAgain")}
                                 </button>
 
                             </div>

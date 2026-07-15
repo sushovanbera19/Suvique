@@ -1,6 +1,8 @@
 import "../assets/style/Topnav.css"
+import { useTranslation } from "../context/LanguageContext"
 
 const Topnav = () => {
+  const { t } = useTranslation();
   return (
     <div className="mainTop">
       <div>
@@ -11,15 +13,15 @@ const Topnav = () => {
 
           }}
           >
-            15% Off On First Order - Sign Up Today
+            {t("topnav.promo")}
           </p>
         </div>
       </div>
       <div>
         <ul className="top-info">
-          <li>info@furnify.com</li>
-          <li>265 New Ave, California, USA</li>
-          <li>(+0123) 2345 56789</li>
+          <li>{t("topnav.email")}</li>
+          <li>{t("topnav.address")}</li>
+          <li>{t("topnav.phone")}</li>
         </ul>
       </div>
     </div>

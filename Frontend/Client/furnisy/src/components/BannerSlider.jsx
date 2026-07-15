@@ -3,16 +3,16 @@ import "../assets/style/BannerSlider.css";
 import Reuseablebutton from "../Common/Commonbutton";
 import { FaArrowRight } from "react-icons/fa"; // Using react-icons
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "../context/LanguageContext";
 
 const slides = [
     {
         img: "../../../public/images/103-MATT-6.jpg",
-        title: "Modern Furniture For \nEvery Space",
-        subtitle: "Showcase your furniture collections most appealing way \ndriving customer engagement and boosting sales.",
     },
 ];
 
 const BannerSlider = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [current, setCurrent] = useState(0);
     const startX = useRef(0);
@@ -69,7 +69,7 @@ const BannerSlider = () => {
                             data-aos-easing="ease-in-out" // smooth easing
                         >
                             <h4>
-                                {slide.title.split("\n").map((line, i) => (
+                                {t("banner.title").split("\n").map((line, i) => (
                                     <span key={i}>
                                         {line}
                                         <br />
@@ -78,7 +78,7 @@ const BannerSlider = () => {
                             </h4>
 
                             <p>
-                                {slide.subtitle.split("\n").map((line, i) => (
+                                {t("banner.subtitle").split("\n").map((line, i) => (
                                     <span key={i}>
                                         {line}
                                         <br />
@@ -88,7 +88,7 @@ const BannerSlider = () => {
 
                             <Reuseablebutton text={
                                 <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                    Shop Now <FaArrowRight />
+                                    {t("banner.shopNow")} <FaArrowRight />
                                 </span>
                             }  onClick={() => navigate("/Shop-1")} style={{
                                 padding: "clamp(0.4rem, 1.5vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",

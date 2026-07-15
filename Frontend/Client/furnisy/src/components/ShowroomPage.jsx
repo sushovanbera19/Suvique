@@ -3,19 +3,20 @@ import "../assets/style/ShowroomPage.css";
 import { AiOutlinePushpin, AiOutlinePhone } from "react-icons/ai";
 import { LocateFixed } from "lucide-react";
 import { FaSearch } from "react-icons/fa";
+import { useTranslation } from "../context/LanguageContext";
 
 // Showroom data
 const showroomData = [
     {
         id: 1,
-        name: "Furnisy Furniture Austin",
+        name: "Savique Furniture Austin",
         address: "301 W. Second St., Austin, TX",
         phone: "+1 559-278-4240",
         image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
     },
     {
         id: 2,
-        name: "Furnisy Furniture Phoenix",
+        name: "Savique Furniture Phoenix",
         address: "200 W. Washington St, Phoenix, AZ",
         phone: "+1 559-278-4240",
         image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80",
@@ -23,7 +24,7 @@ const showroomData = [
     
     {
         id: 4,
-        name: "Furnisy Furniture Phoenix",
+        name: "Savique Furniture Phoenix",
         address: "City Hall 121 N.LaSalle Street Chicago, IL",
         phone: "+1 559-278-4240",
         image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=400&q=80",
@@ -34,6 +35,7 @@ const showroomData = [
 const filterOptions = ["All", "Austin", "Phoenix", "Chicago", "Phoenix", "Texas"];
 
 const ShowroomPage = () => {
+    const { t } = useTranslation();
     const [selectedLocation, setSelectedLocation] = useState("All");
     const [searchText, setSearchText] = useState("");
 
@@ -57,7 +59,7 @@ const ShowroomPage = () => {
 
     return (
         <div className="pageContainer">
-            <h2 className="heading">All Furniture Showroom Locations</h2>
+            <h2 className="heading">{t("showroom.heading")}</h2>
 
             <div className="mainContent">
                 {/* Left Column: Filters + Store List */}
@@ -67,8 +69,9 @@ const ShowroomPage = () => {
                         setSelectedLocation={setSelectedLocation}
                         searchText={searchText}
                         setSearchText={setSearchText}
+                        t={t}
                     />
-                    <StoreList showrooms={filteredShowrooms} />
+                    <StoreList showrooms={filteredShowrooms} t={t} />
                 </div>
 
                 {/* Right Column: Map */}
@@ -79,14 +82,14 @@ const ShowroomPage = () => {
 };
 
 // Filters Component
-const LocationFilters = ({ selectedLocation, setSelectedLocation, searchText, setSearchText }) => (
+const LocationFilters = ({ selectedLocation, setSelectedLocation, searchText, setSearchText, t }) => (
     <div className="filterContainer">
         {/* Search input */}
         <div className="searchInputWrapper">
             <span className="searchIcon"> <FaSearch /></span>
             <input
                 type="text"
-                placeholder="Find your nearest store"
+                placeholder={t("showroom.findNearest")}
                 className="filterSearchInput"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
@@ -120,18 +123,18 @@ const LocationFilters = ({ selectedLocation, setSelectedLocation, searchText, se
 );
 
 // Store List
-const StoreList = ({ showrooms }) => (
+const StoreList = ({ showrooms, t }) => (
     <div className="storeList">
         {showrooms.length === 0 ? (
-            <div>No stores found.</div>
+            <div>{t("showroom.noStores")}</div>
         ) : (
-            showrooms.map((store) => <StoreItem key={store.id} store={store} />)
+            showrooms.map((store) => <StoreItem key={store.id} store={store} t={t} />)
         )}
     </div>
 );
 
 // Single Store Item: text left, image right, icons inside text
-const StoreItem = ({ store }) => (
+const StoreItem = ({ store, t }) => (
     <div className="storeItem">
         <div className="storeInfo">
             <h4 style={{ margin: "0 0 5px 0" }}>
@@ -143,7 +146,7 @@ const StoreItem = ({ store }) => (
             <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 5 }}>
                 <AiOutlinePhone /> {store.phone}
             </div>
-            <div className="showroomDetails">Showroom Details</div>
+            <div className="showroomDetails">{t("showroom.details")}</div>
         </div>
         <img src={store.image} alt={store.name} className="storeImage" />
     </div>

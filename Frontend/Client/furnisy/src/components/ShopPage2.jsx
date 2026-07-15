@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ShopPage from "./ShopPagecomponent";
 import AccountHeader from "./AccountHeader";
 import CategoryStrip from "../Common/CategoryStrip";
-
-import product from "../../public/images/product 7.webp";
-
-const categories = [
-  { id: 1, title: "All Furniture", count: 2200, image: product },
-  { id: 2, title: "Decor", count: 210, image: product },
-  { id: 3, title: "Office", count: 270, image: product },
-  { id: 4, title: "Living Room", count: 180, image: product },
-  { id: 5, title: "Bedroom", count: 220, image: product },
-];
+import { useTranslation } from "../context/LanguageContext";
 
 const ShopPage2 = () => {
+  const { t } = useTranslation();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/products/shop/sidebar")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data.categories) {
+          const mapped = data.data.categories.map((cat) => ({
+            id: cat.category_id,
+            title: cat.category_name,
+            count: 0,
+            image: null,
+          }));
+          setCategories(mapped);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
-      {/* 🔥 Only for ShopPage2 */}
-      <AccountHeader />
+      <AccountHeader title={t("common.shop")} breadcrumb={`${t("common.home")} → ${t("common.shop")}`} />
       <CategoryStrip categories={categories} />
       <ShopPage />
     </>

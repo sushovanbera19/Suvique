@@ -3,6 +3,7 @@ import "../assets/style/BlogSlider.css";
 import Blog1 from "../../public/images/blog-3.webp";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import BlogCard from "../Common/BlogCard";
+import { useTranslation } from "../context/LanguageContext";
 
 const blogs = [
     {
@@ -16,6 +17,7 @@ const blogs = [
 ];
 
 const BlogSlider = () => {
+    const { t } = useTranslation();
     const sliderRef = useRef(null);
 
     const scroll = (direction) => {
@@ -59,7 +61,7 @@ const BlogSlider = () => {
 
     return (
         <div className="blog-slider-container">
-            <h2>News & Blogs</h2>
+            <h2>{t("blog.newsAndBlogs")}</h2>
 
             <div className="Blogs-button">
                 <button onClick={() => scroll("prev")}>

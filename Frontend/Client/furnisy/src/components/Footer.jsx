@@ -4,9 +4,11 @@ import Visa from "../../public/images/visa.jfif";
 import Mastercard from "../../public/images/mastercard.png";
 import paypal from "../../public/images/paypal.png";
 import Discover from "../../public/images/discover.png";
+import { useTranslation } from "../context/LanguageContext";
 
 
 const Footer = () => {
+    const { t } = useTranslation();
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -14,57 +16,57 @@ const Footer = () => {
                 <div className="footer-column">
                     <img src="/images/logo.png" alt="Logo" style={{ height: "100px" }} />
                     <div className="footer-text">
-                        <p>Furnisy provides you with the essential</p>
-                        <p>pieces to build a stunning online store for</p>
-                        <p>your furniture business.</p>
+                        <p>{t("footer.aboutText1")}</p>
+                        <p>{t("footer.aboutText2")}</p>
+                        <p>{t("footer.aboutText3")}</p>
                     </div>
                 </div>
 
                 {/* Column 2 */}
                 <div className="footer-column">
-                    <h4>Home Decor Solutions</h4>
+                    <h4>{t("footer.homeDecor")}</h4>
                     <ul>
-                        <li><a href="/interior-designer">Interior Designer</a></li>
-                        <li><a href="/analytics">Furniture Analytics</a></li>
-                        <li><a href="/boutique-store">Boutique Furniture Store</a></li>
+                        <li><a href="/interior-designer">{t("footer.interiorDesigner")}</a></li>
+                        <li><a href="/analytics">{t("footer.furnitureAnalytics")}</a></li>
+                        <li><a href="/boutique-store">{t("footer.boutiqueStore")}</a></li>
                     </ul>
                 </div>
 
                 {/* Column 3 */}
                 <div className="footer-column">
-                    <h4>Furnisy</h4>
+                    <h4>Savique</h4>
                     <ul>
-                        <li><a href="/about">About Furnisy</a></li>
-                        <li><a href="/careers">Join Our Team</a></li>
-                        <li><a href="/contact">Get in Touch</a></li>
+                        <li><a href="/about">{t("footer.aboutFurnisy")}</a></li>
+                        <li><a href="/careers">{t("footer.joinTeam")}</a></li>
+                        <li><a href="/contact">{t("footer.getInTouch")}</a></li>
                     </ul>
                 </div>
 
                 {/* Column 4 */}
                 <div className="footer-column">
-                    <h4>Resources</h4>
+                    <h4>{t("footer.resources")}</h4>
                     <ul>
-                        <li><a href="/customers">Our Customers</a></li>
-                        <li><a href="/smart-finance">Smart Furniture Finance</a></li>
-                        <li><a href="/guides">Guides on Furniture Design</a></li>
+                        <li><a href="/customers">{t("footer.ourCustomers")}</a></li>
+                        <li><a href="/smart-finance">{t("footer.smartFinance")}</a></li>
+                        <li><a href="/guides">{t("footer.designGuides")}</a></li>
                     </ul>
                 </div>
 
                 {/* Column 5 */}
                 <div className="footer-column">
-                    <h4>Our Features</h4>
+                    <h4>{t("footer.ourFeatures")}</h4>
                     <ul>
-                        <li><a href="/interior-designer">Interior Designer</a></li>
-                        <li><a href="/furniture-analytics">Furniture Analytics</a></li>
-                        <li><a href="/boutique-store">Boutique Furniture Store</a></li>
+                        <li><a href="/interior-designer">{t("footer.interiorDesigner")}</a></li>
+                        <li><a href="/furniture-analytics">{t("footer.furnitureAnalytics")}</a></li>
+                        <li><a href="/boutique-store">{t("footer.boutiqueStore")}</a></li>
                     </ul>
                 </div>
             </div>
 
             <div className="footer-bottom">
-                <p className="copyright">© 2025, All Rights Reserved by Furnisy Furniture</p>
+                <p className="copyright">{t("footer.copyright")}</p>
                 <div className="payment-methods">
-                    <span>We accept:</span>
+                    <span>{t("footer.weAccept")}</span>
                     <img src={Visa} alt="Visa" />
                     <img src={Mastercard} alt="Mastercard" />
                     <img src={paypal} alt="PayPal" />

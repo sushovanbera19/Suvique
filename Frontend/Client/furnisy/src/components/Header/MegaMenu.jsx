@@ -1,7 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
+import { toastError } from "../../utils/toast";
+import { useTranslation } from "../../context/LanguageContext";
 
 const MegaMenu = ({ megaMenu }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLayoutClick = async (layout) => {
     try {
@@ -10,11 +13,11 @@ const MegaMenu = ({ megaMenu }) => {
       if (data.success && data.data.length > 0) {
         navigate(`/product-details-${layout}/${data.data[0].id}`);
       } else {
-        alert("No products found");
+        toastError(t("common.noProducts"));
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to load product");
+      toastError("Failed to load product");
     }
   };
 

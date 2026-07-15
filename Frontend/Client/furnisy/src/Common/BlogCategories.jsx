@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "../context/LanguageContext";
 
 const BlogCategories = ({
   selectedCategory,
@@ -6,6 +7,7 @@ const BlogCategories = ({
   setCurrentPage,
 }) => {
 
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const BlogCategories = ({
   return (
     <div className="sidebar-box">
 
-      <h4>Categories</h4>
+      <h4>{t("blog.categories")}</h4>
 
       <ul>
 
@@ -54,7 +56,7 @@ const BlogCategories = ({
 
           }}
         >
-          All Categories
+          {t("blog.allCategories")}
         </li>
 
         {categories.map((cat) => (

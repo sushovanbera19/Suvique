@@ -1,7 +1,9 @@
 import { useRef, useEffect, useState } from "react";
 import "../assets/style/categoryptoduct.css";
+import { useTranslation } from "../context/LanguageContext";
 
 const Catagory = () => {
+  const { t } = useTranslation();
   const scrollRef = useRef(null);
   const [categories, setCategories] = useState([]);
 
@@ -29,8 +31,8 @@ const Catagory = () => {
 
   return (
     <div className="category-container">
-      <h1>Shop by Category</h1>
-      <p>Discover everything you need through the categories!</p>
+      <h1>{t("category.heading")}</h1>
+      <p>{t("category.desc")}</p>
 
       <div className="category-grid" ref={scrollRef}>
         {categories.map((cat) => (

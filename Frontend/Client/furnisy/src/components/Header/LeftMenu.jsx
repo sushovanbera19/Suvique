@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { toastError } from "../../utils/toast";
+import { useTranslation } from "../../context/LanguageContext";
 
 import Dropdown from "./Dropdown";
 import MegaMenu from "./MegaMenu";
@@ -10,6 +12,7 @@ import MegaMenu from "./MegaMenu";
 const LeftMenu = ({ menuItems }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const handleProductPage = async (layout) => {
     const res = await fetch("http://localhost:5000/api/products");
     const data = await res.json();
@@ -17,7 +20,7 @@ const LeftMenu = ({ menuItems }) => {
     if (data.success && data.data.length > 0) {
       navigate(`/product-details-${layout}/${data.data[0].id}`);
     } else {
-      alert("No products found");
+      toastError(t("common.noProducts"));
     }
   };
   return (

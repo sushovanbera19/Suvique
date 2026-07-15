@@ -2,8 +2,10 @@ import React from "react";
 import "../assets/style/NotFound.css";
 import Reuseablebutton from "./Commonbutton";
 import { FaArrowRight } from "react-icons/fa";
+import { useTranslation } from "../context/LanguageContext";
 
 function NotFound({ backgroundImage }) {
+  const { t } = useTranslation();
   return (
     <div
       className="notfound-container"
@@ -16,15 +18,15 @@ function NotFound({ backgroundImage }) {
       }}
     >
       <div className="notfound-content">
-        <h1>404</h1>
-        <p className="subtitle">Oops! Something Wrong</p>
+        <h1>{t("notfound.heading")}</h1>
+        <p className="subtitle">{t("notfound.title")}</p>
         <p className="description">
-          Sorry but the page you are looking for doesn’t exist.
+          {t("notfound.desc")}
         </p>
         <Reuseablebutton
           text={
             <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              Shop Now <FaArrowRight />
+              {t("notfound.shopNow")} <FaArrowRight />
             </span>
           }
           style={{

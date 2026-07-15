@@ -3,12 +3,17 @@ import { useNavigate } from "react-router-dom";
 import '../assets/style/Cardpage.css';
 import AccountHeader from './AccountHeader';
 import ProductCard from "./ProductCard";
+import { toastError, toastWarning } from "../utils/toast";
+import { useCountry } from "../context/CountryContext";
+import { useTranslation } from "../context/LanguageContext";
 
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [shipping, setShipping] = useState("free");
   const navigate = useNavigate();
+  const { formatPrice } = useCountry();
+  const { t } = useTranslation();
 
   const subtotal = cartItems.reduce((total, item) => {
     return total + Number(item.base_price) * item.quantity;
@@ -81,7 +86,7 @@ const Cart = () => {
       if (data.success) {
         fetchCart();
       } else {
-        alert(data.message);
+        toastError(data.message);
       }
     } catch (err) {
       console.log(err);
@@ -119,7 +124,7 @@ const Cart = () => {
 
   return (
     <>
-      <AccountHeader />
+      <AccountHeader title="Shopping Cart" breadcrumb="Home → Cart" />
       <div className="cart-wrapper">
         <div className="cart-grid">
 
@@ -129,10 +134,10 @@ const Cart = () => {
 
             {/* Table Header */}
             <div className="table-header">
-              <div>Products</div>
-              <div>Price</div>
-              <div>Quantity</div>
-              <div>Subtotal</div>
+              <div>{t("cart.products")}</div>
+              <div>{t("cart.price")}</div>
+              <div>{t("cart.quantity")}</div>
+              <div>{t("cart.subtotal")}</div>
               <div></div> {/* Remove column */}
             </div>
 
@@ -150,7 +155,7 @@ const Cart = () => {
                 </div>
 
                 <div className="product-cell price-cell">
-                  ${Number(item.base_price).toFixed(2)}
+                  {formatPrice(item.base_price)}
                 </div>
 
                 <div className="product-cell quantity-cell">
@@ -168,7 +173,7 @@ const Cart = () => {
                 </div>
 
                 <div className="product-cell subtotal-cell">
-                  ${(Number(item.base_price) * item.quantity).toFixed(2)}
+                  {formatPrice(Number(item.base_price) * item.quantity)}
                 </div>
 
                 <div className="product-cell remove-cell">
@@ -182,14 +187,14 @@ const Cart = () => {
               <div className="left-action">
                 <input
                   type="text"
-                  placeholder="Coupon code"
+                  placeholder={t("cart.couponPlaceholder")}
                   className="coupon-field"
                 />
-                <button className="apply-coupon-btn">Apply coupon</button>
+                <button className="apply-coupon-btn">{t("cart.applyCoupon")}</button>
               </div>
               {/* Right: continue shopping */}
               < div className="right-action" >
-                <button className="continue-shopping-btn">Continue Shopping</button>
+                <button className="continue-shopping-btn">{t("cart.continueShopping")}</button>
               </div>
             </div>
 
@@ -198,11 +203,11 @@ const Cart = () => {
           {/* RIGHT - Totals */}
           <div className="totals-panel">
             <div className="totals-box">
-              <h3>Cart Totals</h3>
+              <h3>{t("cart.cartTotals")}</h3>
 
               <div className="totals-line">
-                <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{t("cart.subtotal")}</span>
+                <span>{formatPrice(subtotal)}</span>
               </div>
 
               <div className="shipping-section">
@@ -216,7 +221,7 @@ const Cart = () => {
                       checked={shipping === 'free'}
                       onChange={() => setShipping('free')}
                     />
-                    Free Shipping
+                    {t("cart.freeShipping")}
                   </label>
 
                   <label className="shipping-label">
@@ -233,7 +238,7 @@ const Cart = () => {
 
 
                 <div className="shipping-info-row">
-                  <div className="shipping-title">Shipping</div>
+                  <div className="shipping-title">{t("cart.shipping")}</div>
 
                   <div className="shipping-address">
                     Shipping to USA <br />
@@ -243,9 +248,9 @@ const Cart = () => {
 
               </div>
               <div className="totals-line total-line">
-                <span>Total</span>
+                <span>{t("cart.total")}</span>
                 <span>
-                  ${(subtotal + (shipping === "flat" ? 10 : 0)).toFixed(2)}
+                  {formatPrice(subtotal + (shipping === "flat" ? 10 : 0))}
                 </span>
 
               </div>
@@ -254,21 +259,21 @@ const Cart = () => {
                 className="proceed-btn"
                 onClick={() => {
                   if (cartItems.length === 0) {
-                    alert("Your cart is empty");
+                    toastWarning(t("cart.emptyCart"));
                     return;
                   }
 
                   navigate("/checkout");
                 }}
               >
-                Proceed to checkout
+                {t("cart.proceedCheckout")}
               </button>
             </div>
           </div>
 
         </div >
         <div className="related-products">
-          <h3>Related Product</h3>
+          <h3>{t("cart.relatedProduct")}</h3>
 
           <div className="related-products-grid">
             {relatedProducts.map((item) => (

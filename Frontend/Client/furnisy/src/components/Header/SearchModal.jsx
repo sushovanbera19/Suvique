@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useCountry } from "../../context/CountryContext";
+import { useTranslation } from "../../context/LanguageContext";
 
 const SearchModal = ({ open, onClose }) => {
 
@@ -9,6 +11,8 @@ const SearchModal = ({ open, onClose }) => {
     const [keyword, setKeyword] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [products, setProducts] = useState([]);
+    const { formatPrice } = useCountry();
+    const { t } = useTranslation();
 
     // Load Categories
     useEffect(() => {
@@ -59,13 +63,34 @@ const SearchModal = ({ open, onClose }) => {
 
         if (!open) return;
 
-        const timer = setTimeout(() => {
+        const controller = new AbortController();
 
-            searchProduct();
+        const timer = setTimeout(async () => {
+
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/products/search?category=${selectedCategory}&keyword=${encodeURIComponent(keyword)}`,
+                    { signal: controller.signal }
+                );
+                const data = await res.json();
+                if (data.success) {
+                    setProducts(data.data);
+                } else {
+                    setProducts([]);
+                }
+            } catch (err) {
+                if (err.name !== "AbortError") {
+                    console.log(err);
+                    setProducts([]);
+                }
+            }
 
         }, 300);
 
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
 
     }, [keyword, selectedCategory, open]);
 
@@ -83,7 +108,7 @@ const SearchModal = ({ open, onClose }) => {
 
                 <div className="search-modal-header">
 
-                    <h3>Search Products</h3>
+                        <h3>{t("menu.searchProducts") || "Search Products"}</h3>
 
                     <button onClick={onClose}>
                         <FontAwesomeIcon icon={faTimes} />
@@ -99,7 +124,7 @@ const SearchModal = ({ open, onClose }) => {
                         onChange={(e) => setSelectedCategory(e.target.value)}
                     >
 
-                        <option value="">All Categories</option>
+                        <option value="">{t("shop.allCategories") || "All Categories"}</option>
 
                         {categories.map((cat) => (
 
@@ -116,7 +141,7 @@ const SearchModal = ({ open, onClose }) => {
 
                     <input
                         type="text"
-                        placeholder="Search products..."
+                        placeholder={t("menu.searchProducts") || "Search products..."}
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                     />
@@ -150,7 +175,7 @@ const SearchModal = ({ open, onClose }) => {
                                     <p>{product.category_name}</p>
 
                                     <strong>
-                                        ₹ {product.sale_price || product.base_price}
+                                        {formatPrice(product.sale_price || product.base_price)}
                                     </strong>
 
                                 </div>
@@ -169,7 +194,7 @@ const SearchModal = ({ open, onClose }) => {
                                     padding: "20px"
                                 }}
                             >
-                                No Products Found
+                                {t("shop.noProducts")}
                             </div>
 
                         )

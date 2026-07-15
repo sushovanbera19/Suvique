@@ -8,6 +8,8 @@ import Pagination from "../Common/Pagination";
 import "../assets/style/ShopPage.css";
 import AccountHeader from "./AccountHeader";
 import image5 from "../../public/images/img-5.webp";
+import { useCountry } from "../context/CountryContext";
+import { useTranslation } from "../context/LanguageContext";
 import { FiSearch } from "react-icons/fi";
 
 
@@ -17,7 +19,7 @@ import { FiSearch } from "react-icons/fi";
 //   { id: 6, name: "Modern Accent Chair", price: 299, img: image5 },
 // ];
 
-const ShopPagecomponent = () => {
+const ShopPagecomponent = ({ defaultView = "grid" }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
@@ -35,17 +37,13 @@ const ShopPagecomponent = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
 
-  const [view, setView] = useState("grid");
+  const [view, setView] = useState(defaultView);
   const [sortBy, setSortBy] = useState("default");
   const [searchTerm, setSearchTerm] = useState("");
 
   const productsPerPage = 6;
-
-  // Formatter for Indian Rupees
-  const formatter = new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-  });
+  const { formatPrice } = useCountry();
+  const { t } = useTranslation();
 
 
 
@@ -119,7 +117,7 @@ const ShopPagecomponent = () => {
             setCurrentPage={setCurrentPage} /></div>
 
           <div className="sidebar-widget price-filter">
-            <h3>Filter by Price</h3>
+            <h3>{t("shop.filterByPrice")}</h3>
             <input
               type="range"
               min={priceRange.minPrice}
@@ -134,7 +132,7 @@ const ShopPagecomponent = () => {
           </div>
 
           <div className="sidebar-widget color-filter">
-            <h3>Filter by Color</h3>
+            <h3>{t("shop.filterByColor")}</h3>
             <div className="color-options">
               {colors.map((color) => (
                 <span
@@ -157,13 +155,13 @@ const ShopPagecomponent = () => {
           </div>
 
           <div className="sidebar-widget best-sellers">
-            <h3 className="sidebar-title">BEST SELLERS</h3>
+            <h3 className="sidebar-title">{t("shop.bestSellers")}</h3>
             {bestSellers.map((item) => (
               <div key={item.id} className="best-seller-item">
-                <img src={item.img} alt={item.name} />
+                <img src={`http://localhost:5000/${item.main_image}`} alt={item.product_name} />
                 <div className="best-seller-text">
-                  <p className="best-seller-name">{item.name}</p>
-                  <p className="best-seller-price">{formatter.format(item.price)}</p>
+                  <p className="best-seller-name">{item.product_name}</p>
+                  <p className="best-seller-price">{formatPrice(item.sale_price || item.base_price)}</p>
                 </div>
               </div>
             ))}
@@ -179,7 +177,7 @@ const ShopPagecomponent = () => {
             <div className="shop-search">
               <input
                 type="text"
-                placeholder="Search Products"
+                placeholder={t("shop.searchProducts")}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -211,10 +209,10 @@ const ShopPagecomponent = () => {
                   setCurrentPage(1);
                 }}
               >
-                <option value="default">Default sorting</option>
-                <option value="low">Price: low to high</option>
-                <option value="high">Price: high to low</option>
-                <option value="new">Newest</option>
+                <option value="default">{t("shop.defaultSort")}</option>
+                <option value="low">{t("shop.priceLowHigh")}</option>
+                <option value="high">{t("shop.priceHighLow")}</option>
+                <option value="new">{t("shop.newest")}</option>
               </select>
             </div>
           </div>
@@ -224,10 +222,7 @@ const ShopPagecomponent = () => {
             {products.map((product) => (
               <ProductCard
                 key={product.id}
-                product={{
-                  ...product,
-                  price: formatter.format(product.price), // ✅ INR format
-                }}
+                product={product}
               />
             ))}
           </div>

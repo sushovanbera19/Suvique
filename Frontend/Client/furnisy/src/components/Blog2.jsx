@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import BlogCard from "../Common/BlogCard";
 import Pagination from "../Common/Pagination";
 import AccountHeader from "../Common/AccountHeader";
+import { useTranslation } from "../context/LanguageContext";
 
 import BlogSearch from "../Common/BlogSearch";
 import BlogCategories from "../Common/BlogCategories";
@@ -22,6 +23,7 @@ const blogData = Array.from({ length: 8 }, (_, i) => ({
 }));
 
 const Blog2 = () => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
 
   // 🔥 layout based on route
@@ -47,7 +49,7 @@ const Blog2 = () => {
 
   return (
     <>
-      <AccountHeader />
+      <AccountHeader title={t("blog.title")} breadcrumb={`${t("common.home")} → ${t("blog.title")}`} />
 
       <div className="blog2-page">
         {/* LEFT SIDE */}

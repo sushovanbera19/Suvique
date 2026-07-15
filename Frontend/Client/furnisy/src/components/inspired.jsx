@@ -3,8 +3,10 @@ import ReusableButton from "../Common/Commonbutton";
 import "../assets/style/BeInspired.css";
 import Inspired from "../../public/images/inspired.webp"
 import { FaArrowRight } from "react-icons/fa"; // Using react-icons
+import { useTranslation } from "../context/LanguageContext";
 
 const BeInspired = () => {
+  const { t } = useTranslation();
   return (
     <section className="be-inspired">
       <div className="be-inspired__container">
@@ -19,22 +21,22 @@ const BeInspired = () => {
 
         {/* Right Content */}
         <div className="be-inspired__content">
-          <h2>Be Inspired...</h2>
+          <h2>{t("inspired.heading")}</h2>
 
           <p>
-            Are you planning on redecorating your living room or freshening things up a bit? Find soft furnishings to create a brand-new look in no time, or discover your next vibe for a complete refresh...
+            {t("inspired.desc")}
           </p>
 
           <ul className="be-inspired__list">
-            <li>Effortless browsing experience</li>
-            <li>Access to the finest 5% of designers for your living space</li>
-            <li>Secure payment options for peace of mind</li>
+            <li>{t("inspired.point1")}</li>
+            <li>{t("inspired.point2")}</li>
+            <li>{t("inspired.point3")}</li>
           </ul>
 
           <ReusableButton
             text={
               <>
-                Shop Living Room <FaArrowRight />
+                {t("inspired.shopLiving")} <FaArrowRight />
               </>
             }
             onClick={() => console.log("Navigate to Living Room")}

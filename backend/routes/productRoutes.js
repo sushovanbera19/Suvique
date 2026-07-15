@@ -20,7 +20,9 @@ router.post(
 );
 router.post("/bulk-add", bulkAddProducts);
 router.get("/", fetchAllProducts);
-router.get("/:id", fetchProductById);
+router.get("/shop", shopProducts);
+router.get("/shop/sidebar", shopSidebar);
+router.get("/search", searchProductController);
 router.put("/offer-settings", updateOfferSettings);
 router.put("/:id/status", toggleStatus);
 router.put(
@@ -32,9 +34,7 @@ router.put(
   editProduct
 );
 router.delete("/:id", removeProduct);
-router.get("/search", searchProductController);
-router.get("/shop", shopProducts);
-router.get("/shop/sidebar", shopSidebar);
+router.get("/:id", fetchProductById);
 
 
 

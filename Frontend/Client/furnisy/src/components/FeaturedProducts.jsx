@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "../assets/style/FeaturedProducts.css";
 import ProductCard from "../Common/ProductCard";
 import ViewAllButton from "../Common/ViewAllButton";
+import { useTranslation } from "../context/LanguageContext";
 
 const TabButton = styled.button`
   padding: 10px 20px;
@@ -23,6 +24,7 @@ const TabButton = styled.button`
 `;
 
 const FeaturedProducts = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("tab1");
   const [products, setProducts] = useState([]);
 
@@ -59,26 +61,26 @@ const FeaturedProducts = () => {
 
   return (
     <div className="featured-products-container">
-      <h1>Featured Products</h1>
-      <p>Explore the best of Furnisy Featured Collection.</p>
+      <h1>{t("featured.heading")}</h1>
+      <p>{t("featured.desc")}</p>
 
       <div className="tabs-row">
         <div className="tabs">
           <TabButton active={activeTab === "tab1"} onClick={() => setActiveTab("tab1")}>
-            Best Sellers
+            {t("featured.bestSellers")}
           </TabButton>
 
           <TabButton active={activeTab === "tab2"} onClick={() => setActiveTab("tab2")}>
-            New Arrivals
+            {t("featured.newArrivals")}
           </TabButton>
 
           <TabButton active={activeTab === "tab3"} onClick={() => setActiveTab("tab3")}>
-            On Sale
+            {t("featured.onSale")}
           </TabButton>
         </div>
 
         <ViewAllButton
-          text="View All Products"
+          text={t("featured.viewAll")}
           onClick={() => console.log("Navigate to Products")}
         />
       </div>
@@ -89,7 +91,7 @@ const FeaturedProducts = () => {
             <ProductCard key={product.id} product={product} />
           ))
         ) : (
-          <p>No products found</p>
+          <p>{t("common.noProducts")}</p>
         )}
       </div>
     </div>

@@ -2,78 +2,69 @@ import chair2 from "../../../public/images/img-1.webp";
 import UserIcon from "../../../public/images/266134.png";
 import CartIcon from "../../../public/images/cart_icon.png";
 
-export const menuItems = [
+export const getMenuItems = (t) => [
   {
-    name: "Home",
+    name: t("nav.home"),
     path: "/",
   },
 
   {
-    name: "Shop",
+    name: t("nav.shop"),
     subMenu: [
-      { label: "Shop 1", path: "/Shop-1" },
-      { label: "Shop 2", path: "/Shop-2" },
-      { label: "Shop 3", path: "/Shop-3" },
+      { label: t("nav.shop1"), path: "/Shop-1" },
+      { label: t("nav.shop2"), path: "/Shop-2" },
+      { label: t("nav.shop3"), path: "/Shop-3" },
     ],
   },
 
   {
-    name: "Blog",
+    name: t("nav.blog"),
     subMenu: [
-      { label: "Blog-1", path: "/blog-1" },
-      { label: "Blog-2", path: "/blog-2" },
-      { label: "Blog-3", path: "/blog-3" },
-      { label: "Blog-Single", path: "/blog-single" },
+      { label: t("nav.blog1"), path: "/blog-1" },
+      { label: t("nav.blog2"), path: "/blog-2" },
+      { label: t("nav.blog3"), path: "/blog-3" },
+      { label: t("nav.blogSingle"), path: "/blog-single" },
     ],
   },
 
   {
-    name: "Pages",
+    name: t("nav.pages"),
     megaMenu: [
       {
-        title: "Product Layout",
+        title: t("nav.productLayout"),
         links: [
-          {
-            label: "Product Details 1",
-            layout: "1",
-          },
-          {
-            label: "Product Details 3",
-            layout: "3",
-          },
-          {
-            label: "Product Details 4",
-            layout: "4",
-          }
+          { label: t("nav.productDetails1"), layout: "1" },
+          { label: t("nav.productDetails3"), layout: "3" },
+          { label: t("nav.productDetails4"), layout: "4" },
         ],
       },
 
       {
-        title: "Pages",
+        title: t("nav.pages"),
         links: [
-          { label: "About Us", path: "/about" },
-          { label: "Contact Us", path: "/contact" },
-          { label: "View Cart", path: "/cart" },
-          { label: "Checkout", path: "/checkout" },
-          { label: "Wishlist", path: "/wishlist" },
-          { label: "Compare", path: "/compare" },
+          { label: t("nav.aboutUs"), path: "/about" },
+          { label: t("nav.contactUs"), path: "/contact" },
+          { label: t("nav.viewCart"), path: "/cart" },
+          { label: t("nav.checkout"), path: "/checkout" },
+          { label: t("nav.wishlist"), path: "/wishlist" },
+          { label: t("nav.compare"), path: "/compare" },
         ],
       },
 
       {
-        title: "Useful Links",
+        title: t("nav.usefulLinks"),
         links: [
-          { label: "Register", path: "/register" },
-          { label: "Login", path: "/login" },
-          { label: "Location", path: "/location" },
-          { label: "FAQ", path: "/faq" },
+          { label: t("nav.register"), path: "/register" },
+          { label: t("nav.login"), path: "/login" },
+          { label: t("nav.location"), path: "/location" },
+          { label: t("nav.faq"), path: "/faq" },
           { label: "404-1", path: "/404-1" },
           { label: "404-2", path: "/404-2" },
         ],
       },
 
       {
-        title: "Featured Products",
+        title: t("nav.featuredProducts"),
         products: [
           {
             img: chair2,
@@ -94,8 +85,8 @@ export const menuItems = [
       },
 
       {
-        title: "Special Offer",
-        offer: "🔥 Urna's Special Offer: Sale up to 30% Only Today!",
+        title: t("nav.specialOffer"),
+        offer: t("nav.specialOfferText"),
       },
     ],
   },
@@ -112,16 +103,5 @@ export const rightMenuItems = [
     name: "",
     img: CartIcon,
     path: "/cart",
-  },
-];
-
-export const cartItems = [
-  {
-    id: 2,
-    name: "Modular Sofa with Wood",
-    price: "399.00",
-    qty: 2,
-    image:
-      "https://furnisy.vercel.app/_next/image?url=%2Fimages%2Fhome-1%2Ffeatured-products%2Fimg-3.webp&w=1920&q=75",
   },
 ];

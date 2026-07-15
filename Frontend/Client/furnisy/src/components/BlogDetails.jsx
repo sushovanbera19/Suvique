@@ -5,6 +5,7 @@ import {
     FaLinkedinIn,
     FaXTwitter
 } from "react-icons/fa6";
+import { useTranslation } from "../context/LanguageContext";
 
 import AccountHeader from "../Common/AccountHeader";
 import BlogCard from "../Common/BlogCard";
@@ -32,10 +33,11 @@ const relatedBlogs = [
 ];
 
 const BlogDetails = () => {
+    const { t } = useTranslation();
     return (
         <>
             {/* HEADER */}
-            <AccountHeader />
+            <AccountHeader title={t("blog.details")} breadcrumb={`${t("common.home")} → ${t("blog.title")} → ${t("blog.details")}`} />
 
             {/* ===============================
           BLOG DETAILS + SIDEBAR
@@ -110,7 +112,7 @@ const BlogDetails = () => {
                         <BlogTags />
 
                         <div className="share">
-                            <span>Share:</span>
+                            <span>{t("blog.share")}</span>
 
                             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
                                 <FaFacebookF />
@@ -144,7 +146,7 @@ const BlogDetails = () => {
           RELATED BLOGS (FULL WIDTH)
       =============================== */}
             <section className="related-section">
-                <h3 className="related-title">Related Blogs</h3>
+                <h3 className="related-title">{t("blog.relatedBlogs")}</h3>
 
                 <div className="related-blogs">
                     {relatedBlogs.map((blog, index) => (

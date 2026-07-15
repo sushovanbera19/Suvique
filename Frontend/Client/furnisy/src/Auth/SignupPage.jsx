@@ -4,8 +4,10 @@ import '../assets/style/SignupPage.css';
 import contact from "../../public/images/contact-img.webp"
 import AccountHeader from '../Common/AccountHeader';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useTranslation } from "../context/LanguageContext";
 
 function SignupPage() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -68,28 +70,28 @@ function SignupPage() {
   };
   return (
     <>
-      <AccountHeader />
+      <AccountHeader title="Create Account" breadcrumb="Home → Register" />
       <div className="signup-container">
         <div className="signup-content">
           <div className="form-side">
-            <h1>Create your account</h1>
+            <h1>{t("register.heading")}</h1>
 
             <form onSubmit={handleSubmit} className="signup-form">
               <div className="form-group">
-                <label htmlFor="name">Name*</label>
-                <input type="text" id="name" name="name" placeholder="Your name" value={formData.name} onChange={handleChange} required />
+                <label htmlFor="name">{t("register.name")}</label>
+                <input type="text" id="name" name="name" placeholder={t("register.namePlaceholder")} value={formData.name} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email*</label>
-                <input type="email" id="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+                <label htmlFor="email">{t("register.email")}</label>
+                <input type="email" id="email" name="email" placeholder={t("register.emailPlaceholder")} value={formData.email} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password*</label>
+                <label htmlFor="password">{t("register.password")}</label>
 
                 <div style={{ position: "relative" }}>
-                  <input type={showPassword ? "text" : "password"} id="password" name="password" placeholder="Create password" value={formData.password} onChange={handleChange} required />
+                  <input type={showPassword ? "text" : "password"} id="password" name="password" placeholder={t("register.passwordPlaceholder")} value={formData.password} onChange={handleChange} required />
 
                   <span
                     onClick={() => setShowPassword(!showPassword)}
@@ -102,17 +104,17 @@ function SignupPage() {
               <div className="form-group checkbox-group">
                 <input type="checkbox" id="agreeTerms" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} required />
                 <label htmlFor="agreeTerms">
-                  I agree to all <a href="#terms">Terms & Conditions</a>
+                  {t("register.agreePrefix")} <a href="#terms">{t("register.terms")}</a>
                 </label>
               </div>
 
               <button type="submit" className="signup-btn">
-                Sign Up
+                {t("register.signUp")}
               </button>
             </form>
 
             <div className="divider">
-              <span>Or Sign Up With</span>
+              <span>{t("register.orSignup")}</span>
             </div>
 
             <div className="social-buttons">
@@ -125,7 +127,7 @@ function SignupPage() {
             </div>
 
             <p className="login-link">
-              Already have an account? <a href="/login">Login</a>
+              {t("register.existingAccount")} <a href="/login">{t("register.loginLink")}</a>
             </p>
           </div>
 
@@ -142,8 +144,8 @@ function SignupPage() {
 
                 <div className="signup-modal-icon">✔</div>
 
-                <h2>Success!</h2>
-                <p>Account created successfully</p>
+                <h2>{t("register.successTitle")}</h2>
+                <p>{t("register.accountCreated")}</p>
 
                 <button
                   className="signup-modal-btn"
@@ -161,7 +163,7 @@ function SignupPage() {
                     setShowPassword(false);
                   }}
                 >
-                  CONTINUE
+                  {t("register.continue")}
                 </button>
 
               </div>
@@ -173,14 +175,14 @@ function SignupPage() {
 
                 <div className="signup-modal-icon signup-error-icon">✖</div>
 
-                <h2>Failed!</h2>
+                <h2>{t("register.failedTitle")}</h2>
                 <p>{errorMessage}</p>
 
                 <button
                   className="signup-modal-btn signup-error-btn"
                   onClick={() => setShowError(false)}
                 >
-                  TRY AGAIN
+                  {t("register.tryAgain")}
                 </button>
 
               </div>

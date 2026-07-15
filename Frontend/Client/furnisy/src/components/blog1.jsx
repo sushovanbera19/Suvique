@@ -4,6 +4,7 @@ import Blogimage from "../../public/images/blog-3.webp";
 import "../assets/style/blog-1.css";
 import AccountHeader from "../Common/AccountHeader";
 import Pagination from "../Common/Pagination";
+import { useTranslation } from "../context/LanguageContext";
 
 const blogData = [
   {
@@ -17,6 +18,7 @@ const blogData = [
 ];
 
 const Blog1 = () => {
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 5;
 
@@ -30,7 +32,7 @@ const Blog1 = () => {
 
   return (
     <>
-      <AccountHeader />
+      <AccountHeader title={t("blog.title")} breadcrumb={`${t("common.home")} → ${t("blog.title")}`} />
 
       <div className="blog-page">
         <div className="blog-container">

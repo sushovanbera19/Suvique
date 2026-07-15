@@ -13,6 +13,8 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import addressRoutes from "./routes/address.routes.js";
 import orderRoutes from "./routes/order.routes.js";
+import newsletterRoutes from "./routes/newsletter.routes.js";
+import aboutRoutes from "./routes/about.routes.js";
 
 
 
@@ -37,6 +39,8 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/about", aboutRoutes);
 
 // test route
 app.get("/", (req, res) => {

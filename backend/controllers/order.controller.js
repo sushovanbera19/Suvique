@@ -19,7 +19,9 @@ export const placeOrder = async (req, res) => {
     const {
 
       address_id,
-      payment_method
+      payment_method,
+      country,
+      currency
 
     } = req.body;
 
@@ -49,7 +51,9 @@ export const placeOrder = async (req, res) => {
       userId,
       address_id,
       total,
-      payment_method
+      payment_method,
+      country,
+      currency
 
     );
 

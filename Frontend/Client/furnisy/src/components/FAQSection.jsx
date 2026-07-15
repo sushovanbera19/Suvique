@@ -3,24 +3,22 @@ import React, { useState } from "react";
 import faqImage from "../../public/images/faq.webp";
 import AccountHeader from "./AccountHeader";
 import "../assets/style/FAQSection.css";
-
-const faqs = [
-  {
-    question: "What is your return policy?",
-    answer:
-      "Simply fill out our online quote request with details about your shipment, including origin, destination, dimensions, and weight. Once we receive your request, one our logistics experts will contact you with a customized.",
-  },
-  { question: "How do I track my order?", answer: "Simply fill out our online quote request with details about your shipment, including origin, destination, dimensions, and weight. Once we receive your request, one our logistics experts will contact you with a customized." },
-  { question: "What payment methods do you accept?", answer: "Simply fill out our online quote request with details about your shipment, including origin, destination, dimensions, and weight. Once we receive your request, one our logistics experts will contact you with a customized." },
-  { question: "Do you offer international shipping?", answer: "Yes, we ship internationally. Shipping charges may apply." },
-  { question: "How can I contact your customer support?", answer: "You can email us at support@yourdomain.com or call us at 123-456-7890." },
-  { question: "Are the sizes true to measurements?", answer: "Yes, all sizes are accurate according to our specifications." },
-  { question: "Can I modify or cancel my order after it's been placed?", answer: "Yes, modifications or cancellations are possible if done within 24 hours of placing the order." },
-  { question: "Do you offer online ordering and shipping?", answer: "Yes, you can place orders online and we will ship them to your address." },
-];
+import { useTranslation } from "../context/LanguageContext";
 
 const FAQSection = () => {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState(null);
+
+  const faqs = [
+    { question: t("faq.q1"), answer: t("faq.a1") },
+    { question: t("faq.q2"), answer: t("faq.a2") },
+    { question: t("faq.q3"), answer: t("faq.a3") },
+    { question: t("faq.q4"), answer: t("faq.a4") },
+    { question: t("faq.q5"), answer: t("faq.a5") },
+    { question: t("faq.q6"), answer: t("faq.a6") },
+    { question: t("faq.q7"), answer: t("faq.a7") },
+    { question: t("faq.q8"), answer: t("faq.a8") },
+  ];
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -28,15 +26,15 @@ const FAQSection = () => {
 
   return (
     <div className="FaqSectionWrapper">
-      <AccountHeader />
+      <AccountHeader title="FAQ" breadcrumb="Home → FAQ" />
       <div className="FaqContainer">
-         <h1 className="Faq_Heading">Frequently Asked Questions</h1>
+         <h1 className="Faq_Heading">{t("faq.heading")}</h1>
         <div className="FaqRow">
           {/* Left Image */}
           <div className="FaqImageWrapper">
             <img src={faqImage} alt="FAQ" className="FaqImage" />
             <div className="FaqSupport">
-              <p>Customer support</p>
+              <p>{t("faq.customerSupport")}</p>
               <h5>support@yourdomain.com</h5>
             </div>
           </div>
