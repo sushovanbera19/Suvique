@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     FaFacebookF,
     FaInstagram,
@@ -15,99 +15,93 @@ import BlogCategories from "../Common/BlogCategories";
 import LatestPosts from "../Common/LatestPosts";
 import BlogTags from "../Common/BlogTags";
 
-import Blogimage from "../../public/images/blog-3.webp";
 import "../assets/style/blog-details.css";
 
-/* ----------------------------------
-   RELATED BLOG DATA
------------------------------------ */
-const relatedBlogs = [
-    {
-        image: Blogimage,
-        title: "Comfortable Chairs Can Help You Create Your Own Home Office",
-        date: "20 Jan 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        description: "Short description here..."
-    },
-];
+const API = "http://localhost:5000";
 
 const BlogDetails = () => {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
+    const [blog, setBlog] = useState(null);
+    const [relatedBlogs, setRelatedBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(`${API}/api/blogs/published?lang=${lang}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success && data.data.length > 0) {
+                    const first = data.data[0];
+                    setBlog(first);
+                    setRelatedBlogs(data.data.slice(1).map((b) => ({
+                        image: b.image,
+                        title: b.title,
+                        date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+                        category: b.category,
+                        author: b.author,
+                        description: b.description,
+                    })));
+                }
+            })
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, [lang]);
+
+    if (loading) {
+        return (
+            <>
+                <AccountHeader title={t("blog.details")} breadcrumb={`${t("common.home")} → ${t("blog.title")} → ${t("blog.details")}`} />
+                <div style={{ textAlign: "center", padding: "60px 20px", color: "#888" }}>
+                    {t("common.loading")}
+                </div>
+            </>
+        );
+    }
+
+    if (!blog) {
+        return (
+            <>
+                <AccountHeader title={t("blog.details")} breadcrumb={`${t("common.home")} → ${t("blog.title")} → ${t("blog.details")}`} />
+                <div style={{ textAlign: "center", padding: "60px 20px", color: "#888" }}>
+                    {t("common.noData")}
+                </div>
+            </>
+        );
+    }
+
+    const metaDate = new Date(blog.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+
     return (
         <>
-            {/* HEADER */}
             <AccountHeader title={t("blog.details")} breadcrumb={`${t("common.home")} → ${t("blog.title")} → ${t("blog.details")}`} />
 
-            {/* ===============================
-          BLOG DETAILS + SIDEBAR
-      =============================== */}
             <section className="blog-details-page">
-                {/* -------- LEFT CONTENT -------- */}
                 <article className="blog-details-content">
-                    {/* Cover Image */}
-                    <img
-                        src={Blogimage}
-                        alt="Blog Cover"
-                        className="blog-cover"
-                    />
+                    {blog.image && (
+                        <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className="blog-cover"
+                        />
+                    )}
 
-                    {/* Meta */}
                     <p className="blog-meta">
-                        20 Jan 2025 • Office Furniture • By Anna Maria • 2 Comments
+                        {metaDate} • {blog.category || "Uncategorized"} • By {blog.author || "Admin"}
                     </p>
 
-                    {/* Title */}
                     <h1 className="blog-title">
-                        The Ultimate Guide to Choosing a Perfect Furniture for Your Home
+                        {blog.title}
                     </h1>
 
-                    {/* Content */}
-                    <p className="blog-text">
-                        Your residence reflects your lifestyle, so choosing the right
-                        furniture is essential for comfort and elegance. Experts often
-                        advise balancing functionality with design to ensure long-term
-                        satisfaction.
-                    </p>
+                    {blog.description && (
+                        <p className="blog-text">
+                            {blog.description}
+                        </p>
+                    )}
 
-                    <p className="blog-text">
-                        Selecting furniture involves understanding space, ergonomics,
-                        durability, and material quality. Whether you prefer modern
-                        minimalism or classic charm, the right choices can elevate your
-                        home.
-                    </p>
+                    {blog.content && (
+                        <div className="blog-text" dangerouslySetInnerHTML={{ __html: blog.content }} />
+                    )}
 
-                    <p className="blog-text">
-                        Join our community of design enthusiasts and stay inspired with
-                        fresh content regularly. Whether you're planning a complete home
-                        makeover or looking for small updates to refresh your space, the
-                        Luxura Pro Blog is here to guide you every step of the way.
-                    </p>
-
-                    {/* Image Row */}
-                    <div className="blog-image-row">
-                        <div className="blog-image-box">
-                            <img src={Blogimage} alt="Wooden Chair" />
-                            <p className="image-caption">
-                                The Ultimate Guide to Choosing a Perfect Furniture for Your Home
-                            </p>
-                        </div>
-
-                        <div className="blog-image-box">
-                            <img src={Blogimage} alt="Swivel Chair" />
-                            <p className="image-caption">
-                                Dorso Swivel Chair. Choosing a Perfect Furniture for Your Home.
-                            </p>
-                        </div>
-                    </div>
-
-                    <p className="blog-text">
-                        Join our community of design enthusiasts and stay inspired with
-                        fresh content regularly. Whether you're planning a complete home
-                        makeover or looking for small updates to refresh your space.
-                    </p>
-
-                    {/* Footer */}
                     <div className="blog-footer">
                         <BlogTags />
 
@@ -133,7 +127,6 @@ const BlogDetails = () => {
                     </div>
                 </article>
 
-                {/* -------- RIGHT SIDEBAR -------- */}
                 <aside className="blog-details-sidebar">
                     <BlogSearch />
                     <BlogCategories />
@@ -142,18 +135,17 @@ const BlogDetails = () => {
                 </aside>
             </section>
 
-            {/* ===============================
-          RELATED BLOGS (FULL WIDTH)
-      =============================== */}
-            <section className="related-section">
-                <h3 className="related-title">{t("blog.relatedBlogs")}</h3>
+            {relatedBlogs.length > 0 && (
+                <section className="related-section">
+                    <h3 className="related-title">{t("blog.relatedBlogs")}</h3>
 
-                <div className="related-blogs">
-                    {relatedBlogs.map((blog, index) => (
-                        <BlogCard key={index} blog={blog} />
-                    ))}
-                </div>
-            </section>
+                    <div className="related-blogs">
+                        {relatedBlogs.map((rb, index) => (
+                            <BlogCard key={index} blog={rb} />
+                        ))}
+                    </div>
+                </section>
+            )}
         </>
     );
 };

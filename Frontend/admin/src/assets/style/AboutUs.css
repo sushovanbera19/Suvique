@@ -677,7 +677,7 @@ body.dark .about-form-group label {
 
 body.dark .about-form-group input,
 body.dark .about-form-group textarea {
-  background: #0f172a;
+  background: #1a1a1a;
   color: #e2e8f0;
   border-color: #334155;
 }
@@ -699,7 +699,7 @@ body.dark .about-form-hint {
 }
 
 body.dark .about-image-input-card {
-  background: #0f172a;
+  background: #1a1a1a;
   border-color: #334155;
 }
 
@@ -712,7 +712,7 @@ body.dark .about-image-input-desc {
 }
 
 body.dark .about-img-preview-card {
-  background: #0f172a;
+  background: #1a1a1a;
   border-color: #334155;
 }
 
@@ -722,13 +722,13 @@ body.dark .about-img-preview-label {
 }
 
 body.dark .about-video-empty {
-  background: #0f172a;
+  background: #1a1a1a;
   border-color: #334155;
   color: #475569;
 }
 
 body.dark .about-feature-input-group input {
-  background: #0f172a;
+  background: #1a1a1a;
   color: #e2e8f0;
   border-color: #334155;
 }

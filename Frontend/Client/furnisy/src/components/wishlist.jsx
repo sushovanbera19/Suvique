@@ -10,7 +10,7 @@ import { useTranslation } from "../context/LanguageContext";
 const Wishlist = () => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const { formatPrice } = useCountry();
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
 
     const removeItem = async (productId) => {
         const token = localStorage.getItem("token");
@@ -89,7 +89,7 @@ const Wishlist = () => {
 
     return (
         <>
-            <AccountHeader title="Wishlist" breadcrumb="Home → Wishlist" />
+            <AccountHeader title={t("wishlist.title")} breadcrumb={`${t("breadcrumb.home")} → ${t("breadcrumb.wishlist")}`} />
 
             <div className="product-table">
                 {/* Header */}

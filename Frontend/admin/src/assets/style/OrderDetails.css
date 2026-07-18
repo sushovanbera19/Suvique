@@ -419,44 +419,44 @@
    DARK MODE
 ========================= */
 
-.dark .order-details-title-row h2,
-.dark .order-section-title,
-.dark .order-product-info h4,
-.dark .order-payment-card h4,
-.dark .order-customer-box h4,
-.dark .order-address-box h5,
-.dark .order-timeline-content h4,
-.dark .order-summary-total strong,
-.dark .order-summary-list strong {
+body.dark .order-details-title-row h2,
+body.dark .order-section-title,
+body.dark .order-product-info h4,
+body.dark .order-payment-card h4,
+body.dark .order-customer-box h4,
+body.dark .order-address-box h5,
+body.dark .order-timeline-content h4,
+body.dark .order-summary-total strong,
+body.dark .order-summary-list strong {
   color: #f8fafc;
 }
 
-.dark .order-details-subtitle,
-.dark .order-product-info p,
-.dark .order-timeline-content p,
-.dark .order-summary-list span,
-.dark .order-summary-total span,
-.dark .order-payment-card p,
-.dark .order-address-box p,
-.dark .order-progress-item p,
-.dark .order-timeline-item span {
+body.dark .order-details-subtitle,
+body.dark .order-product-info p,
+body.dark .order-timeline-content p,
+body.dark .order-summary-list span,
+body.dark .order-summary-total span,
+body.dark .order-payment-card p,
+body.dark .order-address-box p,
+body.dark .order-progress-item p,
+body.dark .order-timeline-item span {
   color: #94a3b8;
 }
 
-.dark .order-details-top,
-.dark .order-section-title,
-.dark .order-product-table th,
-.dark .order-product-table td {
+body.dark .order-details-top,
+body.dark .order-section-title,
+body.dark .order-product-table th,
+body.dark .order-product-table td {
   border-color: #1e293b;
 }
 
-.dark .order-details-actions button {
+body.dark .order-details-actions button {
   background: #020617;
   border-color: #334155;
   color: #cbd5e1;
 }
 
-.dark .order-progress-bar {
+body.dark .order-progress-bar {
   background: #1e293b;
 }
 
@@ -524,11 +524,11 @@
 
 /* DARK MODE */
 
-.dark .order-back-btn {
+body.dark .order-back-btn {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
   margin-top: 10px;
 }
 
-.dark .order-back-icon {
+body.dark .order-back-icon {
   background: rgba(255, 255, 255, 0.12);
 }

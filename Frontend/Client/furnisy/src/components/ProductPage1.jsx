@@ -40,6 +40,8 @@ const ProductPage = () => {
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
+    const [additionalInfo, setAdditionalInfo] = useState([]);
+    const [productReviews, setProductReviews] = useState([]);
     const { t } = useTranslation();
 
     const nextImage = () => {
@@ -131,6 +133,20 @@ const ProductPage = () => {
                 } else {
                     setProduct(null);
                 }
+
+                // fetch additional info
+                try {
+                    const infoRes = await fetch(`http://localhost:5000/api/product-info/product/${id}`);
+                    const infoData = await infoRes.json();
+                    if (infoData.success) setAdditionalInfo(infoData.data);
+                } catch (infoErr) { console.log(infoErr); }
+
+                // fetch product reviews
+                try {
+                    const revRes = await fetch(`http://localhost:5000/api/reviews/product/${id}`);
+                    const revData = await revRes.json();
+                    if (revData.success) setProductReviews(revData.data);
+                } catch (revErr) { console.log(revErr); }
             } catch (error) {
                 console.error("Product load error:", error);
             } finally {
@@ -295,7 +311,7 @@ const ProductPage = () => {
                     {t("product.additionalInfo")}
                 </button>
                 <button className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")}>
-                    {t("product.reviews")} ({product.reviews.length})
+                    {t("product.reviews")} ({productReviews.length})
                 </button>
             </div>
 
@@ -312,25 +328,65 @@ const ProductPage = () => {
                         </ul>
                     </>
                 )}
-                {activeTab === "additional" && <p>{product.additionalInfo}</p>}
+                {activeTab === "additional" && (
+                    <div className="ProductPage1-additional-info">
+                        {additionalInfo.length === 0 ? (
+                            <p>{t("product.noAdditionalInfo") || "No additional information available."}</p>
+                        ) : (
+                            additionalInfo.map((item) => (
+                                <div key={item.id} className="info-section">
+                                    <h4>{item.heading}</h4>
+                                    {item.info_type === "text" && <p>{item.content}</p>}
+                                    {item.info_type === "list" && (
+                                        <ul>
+                                            {(item.content || "").split("\n").filter(Boolean).map((line, i) => (
+                                                <li key={i}>{line.trim()}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                    {item.info_type === "table" && (() => {
+                                        try {
+                                            const rows = JSON.parse(item.content || "[]");
+                                            return (
+                                                <table className="info-table">
+                                                    <tbody>
+                                                        {rows.map((row, i) => (
+                                                            <tr key={i}>
+                                                                <td className="info-table-key">{row.key}</td>
+                                                                <td className="info-table-value">{row.value}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            );
+                                        } catch { return null; }
+                                    })()}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )}
                 {activeTab === "reviews" && (
                     <div className="ProductPage1-reviews">
-                        {product.reviews?.map((review, idx) => (
-                            <div key={idx} className="ProductPage1-review-item">
-                                <div className="ProductPage1-review-header">
-                                    <img src={review.image} alt={review.name} />
-                                    <div className="ProductPage1-review-info">
-                                        <h4>{review.name}</h4>
-                                        <div className="ProductPage1-review-stars">
-                                            {"★".repeat(review.rating)}
+                        {productReviews.length === 0 ? (
+                            <p className="ppr-empty">{t("product.noReviews") || "No reviews yet for this product."}</p>
+                        ) : (
+                            productReviews.map((review) => (
+                                <div key={review.id} className="ppr-card">
+                                    <div className="ppr-card-header">
+                                        <img className="ppr-card-avatar" src={review.avatar?.startsWith("/") ? review.avatar : `/images/${review.avatar}`} alt={review.name} onError={(e) => e.target.src = "/images/user-1.webp"} />
+                                        <div>
+                                            <div className="ppr-card-name">{review.name}</div>
+                                            <div className="ppr-card-role">{review.role}</div>
                                         </div>
                                     </div>
+                                    <div className="ppr-card-stars">
+                                        {Array.from({ length: review.rating || 5 }).map((_, i) => "★").join("")}
+                                    </div>
+                                    <div className="ppr-card-text">{review.text}</div>
                                 </div>
-                                <div className="Review_comment">
-                                    <p>{review.comment}</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
 
                         <div className="ProductPage1-review-form">
                             <h3>{t("product.writeReview")}</h3>

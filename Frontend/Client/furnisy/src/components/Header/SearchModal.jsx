@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useCountry } from "../../context/CountryContext";
@@ -13,6 +13,7 @@ const SearchModal = ({ open, onClose }) => {
     const [products, setProducts] = useState([]);
     const { formatPrice } = useCountry();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     // Load Categories
     useEffect(() => {
@@ -151,11 +152,11 @@ const SearchModal = ({ open, onClose }) => {
                 <div className="search-results">
 
                     {products.length > 0 ? (
-
-                        products.map((product) => (
+                        <>
+                        {products.map((product) => (
 
                             <Link
-                                to={`/product/${product.id}`}
+                                to={`/product-details-1/${product.id}`}
                                 key={product.id}
                                 className="search-item"
                                 onClick={onClose}
@@ -182,8 +183,19 @@ const SearchModal = ({ open, onClose }) => {
 
                             </Link>
 
-                        ))
-
+                        ))}
+                        <div className="search-view-all">
+                            <button onClick={() => {
+                                const params = [];
+                                if (keyword.trim()) params.push(`q=${encodeURIComponent(keyword.trim())}`);
+                                if (selectedCategory) params.push(`category=${selectedCategory}`);
+                                onClose();
+                                navigate(`/search${params.length ? "?" + params.join("&") : ""}`);
+                            }}>
+                                View All Results ({products.length})
+                            </button>
+                        </div>
+                        </>
                     ) : (
 
                         (keyword || selectedCategory) && (

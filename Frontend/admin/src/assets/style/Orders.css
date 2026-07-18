@@ -307,7 +307,7 @@
    DARK MODE
 ========================= */
 
-.dark .orders-page-title {
+body.dark .orders-page-title {
     color: #f1f5f9;
 }
 
@@ -315,20 +315,20 @@
    Cards
 ========================= */
 
-.dark .orders-card {
-    background: #0f172a;
+body.dark .orders-card {
+    background: #1a1a1a;
     border: 1px solid #1e293b;
 }
 
-.dark .orders-card-title {
+body.dark .orders-card-title {
     color: #cbd5e1;
 }
 
-.dark .orders-card-count {
+body.dark .orders-card-count {
     color: #f8fafc;
 }
 
-.dark .orders-card-icon {
+body.dark .orders-card-icon {
     background: rgba(255, 107, 53, 0.12);
 }
 
@@ -336,8 +336,8 @@
    Table Wrapper
 ========================= */
 
-.dark .orders-table-wrapper {
-    background: #0f172a;
+body.dark .orders-table-wrapper {
+    background: #1a1a1a;
     border: 1px solid #1e293b;
 }
 
@@ -345,15 +345,15 @@
    Table Header
 ========================= */
 
-.dark .orders-table-header {
+body.dark .orders-table-header {
     border-bottom: 1px solid #1e293b;
 }
 
-.dark .orders-table-title {
+body.dark .orders-table-title {
     color: #f8fafc;
 }
 
-.dark .orders-table-select {
+body.dark .orders-table-select {
     background: #1a1a1a;
     border: 1px solid #334155;
     color: #cbd5e1;
@@ -363,21 +363,21 @@
    Table
 ========================= */
 
-.dark .orders-table thead {
+body.dark .orders-table thead {
     background: #1a1a1a;
 }
 
-.dark .orders-table th {
+body.dark .orders-table th {
     color: #94a3b8;
     border-bottom: 1px solid #1e293b;
 }
 
-.dark .orders-table td {
+body.dark .orders-table td {
     color: #cbd5e1;
     border-bottom: 1px solid #1e293b;
 }
 
-.dark .orders-customer-name {
+body.dark .orders-customer-name {
     color: #ff8c66;
 }
 
@@ -385,12 +385,12 @@
    Payment Badge
 ========================= */
 
-.dark .orders-paid {
+body.dark .orders-paid {
     background: rgba(34, 197, 94, 0.15);
     color: #4ade80;
 }
 
-.dark .orders-refund {
+body.dark .orders-refund {
     background: rgba(79, 70, 229, 0.15);
     color: #818cf8;
 }
@@ -399,19 +399,19 @@
    Status Badge
 ========================= */
 
-.dark .orders-completed {
+body.dark .orders-completed {
     background: rgba(34, 197, 94, 0.12);
     border-color: #22c55e;
     color: #4ade80;
 }
 
-.dark .orders-canceled {
+body.dark .orders-canceled {
     background: rgba(239, 68, 68, 0.12);
     border-color: #ef4444;
     color: #f87171;
 }
 
-.dark .orders-progress {
+body.dark .orders-progress {
     background: rgba(249, 115, 22, 0.12);
     border-color: #f97316;
     color: #fb923c;
@@ -421,13 +421,13 @@
    Action Buttons
 ========================= */
 
-.dark .orders-action-btn {
+body.dark .orders-action-btn {
     background: #020617;
     border: 1px solid #1e293b;
     color: #cbd5e1;
 }
 
-.dark .orders-action-btn:hover {
+body.dark .orders-action-btn:hover {
     background: #ff6b35;
     border-color: #ff6b35;
     color: #ffffff;
@@ -437,19 +437,19 @@
    Pagination
 ========================= */
 
-.dark .orders-pagination-btn {
+body.dark .orders-pagination-btn {
     background: #020617;
     border: 1px solid #334155;
     color: #cbd5e1;
 }
 
-.dark .orders-pagination-btn:hover {
+body.dark .orders-pagination-btn:hover {
     background: #ff6b35;
     border-color: #ff6b35;
     color: #ffffff;
 }
 
-.dark .orders-active-page {
+body.dark .orders-active-page {
     background: #ff6b35;
     border-color: #ff6b35;
     color: #ffffff;
@@ -554,24 +554,24 @@
    Dark Mode
 ========================= */
 
-.dark .orders-view-btn,
-.dark .orders-menu-btn {
+body.dark .orders-view-btn,
+body.dark .orders-menu-btn {
     background: #1a1a1a;
     border: 1px solid #1e293b;
     color: #cbd5e1;
 }
 
-.dark .orders-dropdown-menu {
+body.dark .orders-dropdown-menu {
     background: #1a1a1a;
     border: 1px solid #1e293b;
 }
 
-.dark .orders-dropdown-menu button {
+body.dark .orders-dropdown-menu button {
     color: #cbd5e1;
     background-color: #1a1a1a;
 }
 
-.dark .orders-dropdown-menu button:hover {
+body.dark .orders-dropdown-menu button:hover {
     background: #020617;
     color: #ff8c66;
 }
@@ -698,33 +698,33 @@
     }
 }
 
-.dark .orders-edit-header h3 {
+body.dark .orders-edit-header h3 {
     color: #f8fafc;
 }
 
-.dark .orders-edit-field label {
+body.dark .orders-edit-field label {
     color: #94a3b8;
 }
 
-.dark .orders-edit-field input,
-.dark .orders-edit-field select {
+body.dark .orders-edit-field input,
+body.dark .orders-edit-field select {
     background: #1a1a1a;
     border-color: #334155;
     color: #f1f5f9;
 }
 
-.dark .orders-edit-disabled {
+body.dark .orders-edit-disabled {
     background: #111827 !important;
     color: #64748b !important;
 }
 
-.dark .orders-edit-cancel-btn {
+body.dark .orders-edit-cancel-btn {
     background: #1e293b;
     border-color: #334155;
     color: #94a3b8;
 }
 
-.dark .orders-edit-cancel-btn:hover {
+body.dark .orders-edit-cancel-btn:hover {
     background: #334155;
     color: #fff;
 }

@@ -7,8 +7,8 @@ import "../../assets/style/Sidebar.css";
 const Sidebar = ({ collapsed }) => {
   const { t } = useTranslation();
   const [active, setActive] = useState("Ecommerce");
-  const [openMenu, setOpenMenu] = useState("Dashboards");
-  const [openSubMenus, setOpenSubMenus] = useState({});
+  const [openMenu, setOpenMenu] = useState("Pages");
+  const [openSubMenus, setOpenSubMenus] = useState({ "Blog": true, [t("sidebar.fileManager")]: true });
 
   const toggleSubMenu = (name) => {
     setOpenSubMenus((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -69,16 +69,17 @@ const Sidebar = ({ collapsed }) => {
           badge: t("sidebar.new"),
           children: [
             { name: t("sidebar.aboutUs"), path: "/dashboard/about-us" },
+            { name: t("sidebar.staticPages"), path: "/dashboard/static-pages" },
             {
               name: t("sidebar.blog"),
               children: [
-                { name: t("sidebar.blog") },
-                { name: t("sidebar.blogDetails") },
-                { name: t("sidebar.createBlog") },
+                { name: t("sidebar.blog"), path: "/dashboard/blogs" },
+                { name: t("sidebar.blogDetails"), path: "/dashboard/blogs/details" },
+                { name: t("sidebar.createBlog"), path: "/dashboard/blogs/create" },
               ],
             },
             { name: t("sidebar.chat") },
-            { name: t("sidebar.contacts") },
+            { name: t("sidebar.contacts"), path: "/dashboard/contacts" },
             { name: t("sidebar.contactUs") },
             {
               name: t("sidebar.ecommerce"),
@@ -96,12 +97,17 @@ const Sidebar = ({ collapsed }) => {
               ],
             },
             { name: t("sidebar.empty") },
-            { name: t("sidebar.faqs") },
+            { name: t("sidebar.faqs"), path: "/dashboard/faqs" },
+            { name: "Showrooms", path: "/dashboard/showrooms" },
+            { name: "Product Info", path: "/dashboard/product-info" },
+            { name: "Banners", path: "/dashboard/banners" },
+            { name: "Videos", path: "/dashboard/videos" },
+            { name: "Reviews", path: "/dashboard/reviews" },
             {
               name: t("sidebar.fileManager"),
               children: [
-                { name: t("sidebar.files") },
-                { name: t("sidebar.recentFiles") },
+                { name: t("sidebar.files"), path: "/dashboard/files" },
+                { name: t("sidebar.recentFiles"), path: "/dashboard/files/recent" },
               ],
             },
             {
@@ -328,13 +334,24 @@ const Sidebar = ({ collapsed }) => {
                             {openSubMenus[sub.name] && (
                               <ul className="nested-submenu">
                                 {sub.children.map((nested, i) => (
-                                  <li
-                                    key={i}
-                                    className={active === nested.name ? "nested-item nested-active" : "nested-item"}
-                                    onClick={() => setActive(nested.name)}
-                                  >
-                                    <span className="dot"></span>
-                                    {!collapsed && <span>{nested.name}</span>}
+                                  <li key={i}>
+                                    {nested.path ? (
+                                      <NavLink
+                                        to={nested.path}
+                                        className={({ isActive }) => isActive ? "nested-item nested-active" : "nested-item"}
+                                      >
+                                        <span className="dot"></span>
+                                        {!collapsed && <span>{nested.name}</span>}
+                                      </NavLink>
+                                    ) : (
+                                      <div
+                                        className={active === nested.name ? "nested-item nested-active" : "nested-item"}
+                                        onClick={() => setActive(nested.name)}
+                                      >
+                                        <span className="dot"></span>
+                                        {!collapsed && <span>{nested.name}</span>}
+                                      </div>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

@@ -521,15 +521,15 @@
    DARK MODE
 ========================= */
 
-.dark .sale-region-item {
+body.dark .sale-region-item {
   color: #f9fafb;
 }
 
-.dark .sale-donut-center {
+body.dark .sale-donut-center {
   background: #1f2937;
 }
 
-.dark .sale-map-image {
+body.dark .sale-map-image {
   opacity: 0.5;
 }
 

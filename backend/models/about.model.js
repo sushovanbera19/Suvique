@@ -1,14 +1,19 @@
 import db from "../config/db.js";
 
-export const getAboutPage = () => {
-  const sql = "SELECT * FROM about_page WHERE id = 1";
+export const getAboutPage = (lang) => {
+  const sql = "SELECT * FROM about_page WHERE lang = ?";
+  return db.promise().query(sql, [lang]);
+};
+
+export const getAboutPageFallback = () => {
+  const sql = "SELECT * FROM about_page WHERE lang = 'en'";
   return db.promise().query(sql);
 };
 
-export const upsertAboutPage = (data) => {
+export const upsertAboutPage = (data, lang) => {
   const sql = `
     INSERT INTO about_page (
-      id, heading, description,
+      lang, heading, description,
       stat1_value, stat1_label,
       stat2_value, stat2_label,
       stat3_value, stat3_label,
@@ -16,7 +21,7 @@ export const upsertAboutPage = (data) => {
       feature1, feature2, feature3, feature4, feature5,
       hero_image, about_image, experience_image,
       video_banner_image, video_url
-    ) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON DUPLICATE KEY UPDATE
       heading = VALUES(heading),
       description = VALUES(description),
@@ -40,6 +45,7 @@ export const upsertAboutPage = (data) => {
       video_url = VALUES(video_url)
   `;
   const values = [
+    lang,
     data.heading,
     data.description,
     data.stat1_value,

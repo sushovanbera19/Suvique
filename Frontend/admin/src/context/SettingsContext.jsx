@@ -5,22 +5,15 @@ const SettingsContext = createContext();
 const COUNTRIES_API = "https://countriesnow.space/api/v0.1/countries/currency";
 
 const LANGUAGES = [
-  { code: "en", name: "English" }, { code: "fr", name: "French" },
-  { code: "de", name: "German" }, { code: "es", name: "Spanish" },
-  { code: "pt", name: "Portuguese" }, { code: "it", name: "Italian" },
-  { code: "nl", name: "Dutch" }, { code: "ru", name: "Russian" },
-  { code: "ja", name: "Japanese" }, { code: "zh", name: "Chinese" },
-  { code: "ko", name: "Korean" }, { code: "ar", name: "Arabic" },
-  { code: "hi", name: "Hindi" }, { code: "bn", name: "Bengali" },
-  { code: "tr", name: "Turkish" }, { code: "vi", name: "Vietnamese" },
-  { code: "th", name: "Thai" }, { code: "id", name: "Indonesian" },
-  { code: "ms", name: "Malay" }, { code: "sv", name: "Swedish" },
-  { code: "pl", name: "Polish" }, { code: "cs", name: "Czech" },
-  { code: "ro", name: "Romanian" }, { code: "uk", name: "Ukrainian" },
-  { code: "el", name: "Greek" }, { code: "he", name: "Hebrew" },
-  { code: "fa", name: "Persian" }, { code: "sw", name: "Swahili" },
-  { code: "am", name: "Amharic" }, { code: "ha", name: "Hausa" },
-  { code: "yo", name: "Yoruba" }, { code: "zu", name: "Zulu" },
+  { code: "en", name: "English" }, { code: "hi", name: "Hindi" },
+  { code: "fr", name: "French" }, { code: "de", name: "German" },
+  { code: "es", name: "Spanish" }, { code: "ar", name: "Arabic" },
+  { code: "zh", name: "Chinese" }, { code: "ja", name: "Japanese" },
+  { code: "bn", name: "Bengali" }, { code: "th", name: "Thai" },
+  { code: "id", name: "Indonesian" }, { code: "ms", name: "Malay" },
+  { code: "sv", name: "Swedish" }, { code: "pl", name: "Polish" },
+  { code: "cs", name: "Czech" }, { code: "ro", name: "Romanian" },
+  { code: "el", name: "Greek" },
 ];
 
 const DEFAULT_COUNTRY = {

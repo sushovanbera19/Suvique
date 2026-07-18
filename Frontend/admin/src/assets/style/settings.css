@@ -342,55 +342,55 @@
    OFFER SETTINGS - DARK MODE
 =========================== */
 
-.dark .offer-product-card,
+body.dark .offer-product-card,
 .dark-theme .offer-product-card{
     background:#1a1a1a;
     border:1px solid #334155;
     color:#f8fafc;
 }
 
-.dark .offer-product-info h4,
+body.dark .offer-product-info h4,
 .dark-theme .offer-product-info h4{
     color:#f8fafc;
 }
 
-.dark .offer-product-info p,
+body.dark .offer-product-info p,
 .dark-theme .offer-product-info p{
     color:#94a3b8;
 }
 
-.dark .offer-checkbox,
+body.dark .offer-checkbox,
 .dark-theme .offer-checkbox{
     color:#e2e8f0;
 }
 
-.dark .offer-options input[type="text"],
-.dark .offer-options input[type="number"],
+body.dark .offer-options input[type="text"],
+body.dark .offer-options input[type="number"],
 .dark-theme .offer-options input[type="text"],
 .dark-theme .offer-options input[type="number"]{
-    background:#0f172a;
+    background:#1a1a1a;
     border:1px solid #334155;
     color:#fff;
 }
 
-.dark .offer-options input::placeholder,
+body.dark .offer-options input::placeholder,
 .dark-theme .offer-options input::placeholder{
     color:#94a3b8;
 }
 
-.dark .offer-options input:focus,
+body.dark .offer-options input:focus,
 .dark-theme .offer-options input:focus{
     border-color:#3b82f6;
     outline:none;
     box-shadow:0 0 0 3px rgba(59,130,246,.25);
 }
 
-.dark .offer-product-info img,
+body.dark .offer-product-info img,
 .dark-theme .offer-product-info img{
     border:1px solid #334155;
 }
 
-.dark .offer-product-card:hover,
+body.dark .offer-product-card:hover,
 .dark-theme .offer-product-card:hover{
     border-color:#3b82f6;
 }
@@ -453,55 +453,55 @@
    DARK MODE FORM FIELDS
 ================================ */
 
-.dark .settings-page-form-group input,
-.dark .settings-page-form-group textarea,
-.dark .settings-page-form-group select {
+body.dark .settings-page-form-group input,
+body.dark .settings-page-form-group textarea,
+body.dark .settings-page-form-group select {
   background: #212225;          /* dark background */
   color: #e5e7eb;               /* light text */
   border: 1px solid #2d3748;   /* soft border */
 }
 
 /* Placeholder color */
-.dark .settings-page-form-group input::placeholder,
-.dark .settings-page-form-group textarea::placeholder {
+body.dark .settings-page-form-group input::placeholder,
+body.dark .settings-page-form-group textarea::placeholder {
   color: #9ca3af;
 }
 
 /* Focus state */
-.dark .settings-page-form-group input:focus,
-.dark .settings-page-form-group textarea:focus,
-.dark .settings-page-form-group select:focus {
+body.dark .settings-page-form-group input:focus,
+body.dark .settings-page-form-group textarea:focus,
+body.dark .settings-page-form-group select:focus {
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
   outline: none;
 }
 
 /* Select dropdown arrow fix (optional polish) */
-.dark .settings-page-form-group select {
+body.dark .settings-page-form-group select {
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg fill='white' height='10' viewBox='0 0 20 20' width='10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 12px;
 }
-.dark .settings-page-switch-grid label {
+body.dark .settings-page-switch-grid label {
   background: #212225;        /* dark card background */
   border: 1px solid #2d3748;  /* subtle border */
   color: #e5e7eb;             /* light text */
 }
 
 /* Hover effect */
-.dark .settings-page-switch-grid label:hover {
+body.dark .settings-page-switch-grid label:hover {
   background: #1f2937;
   border-color: #374151;
 }
 
 /* Checkbox styling */
-.dark .settings-page-switch-grid input[type="checkbox"] {
+body.dark .settings-page-switch-grid input[type="checkbox"] {
   accent-color: #6366f1;
 }
 
-.dark .settings-page-header h3 {
+body.dark .settings-page-header h3 {
   color: #f3f4f6;   /* light gray text */
 }
 body.dark .settings-page-title {

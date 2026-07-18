@@ -366,7 +366,7 @@ export const getShopProducts = (filters, callback) => {
 
     const totalCount = countResult[0]?.total || 0;
 
-    const dataSql = `SELECT ${distinct}p.id, p.product_name, p.description, p.category_id, p.sub_category_id, p.base_price, p.sku, p.quantity, p.vat, p.width, p.height, p.weight, p.shipping_cost, p.tags, p.main_image, p.gallery_images, c.category_name, s.subcategory_name ${fromSql}${whereSql}${orderSql} LIMIT ?, ?`;
+    const dataSql = `SELECT ${distinct}p.id, p.product_name, p.description, p.category_id, p.sub_category_id, p.base_price, p.sale_price, p.sku, p.quantity, p.vat, p.width, p.height, p.weight, p.shipping_cost, p.tags, p.main_image, p.gallery_images, c.category_name, s.subcategory_name ${fromSql}${whereSql}${orderSql} LIMIT ?, ?`;
 
     values.push(offset, limit);
 

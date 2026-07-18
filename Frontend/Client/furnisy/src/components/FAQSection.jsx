@@ -1,24 +1,49 @@
-// FAQSection.jsx
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import faqImage from "../../public/images/faq.webp";
 import AccountHeader from "./AccountHeader";
 import "../assets/style/FAQSection.css";
 import { useTranslation } from "../context/LanguageContext";
 
-const FAQSection = () => {
-  const { t } = useTranslation();
-  const [openIndex, setOpenIndex] = useState(null);
+const API = "http://localhost:5000";
 
-  const faqs = [
-    { question: t("faq.q1"), answer: t("faq.a1") },
-    { question: t("faq.q2"), answer: t("faq.a2") },
-    { question: t("faq.q3"), answer: t("faq.a3") },
-    { question: t("faq.q4"), answer: t("faq.a4") },
-    { question: t("faq.q5"), answer: t("faq.a5") },
-    { question: t("faq.q6"), answer: t("faq.a6") },
-    { question: t("faq.q7"), answer: t("faq.a7") },
-    { question: t("faq.q8"), answer: t("faq.a8") },
-  ];
+const FAQSection = () => {
+  const { t, lang } = useTranslation();
+  const [openIndex, setOpenIndex] = useState(null);
+  const [faqs, setFaqs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFaqs();
+  }, [lang]);
+
+  const fetchFaqs = async () => {
+    try {
+      const res = await fetch(`${API}/api/faqs/active?lang=${lang}`);
+      const data = await res.json();
+      if (data.success && data.data.length > 0) {
+        setFaqs(data.data);
+      } else {
+        setFallbackFaqs();
+      }
+    } catch (err) {
+      console.log(err);
+      setFallbackFaqs();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setFallbackFaqs = () => {
+    const fallback = [];
+    for (let i = 1; i <= 8; i++) {
+      const q = t(`faq.q${i}`);
+      const a = t(`faq.a${i}`);
+      if (q !== `faq.q${i}`) {
+        fallback.push({ id: i, question: q, answer: a });
+      }
+    }
+    setFaqs(fallback);
+  };
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -26,11 +51,10 @@ const FAQSection = () => {
 
   return (
     <div className="FaqSectionWrapper">
-      <AccountHeader title="FAQ" breadcrumb="Home → FAQ" />
+      <AccountHeader title={t("faq.title")} breadcrumb={`${t("breadcrumb.home")} → ${t("breadcrumb.faq")}`} />
       <div className="FaqContainer">
-         <h1 className="Faq_Heading">{t("faq.heading")}</h1>
+        <h1 className="Faq_Heading">{t("faq.heading")}</h1>
         <div className="FaqRow">
-          {/* Left Image */}
           <div className="FaqImageWrapper">
             <img src={faqImage} alt="FAQ" className="FaqImage" />
             <div className="FaqSupport">
@@ -39,27 +63,30 @@ const FAQSection = () => {
             </div>
           </div>
 
-          {/* FAQ Accordion */}
           <div className="FaqAccordionWrapper">
-           
-            <div className="FaqAccordion">
-              {faqs.map((faq, index) => (
-                <div className="FaqItem" key={index}>
-                  <button
-                    className={`FaqButton ${openIndex === index ? "open" : ""}`}
-                    onClick={() => toggleFAQ(index)}
-                  >
-                    {faq.question}
-                    <span className="FaqIcon">{openIndex === index ? "-" : "+"}</span>
-                  </button>
-                  <div
-                    className={`FaqCollapse ${openIndex === index ? "open" : ""}`}
-                  >
-                    <div className="FaqBody">{faq.answer}</div>
+            {loading ? (
+              <p style={{ textAlign: "center", padding: "40px", color: "#999" }}>{t("common.loading")}</p>
+            ) : (
+              <div className="FaqAccordion">
+                {faqs.map((faq, index) => (
+                  <div className="FaqItem" key={faq.id || index}>
+                    <button
+                      className={`FaqButton ${openIndex === index ? "open" : ""}`}
+                      onClick={() => toggleFAQ(index)}
+                    >
+                      {faq.question}
+                      <span className="FaqIcon">{openIndex === index ? "-" : "+"}</span>
+                    </button>
+                    <div className={`FaqCollapse ${openIndex === index ? "open" : ""}`}>
+                      <div className="FaqBody">{faq.answer}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+                {faqs.length === 0 && (
+                  <p style={{ textAlign: "center", padding: "40px", color: "#999" }}>{t("common.noData")}</p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

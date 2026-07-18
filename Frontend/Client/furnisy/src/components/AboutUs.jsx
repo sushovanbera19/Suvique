@@ -191,7 +191,7 @@ const AboutUs = () => {
     useEffect(() => {
         const fetchAbout = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/about");
+                const res = await fetch(`http://localhost:5000/api/about?lang=${lang}`);
                 const data = await res.json();
                 if (data.success && data.data) {
                     setAboutContent(data.data);
@@ -201,7 +201,7 @@ const AboutUs = () => {
             }
         };
         fetchAbout();
-    }, []);
+    }, [lang]);
 
     const isEnglish = lang === "en";
 
@@ -235,7 +235,7 @@ const AboutUs = () => {
 
     return (
         <>
-            <AccountHeader title={t("about.title")} breadcrumb="Home → About Us" />
+            <AccountHeader title={t("about.title")} breadcrumb={`${t("breadcrumb.home")} → ${t("breadcrumb.aboutUs")}`} />
             <div className="about-wrapper">
                 <HeroSection image={aboutData.heroImage} />
                 <AboutSection

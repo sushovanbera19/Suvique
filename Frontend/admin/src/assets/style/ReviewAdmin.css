@@ -1,0 +1,134 @@
+/* REVIEW ADMIN EXTRAS */
+
+.rv-hero {
+  width: 100%;
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eab308 0%, #f97316 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rv-hero::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  top: -100px;
+  right: -50px;
+}
+
+.rv-inline-header {
+  background: linear-gradient(135deg, #eab308 0%, #f97316 100%) !important;
+}
+
+.rv-rating-select {
+  display: flex;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.rv-rating-select .rv-star-active {
+  color: #eab308;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.rv-rating-select .rv-star-inactive {
+  color: #d1d5db;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.rv-stars-inline {
+  display: flex;
+  gap: 2px;
+}
+
+.rv-stars-inline .rv-star-active { color: #eab308; font-size: 12px; }
+.rv-stars-inline .rv-star-inactive { color: #d1d5db; font-size: 12px; }
+
+body.dark .rv-hero { filter: brightness(0.85); }
+
+.rv-product-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: #eff6ff;
+  color: #3b82f6;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rv-general-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #f3f4f6;
+  color: #999;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+body.dark .rv-product-tag { background: #172554; color: #60a5fa; }
+body.dark .rv-general-tag { background: #334155; color: #94a3b8; }
+
+/* Product Page Reviews */
+.ppr-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.ppr-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.ppr-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid #f0f0f0;
+}
+
+.ppr-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ppr-card-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ppr-card-name { font-weight: 600; font-size: 14px; }
+.ppr-card-role { font-size: 12px; color: #999; }
+.ppr-card-stars { display: flex; gap: 2px; margin-bottom: 8px; color: #eab308; font-size: 14px; }
+.ppr-card-text { font-size: 14px; color: #555; line-height: 1.6; }
+
+.ppr-empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 14px;
+}

@@ -109,7 +109,7 @@
 
   .subscribe-btn {
     padding: 1rem;
-    border-radius: 0 0 50px 50px;
+    border-radius: 0 0 20px 2px;
   }
 
   .highlight-text {
@@ -149,7 +149,7 @@
   /* KEEP INPUT & BUTTON IN SAME LINE */
   .input-wrapper {
     display: flex;
-    flex-direction: row;   /* 👈 key fix */
+    flex-direction: row !important;
     align-items: center;
     border-radius: 50px;
   }
@@ -178,4 +178,3 @@
     margin-top: 0.8rem;
   }
 }
-

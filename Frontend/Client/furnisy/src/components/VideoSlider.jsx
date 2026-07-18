@@ -1,11 +1,7 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "../assets/style/VideoSlider.css";
-import video1 from "../../public/video/video1.mp4";
-import thumb1 from "../../public/images/video-thumblan-1.webp";
 
-const videos = [
-    { id: 1, video: video1, thumbnail: thumb1 },
-];
+const API = "http://localhost:5000";
 
 const VideoSlider = () => {
     const sliderRef = useRef(null);
@@ -13,6 +9,14 @@ const VideoSlider = () => {
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const [playingVideo, setPlayingVideo] = useState(null);
+    const [videos, setVideos] = useState([]);
+
+    useEffect(() => {
+        fetch(`${API}/api/videos/active`)
+            .then((r) => r.json())
+            .then((d) => { if (d.success && d.data.length > 0) setVideos(d.data); })
+            .catch(() => {});
+    }, []);
 
     const handleMouseDown = (e) => {
         setIsDragging(true);
@@ -25,9 +29,17 @@ const VideoSlider = () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - sliderRef.current.offsetLeft;
-        const walk = (x - startX) * 2; // scroll speed
+        const walk = (x - startX) * 2;
         sliderRef.current.scrollLeft = scrollLeft - walk;
     };
+
+    const resolvePath = (p) => {
+        if (!p) return "";
+        if (p.startsWith("http")) return p;
+        return p.startsWith("/") ? p : `/images/${p}`;
+    };
+
+    if (videos.length === 0) return null;
 
     return (
         <div
@@ -42,7 +54,7 @@ const VideoSlider = () => {
                 <div className="slider-item" key={item.id}>
                     {playingVideo === item.id ? (
                         <video
-                            src={item.video}
+                            src={resolvePath(item.video_url)}
                             controls
                             autoPlay
                             loop
@@ -56,7 +68,7 @@ const VideoSlider = () => {
                         <div
                             className="video-thumbnail"
                             style={{
-                                backgroundImage: `url(${item.thumbnail})`,
+                                backgroundImage: `url(${resolvePath(item.thumbnail)})`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                                 width: "1000px",

@@ -364,19 +364,19 @@
   color: #555;
 }
 /* DARK MODE */
-.dark .earnings-header {
+body.dark .earnings-header {
   color: #fff;
 }
 
-.dark .earnings-title {
+body.dark .earnings-title {
   color: #fff;
 }
 
-.dark .view-all {
+body.dark .view-all {
   color: #fff;
 }
 
-.dark .dropdown-icon {
+body.dark .dropdown-icon {
   color: #d1d5db;
 }
 .card-title-row {
@@ -426,12 +426,12 @@
   font-weight: 600;
 }
 
-.dark .product-list li {
+body.dark .product-list li {
   border-bottom: 1px solid #333;
 }
 
-.dark .product-name,
-.dark .product-price {
+body.dark .product-name,
+body.dark .product-price {
   color: #fff;
 }
 

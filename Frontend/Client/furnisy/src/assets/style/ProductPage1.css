@@ -271,6 +271,63 @@
     line-height: 1.6;
 }
 
+/* Additional Info Sections */
+.ProductPage1-additional-info .info-section {
+    margin-bottom: 28px;
+}
+
+.ProductPage1-additional-info .info-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.ProductPage1-additional-info .info-section p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.ProductPage1-additional-info .info-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.ProductPage1-additional-info .info-section li {
+    font-size: 14px;
+    color: #555;
+    line-height: 2;
+    list-style: disc;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.info-table tr:not(:last-child) td {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-table-key {
+    font-weight: 600;
+    color: #333;
+    padding: 10px 14px;
+    width: 40%;
+    background: #fafafa;
+}
+
+.info-table-value {
+    color: #555;
+    padding: 10px 14px;
+}
+
 /* Share */
 .ProductPage1-share {
     display: flex;

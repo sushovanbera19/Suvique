@@ -1,0 +1,402 @@
+/* ============================
+   SHARED FOOTER PAGE STYLES
+   ============================ */
+
+.page-wrapper {
+    max-width: 1400px;
+    margin: 100px auto;
+    padding: 0 20px;
+    font-family: 'Dosis', sans-serif;
+}
+
+/* ── Hero Banner ── */
+.page-hero {
+    width: 100%;
+    height: clamp(280px, 40vw, 500px);
+    overflow: hidden;
+    position: relative;
+}
+
+.page-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.page-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+}
+
+.page-hero-overlay h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    margin: 0 0 12px;
+    font-weight: 400;
+}
+
+.page-hero-overlay p {
+    font-size: clamp(16px, 2vw, 22px);
+    max-width: 700px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* ── Content Section ── */
+.page-section {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    padding: 50px 0;
+}
+
+.page-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.page-section-text {
+    flex: 1;
+}
+
+.page-section-text h2 {
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.page-section-text p {
+    font-size: clamp(16px, 1.8vw, 20px);
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.page-section-image {
+    flex: 1;
+}
+
+.page-section-image img {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+}
+
+/* ── Feature Grid ── */
+.page-features {
+    background: #f8f8f8;
+    padding: clamp(30px, 5vw, 60px) 20px;
+}
+
+.page-features h2 {
+    text-align: center;
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: #fff;
+    padding: 35px 28px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    font-size: 28px;
+}
+
+.feature-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.feature-card p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ── Stats Row ── */
+.page-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.page-stat h3 {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.page-stat span {
+    font-size: 15px;
+    color: #777;
+}
+
+/* ── CTA Banner ── */
+.page-cta {
+    background: #f8f8f8;
+    text-align: center;
+    padding: clamp(40px, 6vw, 80px) 20px;
+}
+
+.page-cta h2 {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.page-cta p {
+    font-size: clamp(16px, 1.8vw, 20px);
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    line-height: 1.7;
+}
+
+.page-cta a {
+    display: inline-block;
+    background: #222;
+    color: #fff;
+    padding: 14px 40px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.page-cta a:hover {
+    background: #444;
+}
+
+/* ── Testimonial Cards ── */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.testimonial-card p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testimonial-author img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.testimonial-author span {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+/* ── Job Listings ── */
+.job-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.job-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.job-item:last-child {
+    border-bottom: none;
+}
+
+.job-info h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.job-info p {
+    font-size: 15px;
+    color: #777;
+    margin: 0;
+}
+
+.job-item a {
+    background: #222;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background 0.3s ease;
+}
+
+.job-item a:hover {
+    background: #444;
+}
+
+/* ── Services / Steps ── */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.service-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.service-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #222;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 auto 16px;
+}
+
+.service-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ── Guide List ── */
+.guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.guide-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    transition: transform 0.3s ease;
+}
+
+.guide-card:hover {
+    transform: translateY(-4px);
+}
+
+.guide-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.guide-card-body {
+    padding: 22px;
+}
+
+.guide-card-body h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.guide-card-body p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .page-wrapper {
+        margin: 50px auto;
+    }
+
+    .page-section,
+    .page-section.reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .page-section-image img {
+        max-width: 100%;
+    }
+
+    .page-stats {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .job-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

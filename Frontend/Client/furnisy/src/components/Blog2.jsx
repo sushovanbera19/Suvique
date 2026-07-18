@@ -10,33 +10,41 @@ import BlogCategories from "../Common/BlogCategories";
 import LatestPosts from "../Common/LatestPosts";
 import BlogTags from "../Common/BlogTags";
 
-import Blogimage from "../../public/images/blog-3.webp";
 import "../assets/style/blog-2.css";
 
-const blogData = Array.from({ length: 8 }, (_, i) => ({
-  image: Blogimage,
-  title: `Blog Post ${i + 1}`,
-  date: "18 Aug 2025",
-  category: "Office Furniture",
-  author: "Anna Maria",
-  description: "Make your database provisioning cloud-native using our database generation. Make your..."
-}));
+const API = "http://localhost:5000";
 
 const Blog2 = () => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const { pathname } = useLocation();
 
-  // 🔥 layout based on route
   const columns = pathname === "/blog-3" ? 3 : 2;
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [blogData, setBlogData] = useState([]);
 
-  // adjust blogs per page automatically
   const blogsPerPage = columns === 3 ? 6 : 4;
+
+  useEffect(() => {
+    fetch(`${API}/api/blogs/published?lang=${lang}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setBlogData(data.data.map((b) => ({
+            image: b.image,
+            title: b.title,
+            date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+            category: b.category,
+            author: b.author,
+            description: b.description,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, [lang]);
 
   const totalPages = Math.ceil(blogData.length / blogsPerPage);
 
-  // reset page when route/layout changes
   useEffect(() => {
     setCurrentPage(1);
   }, [columns]);
@@ -52,7 +60,6 @@ const Blog2 = () => {
       <AccountHeader title={t("blog.title")} breadcrumb={`${t("common.home")} → ${t("blog.title")}`} />
 
       <div className="blog2-page">
-        {/* LEFT SIDE */}
         <div className="blog2-content">
           <div className={`blog2-grid cols-${columns}`}>
             {currentBlogs.map((blog, index) => (
@@ -68,7 +75,6 @@ const Blog2 = () => {
           />
         </div>
 
-        {/* RIGHT SIDEBAR */}
         <aside className="blog2-sidebar">
           <BlogSearch />
           <BlogCategories />

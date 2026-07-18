@@ -15,7 +15,15 @@ import addressRoutes from "./routes/address.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import newsletterRoutes from "./routes/newsletter.routes.js";
 import aboutRoutes from "./routes/about.routes.js";
-
+import blogRoutes from "./routes/blog.routes.js";
+import staticPageRoutes from "./routes/staticPage.routes.js";
+import fileManagerRoutes from "./routes/fileManager.routes.js";
+import faqRoutes from "./routes/faq.routes.js";
+import showroomRoutes from "./routes/showroom.routes.js";
+import productInfoRoutes from "./routes/productInfo.routes.js";
+import bannerRoutes from "./routes/banner.routes.js";
+import videoRoutes from "./routes/video.routes.js";
+import reviewRoutes from "./routes/review.routes.js";
 
 
 const app = express();
@@ -41,10 +49,25 @@ app.use("/api/address", addressRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/about", aboutRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/static-pages", staticPageRoutes);
+app.use("/api/files", fileManagerRoutes);
+app.use("/api/faqs", faqRoutes);
+app.use("/api/showrooms", showroomRoutes);
+app.use("/api/product-info", productInfoRoutes);
+app.use("/api/banners", bannerRoutes);
+app.use("/api/videos", videoRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // test route
 app.get("/", (req, res) => {
   res.send("Server is running 🚀");
+});
+
+// global error handler (returns JSON, never HTML)
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+  res.status(500).json({ success: false, message: err.message || "Internal server error" });
 });
 
 // start server

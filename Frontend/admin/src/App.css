@@ -281,31 +281,31 @@ body.dark .save-btn:hover {
   background: #fff;
 }
 
-.dark .breadcrumb .active {
+body.dark .breadcrumb .active {
   color: #afafb0;
 }
-.dark .page-title {
+body.dark .page-title {
   color: #afafb0;
 }
-.dark .breadcrumb a {
+body.dark .breadcrumb a {
   color: #474799;
 }
 /* ROOT DARK MODE */
-.dark {
+body.dark {
   background: #0f0f0f; /* page background */
   color: #e5e7eb; /* default text */
 }
 
 /* PAGE HEADER */
-.dark .page-title {
+body.dark .page-title {
   color: #ffffff;
 }
 
 /* CARDS */
-.dark .dashboard-card,
-.dark .products-card,
-.dark .earnings-card,
-.dark .promo-box {
+body.dark .dashboard-card,
+body.dark .products-card,
+body.dark .earnings-card,
+body.dark .promo-box {
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
@@ -313,76 +313,76 @@ body.dark .save-btn:hover {
 }
 
 /* CARD TEXT */
-.dark .card-title {
+body.dark .card-title {
   color: #ffffff;
 }
 
-.dark .card-subtitle {
+body.dark .card-subtitle {
   color: #94a3b8;
 }
 
-.dark .card-value {
+body.dark .card-value {
   color: #ffffff;
 }
 
 /* ICONS */
-.dark .purple {
+body.dark .purple {
   color: #a78bfa;
 }
 
-.dark .blue {
+body.dark .blue {
   color: #60a5fa;
 }
 
-.dark .green {
+body.dark .green {
   color: #34d399;
 }
 
-.dark .orange {
+body.dark .orange {
   color: #fb923c;
 }
 
 /* LISTS */
-.dark .list li {
+body.dark .list li {
   color: #e5e7eb;
 }
 
 /* TABLES */
-.dark .table {
+body.dark .table {
   color: #e5e7eb;
 }
 
-.dark .table th {
+body.dark .table th {
   color: #ffffff;
   border-bottom: 1px solid #2a2a2a;
 }
 
-.dark .table td {
+body.dark .table td {
   border-bottom: 1px solid #2a2a2a;
 }
 
-.dark .table tr:hover {
+body.dark .table tr:hover {
   background: #222222;
 }
 
 /* CHART BOX */
-.dark .chart-placeholder {
+body.dark .chart-placeholder {
   background: #121212;
   color: #94a3b8;
 }
 
 /* GRIDS */
-.dark .stats-grid,
-.dark .small-grid,
-.dark .bottom-two-cards,
-.dark .left-column,
-.dark .right-column,
-.dark .right-bottom-section {
+body.dark .stats-grid,
+body.dark .small-grid,
+body.dark .bottom-two-cards,
+body.dark .left-column,
+body.dark .right-column,
+body.dark .right-bottom-section {
   background: transparent;
 }
 
 /* BUTTONS in promo */
-.dark .promo-box button {
+body.dark .promo-box button {
   background: #6366f1;
   color: #fff;
   border: none;
@@ -415,53 +415,53 @@ body.dark .card-icon {
    DARK MODE
 ========================= */
 
-.dark .sales-page {
+body.dark .sales-page {
   background: #0f0f0f ;
 }
 
-.dark .sale-card {
+body.dark .sale-card {
   background: #1f2937;
 }
 
-.dark .sale-page-title,
-.dark .sale-card-title,
-.dark .sale-stat-value,
-.dark .sale-product-item,
-.dark .sale-target-box h3,
-.dark .sale-button-group button {
+body.dark .sale-page-title,
+body.dark .sale-card-title,
+body.dark .sale-stat-value,
+body.dark .sale-product-item,
+body.dark .sale-target-box h3,
+body.dark .sale-button-group button {
   color: #f9fafb;
 }
 
-.dark .sale-stat-title,
-.dark .sale-total-sales p,
-.dark .sale-target-box p,
-.dark .sale-production-header {
+body.dark .sale-stat-title,
+body.dark .sale-total-sales p,
+body.dark .sale-target-box p,
+body.dark .sale-production-header {
   color: #9ca3af;
 }
 
-.dark .sale-stat-icon {
+body.dark .sale-stat-icon {
   background: #374151;
   color: white;
 }
 
-.dark .sale-progress-bar {
+body.dark .sale-progress-bar {
   background: #374151;
 }
 
-.dark .sale-target-box {
+body.dark .sale-target-box {
   background: #374151;
 }
 
-.dark .sale-button-group button {
+body.dark .sale-button-group button {
   background: #374151;
 }
 
-.dark .sale-active-btn {
+body.dark .sale-active-btn {
   background: #ec4899 !important;
   color: white !important;
 }
 
-.dark .sale-productivity-chart {
+body.dark .sale-productivity-chart {
   background: linear-gradient(to top, #312e81, #14532d);
 }
 

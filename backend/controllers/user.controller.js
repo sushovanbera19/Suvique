@@ -1,4 +1,4 @@
-import { insertUser, findUserByEmail, getAllUsers, deleteUser, updateUser } from "../models/user.model.js";
+import { insertUser, findUserByEmail, getAllUsers, deleteUser, updateUser, findUserById, getUserImage, updateUserProfile, updateUserImage, getUserCoverImage, updateUserCoverImage } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -106,8 +106,9 @@ export const loginUser = async (req, res) => {
       }
     );
 
-    // Remove password before sending response
+    // Remove sensitive fields before sending response
     delete user.password;
+    delete user.profileImageType;
 
     res.status(200).json({
       success: true,
@@ -172,5 +173,83 @@ export const deleteUserController = async (req, res) => {
       success: false,
       message: "Delete failed",
     });
+  }
+};
+
+// get logged-in user profile
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await findUserById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.json({ success: true, data: user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// serve user profile image as blob
+export const getUserProfileImage = async (req, res) => {
+  try {
+    const image = await getUserImage(req.params.id);
+    if (!image || !image.profileImage) {
+      return res.status(404).json({ success: false, message: "No image" });
+    }
+    res.set("Content-Type", image.profileImageType || "image/jpeg");
+    res.send(image.profileImage);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// update user profile (name, email)
+export const updateUserProfileController = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    await updateUserProfile(req.user.userId, name, email);
+    res.json({ success: true, message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// update user profile image (multer memoryStorage)
+export const updateUserProfileImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No image provided" });
+    }
+    await updateUserImage(req.user.userId, req.file.buffer, req.file.mimetype);
+    res.json({ success: true, message: "Profile image updated" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// serve user cover photo as blob
+export const getUserCoverImageCtrl = async (req, res) => {
+  try {
+    const image = await getUserCoverImage(req.params.id);
+    if (!image || !image.coverPhoto) {
+      return res.status(404).json({ success: false, message: "No cover photo" });
+    }
+    res.set("Content-Type", image.coverPhotoType || "image/jpeg");
+    res.send(image.coverPhoto);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// update user cover photo (multer memoryStorage)
+export const updateUserCoverImageCtrl = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "No image provided" });
+    }
+    await updateUserCoverImage(req.user.userId, req.file.buffer, req.file.mimetype);
+    res.json({ success: true, message: "Cover photo updated" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

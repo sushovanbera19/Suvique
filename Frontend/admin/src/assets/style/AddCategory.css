@@ -292,18 +292,18 @@ body.dark .add_category_btn_danger:hover {
 =========================== */
 
 body.dark .add_category_import,
-.dark .add_category_import {
+body.dark .add_category_import {
   background: #1f2937;
   border-color: #4b5563;
 }
 
 body.dark .add_category_import h4,
-.dark .add_category_import h4 {
+body.dark .add_category_import h4 {
   color: #fff;
 }
 
 body.dark .add_category_import input[type="file"],
-.dark .add_category_import input[type="file"] {
+body.dark .add_category_import input[type="file"] {
   background: #111827;
   border-color: #374151;
   color: #fff;
@@ -311,19 +311,19 @@ body.dark .add_category_import input[type="file"],
 
 body.dark .add_category_import input[type="file"]::file-selector-button,
 body.dark .add_category_import input[type="file"]::-webkit-file-upload-button,
-.dark .add_category_import input[type="file"]::file-selector-button,
-.dark .add_category_import input[type="file"]::-webkit-file-upload-button {
+body.dark .add_category_import input[type="file"]::file-selector-button,
+body.dark .add_category_import input[type="file"]::-webkit-file-upload-button {
   background: #2563eb;
   color: #fff;
 }
 
 body.dark .import_btn,
-.dark .import_btn {
+body.dark .import_btn {
   background: #2563eb;
 }
 
 body.dark .import_btn:hover,
-.dark .import_btn:hover {
+body.dark .import_btn:hover {
   background: #1d4ed8;
 }
 

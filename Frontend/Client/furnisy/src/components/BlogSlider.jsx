@@ -1,24 +1,33 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "../assets/style/BlogSlider.css";
-import Blog1 from "../../public/images/blog-3.webp";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import BlogCard from "../Common/BlogCard";
 import { useTranslation } from "../context/LanguageContext";
 
-const blogs = [
-    {
-        date: "20 Jan 2025",
-        category: "Office Furniture",
-        author: "Anna Maria",
-        title: "Comfortable Chairs Can Help You Create Your Own Home Office",
-        description:"Make your database provisioning cloud-native using our database generation. Make your database provisioning cloud-native",
-        image: Blog1,
-    },
-];
+const API = "http://localhost:5000";
 
 const BlogSlider = () => {
-    const { t } = useTranslation();
+    const { t, lang } = useTranslation();
     const sliderRef = useRef(null);
+    const [blogs, setBlogs] = useState([]);
+
+    useEffect(() => {
+        fetch(`${API}/api/blogs/published?lang=${lang}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    setBlogs(data.data.map((b) => ({
+                        image: b.image,
+                        title: b.title,
+                        date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+                        category: b.category,
+                        author: b.author,
+                        description: b.description,
+                    })));
+                }
+            })
+            .catch(() => {});
+    }, [lang]);
 
     const scroll = (direction) => {
         if (sliderRef.current) {

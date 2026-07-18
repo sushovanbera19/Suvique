@@ -9,7 +9,7 @@ import { toastSuccess, toastError } from "../utils/toast";
 import { useTranslation } from "../context/LanguageContext";
 
 const Contact = () => {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,7 +51,7 @@ const Contact = () => {
   };
   return (
     <>
-      <AccountHeader title="Contact Us" breadcrumb="Home → Contact Us" />
+      <AccountHeader title={t("contact.title")} breadcrumb={`${t("breadcrumb.home")} → ${t("breadcrumb.contactUs")}`} />
       <div className="contact-outer">
         <div className="contact-inner">
 

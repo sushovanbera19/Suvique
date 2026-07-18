@@ -1,5 +1,5 @@
 import db from "../config/db.js";
-import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct, updateOfferSettingsModel, getShopProducts, getShopSidebar, bulkCreateProducts, toggleProductStatus } from "../models/productModel.js";
+import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct, updateOfferSettingsModel, getShopProducts, getShopSidebar, bulkCreateProducts, toggleProductStatus, searchProducts } from "../models/productModel.js";
 
 // =========================
 // CREATE PRODUCT + VARIATIONS (FIXED)

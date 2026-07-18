@@ -1,0 +1,642 @@
+/* ========================================
+   STATIC PAGES EDITOR
+   ======================================== */
+
+/* HERO */
+.sp-hero {
+  width: 100%;
+  height: 160px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sp-hero::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  top: -100px;
+  right: -50px;
+}
+
+.sp-hero-overlay {
+  position: relative;
+  z-index: 1;
+}
+
+.sp-hero-overlay h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.sp-hero-overlay p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* PAGE SELECTOR */
+.sp-page-selector {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.sp-page-selector label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.sp-page-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sp-pill {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 2px solid #e0e0e0;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #555;
+}
+
+.sp-pill:hover {
+  border-color: #aaa;
+}
+
+.sp-pill.active {
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* TABS */
+.sp-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  background: #f5f5f5;
+  padding: 6px;
+  border-radius: 12px;
+}
+
+.sp-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.sp-tab:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.sp-tab.active {
+  background: #fff;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* GRID */
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.sp-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #f0f0f0;
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.sp-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.sp-card-full {
+  grid-column: 1 / -1;
+}
+
+.sp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sp-card-header svg {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.sp-card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* FIELDS */
+.sp-field {
+  margin-bottom: 16px;
+}
+
+.sp-field:last-child {
+  margin-bottom: 0;
+}
+
+.sp-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sp-field input,
+.sp-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.sp-field input:focus,
+.sp-field textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.sp-field textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* URL INPUT */
+.sp-url-wrap {
+  position: relative;
+}
+
+.sp-url-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 14px;
+}
+
+.sp-url-input {
+  padding-left: 12px !important;
+}
+
+/* IMAGE FIELD */
+.sp-img-field {
+  margin-bottom: 16px;
+}
+
+.sp-img-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sp-img-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sp-img-actions input[type="text"] {
+  flex: 1;
+}
+
+.sp-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #667eea;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.sp-upload-btn:hover {
+  background: #5a6fd6;
+}
+
+.sp-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sp-remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.sp-remove-btn:hover {
+  background: #e63946;
+}
+
+.sp-img-delete {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #ff4757;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s ease;
+}
+
+.sp-img-delete:hover {
+  background: #e63946;
+}
+
+/* IMAGE PREVIEW */
+.sp-img-preview {
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.sp-img-preview img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.sp-img-label {
+  display: block;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: #888;
+  background: #fafafa;
+}
+
+/* FEATURE BADGE */
+.sp-feature-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #667eea;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* STATS GRID */
+.sp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.sp-stat-group h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+/* CTA ROW */
+.sp-cta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* SAVE BAR */
+.sp-save-bar {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.sp-save-status {
+  font-size: 13px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sp-save-status.saved {
+  color: #43e97b;
+  font-weight: 600;
+}
+
+.sp-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sp-save-btn:hover {
+  background: #555;
+}
+
+.sp-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* LOADING */
+.sp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  color: #999;
+  gap: 16px;
+}
+
+.sp-spinner {
+  font-size: 32px;
+  color: #667eea;
+  animation: sp-spin 1s linear infinite;
+}
+
+.sp-spinner-btn {
+  animation: sp-spin 1s linear infinite;
+}
+
+@keyframes sp-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sp-grid {
+    grid-template-columns: 1fr;
+  }
+  .sp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .sp-cta-row {
+    grid-template-columns: 1fr;
+  }
+  .sp-page-pills {
+    gap: 6px;
+  }
+  .sp-pill {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ========================
+   DARK MODE
+   ======================== */
+
+body.dark .sp-hero {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%) !important;
+}
+
+body.dark .sp-page-selector label {
+  color: #e2e8f0;
+}
+
+body.dark .sp-pill {
+  background: #1a1a1a;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+body.dark .sp-pill:hover {
+  border-color: #667eea;
+}
+
+body.dark .sp-pill.active {
+  color: #fff;
+}
+
+body.dark .sp-tabs {
+  background: #1e293b;
+}
+
+body.dark .sp-tab {
+  color: #94a3b8;
+}
+
+body.dark .sp-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+body.dark .sp-tab.active {
+  background: #334155;
+  color: #a78bfa;
+}
+
+body.dark .sp-card {
+  background: #1a1a1a;
+  border-color: #334155;
+}
+
+body.dark .sp-card-header {
+  border-bottom-color: #334155;
+}
+
+body.dark .sp-card-header h3 {
+  color: #f1f5f9;
+}
+
+body.dark .sp-card-header svg {
+  color: #a78bfa;
+}
+
+body.dark .sp-field label {
+  color: #94a3b8;
+}
+
+body.dark .sp-field input,
+body.dark .sp-field textarea {
+  background: #1a1a1a;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+body.dark .sp-field input::placeholder,
+body.dark .sp-field textarea::placeholder {
+  color: #475569;
+}
+
+body.dark .sp-field input:focus,
+body.dark .sp-field textarea:focus {
+  border-color: #667eea;
+  background: #111827;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+}
+
+body.dark .sp-img-field label {
+  color: #94a3b8;
+}
+
+body.dark .sp-img-actions input[type="text"] {
+  background: #1a1a1a;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+body.dark .sp-img-actions input[type="text"]::placeholder {
+  color: #475569;
+}
+
+body.dark .sp-upload-btn {
+  background: #667eea;
+}
+
+body.dark .sp-upload-btn:hover {
+  background: #5a6fd6;
+}
+
+body.dark .sp-remove-btn {
+  background: #dc2626;
+}
+
+body.dark .sp-remove-btn:hover {
+  background: #b91c1c;
+}
+
+body.dark .sp-img-preview {
+  border-color: #334155;
+}
+
+body.dark .sp-img-label {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+body.dark .sp-img-delete {
+  background: #dc2626;
+}
+
+body.dark .sp-img-delete:hover {
+  background: #b91c1c;
+}
+
+body.dark .sp-feature-badge {
+  background: #667eea;
+}
+
+body.dark .sp-stat-group h4 {
+  color: #e2e8f0;
+}
+
+body.dark .sp-save-bar {
+  background: #1a1a1a;
+  border-top-color: #334155;
+}
+
+body.dark .sp-save-status {
+  color: #64748b;
+}
+
+body.dark .sp-save-status.saved {
+  color: #4ade80;
+}
+
+body.dark .sp-save-btn {
+  background: #667eea;
+}
+
+body.dark .sp-save-btn:hover {
+  background: #5a6fd6;
+}
+
+body.dark .sp-loading {
+  color: #64748b;
+}
+
+body.dark .sp-spinner {
+  color: #a78bfa;
+}

@@ -22,6 +22,19 @@ import EditSubCategory from "./components/subcategory/EditSubCategory";
 import Signup from "./pages/AdminSignup";
 import EditCategory from "./components/category/EditCategory";
 import AboutUs from "./components/Dashboard/AboutUs";
+import AdminBlog from "./components/Dashboard/BlogAdmin";
+import BlogDetailsAdmin from "./components/Dashboard/BlogDetailsAdmin";
+import BlogCreate from "./components/Dashboard/BlogCreate";
+import BlogEdit from "./components/Dashboard/BlogEdit";
+import StaticPagesAdmin from "./components/Dashboard/StaticPagesAdmin";
+import FileManager from "./components/Dashboard/FileManager";
+import ContactAdmin from "./components/Dashboard/ContactAdmin";
+import FAQAdmin from "./components/Dashboard/FAQAdmin";
+import ShowroomAdmin from "./components/Dashboard/ShowroomAdmin";
+import ProductInfoAdmin from "./components/Dashboard/ProductInfoAdmin";
+import BannerAdmin from "./components/Dashboard/BannerAdmin";
+import VideoAdmin from "./components/Dashboard/VideoAdmin";
+import ReviewAdmin from "./components/Dashboard/ReviewAdmin";
 import { SettingsProvider } from "./context/SettingsContext";
 import "./App.css";
 
@@ -65,6 +78,21 @@ const App = () => {
           <Route path="support" element={<Support />} />
           <Route path="settings" element={<Settings />} />
           <Route path="about-us" element={<AboutUs />} />
+          <Route path="blogs" element={<AdminBlog />} />
+          <Route path="blogs/details" element={<BlogDetailsAdmin />} />
+          <Route path="blogs/details/:id" element={<BlogDetailsAdmin />} />
+          <Route path="blogs/create" element={<BlogCreate />} />
+          <Route path="blogs/edit/:id" element={<BlogEdit />} />
+          <Route path="static-pages" element={<StaticPagesAdmin />} />
+          <Route path="contacts" element={<ContactAdmin />} />
+          <Route path="faqs" element={<FAQAdmin />} />
+          <Route path="showrooms" element={<ShowroomAdmin />} />
+          <Route path="product-info" element={<ProductInfoAdmin />} />
+          <Route path="banners" element={<BannerAdmin />} />
+          <Route path="videos" element={<VideoAdmin />} />
+          <Route path="reviews" element={<ReviewAdmin />} />
+          <Route path="files" element={<FileManager />} />
+          <Route path="files/recent" element={<FileManager recentOnly />} />
           {/* Category */}
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/create" element={<AddCategory />} />

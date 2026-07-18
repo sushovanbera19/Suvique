@@ -204,3 +204,52 @@ export const updateOrder = (orderId, payment_status, order_status, payment_metho
     });
   });
 };
+
+// Get single order by id (with status)
+export const getOrderWithStatus = (orderId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT id, user_id, total, payment_method, payment_status, order_status, country, currency, created_at FROM orders WHERE id = ?";
+    db.query(sql, [orderId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result[0]);
+    });
+  });
+};
+
+// Get orders by user id (numeric)
+export const getOrdersByUserId = (userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        o.id,
+        o.created_at,
+        o.total,
+        o.payment_method,
+        o.payment_status,
+        o.order_status,
+        o.country,
+        o.currency,
+        COUNT(oi.id) AS total_items
+      FROM orders o
+      LEFT JOIN order_items oi ON o.id = oi.order_id
+      WHERE o.user_id = ?
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
+    `;
+    db.query(sql, [userId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// Cancel order (only if Pending)
+export const cancelOrderById = (orderId, userId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE orders SET order_status = 'Cancelled', payment_status = 'Cancelled' WHERE id = ? AND user_id = ? AND order_status = 'Pending'";
+    db.query(sql, [orderId, userId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};

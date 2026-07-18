@@ -8,6 +8,9 @@ import {
   deleteOrderItems,
   deleteOrderById,
   updateOrder,
+  getOrdersByUserId,
+  cancelOrderById,
+  getOrderWithStatus,
 } from "../models/orderModel.js";
 
 export const placeOrder = async (req, res) => {
@@ -136,6 +139,24 @@ export const fetchOrderDetails=(req,res)=>{
 
 };
 
+export const fetchOrderStatus = async (req, res) => {
+  try {
+    const order = await getOrderWithStatus(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    const items = await new Promise((resolve, reject) => {
+      getOrderDetails(req.params.id, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+    res.json({ success: true, data: { ...order, items } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
@@ -157,5 +178,26 @@ export const editOrder = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Update failed" });
+  }
+};
+
+export const fetchUserOrders = async (req, res) => {
+  try {
+    const orders = await getOrdersByUserId(req.user.userId);
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const cancelUserOrder = async (req, res) => {
+  try {
+    const result = await cancelOrderById(req.params.id, req.user.userId);
+    if (result.affectedRows === 0) {
+      return res.status(400).json({ success: false, message: "Order cannot be cancelled" });
+    }
+    res.json({ success: true, message: "Order cancelled successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

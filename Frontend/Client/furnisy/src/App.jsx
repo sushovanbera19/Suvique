@@ -24,6 +24,17 @@ import ShopPage2 from "./components/ShopPage2";
 import ShopPage3 from "./components/Shoppage3"
 import NotFound from "./Common/404-1";
 import ProductPage from "./components/ProductPage1";
+import InteriorDesigner from "./pages/InteriorDesigner";
+import FurnitureAnalytics from "./pages/FurnitureAnalytics";
+import BoutiqueStore from "./pages/BoutiqueStore";
+import Careers from "./pages/Careers";
+import Customers from "./pages/Customers";
+import SmartFinance from "./pages/SmartFinance";
+import DesignGuides from "./pages/DesignGuides";
+import UserProfile from "./pages/UserProfile";
+import UserOrders from "./pages/UserOrders";
+import TrackOrder from "./pages/TrackOrder";
+import SearchPage from "./pages/SearchPage";
 import { CompareProvider } from "./context/CompareContext";
 import { CountryProvider } from "./context/CountryContext";
 import { LanguageProvider } from "./context/LanguageContext";
@@ -63,6 +74,17 @@ function App() {
         <Route path="/Shop-1" element={<ShopPage1 />} />
         <Route path="/Shop-2" element={<ShopPage2 />} />
         <Route path="/Shop-3" element={<ShopPage3 />} />
+        <Route path="/interior-designer" element={<InteriorDesigner />} />
+        <Route path="/analytics" element={<FurnitureAnalytics />} />
+        <Route path="/boutique-store" element={<BoutiqueStore />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/customers" element={<Customers />} />
+        <Route path="/smart-finance" element={<SmartFinance />} />
+        <Route path="/guides" element={<DesignGuides />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/orders" element={<UserOrders />} />
+        <Route path="/track-order" element={<TrackOrder />} />
+        <Route path="/search" element={<SearchPage />} />
         {/* NotFound version 1 */}
         <Route
           path="/404-1"
@@ -73,6 +95,12 @@ function App() {
         <Route
           path="/404-2"
           element={<NotFound backgroundImage="/images/404-2.jpg" />}
+        />
+
+        {/* Catch-all 404 */}
+        <Route
+          path="*"
+          element={<NotFound backgroundImage="/images/404-1.jpg" />}
         />
       </Routes>
 

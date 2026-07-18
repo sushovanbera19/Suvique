@@ -1,9 +1,14 @@
-import { getAboutPage, upsertAboutPage } from "../models/about.model.js";
+import { getAboutPage, getAboutPageFallback, upsertAboutPage } from "../models/about.model.js";
 
 // GET about page content
 export const fetchAboutPage = async (req, res) => {
   try {
-    const [rows] = await getAboutPage();
+    const lang = req.query.lang || 'en';
+    let [rows] = await getAboutPage(lang);
+
+    if (rows.length === 0) {
+      [rows] = await getAboutPageFallback();
+    }
 
     if (rows.length === 0) {
       return res.json({
@@ -22,6 +27,7 @@ export const fetchAboutPage = async (req, res) => {
 // PUT update about page content
 export const updateAboutPage = async (req, res) => {
   try {
+    const lang = req.query.lang || req.body.lang || 'en';
     const {
       heading,
       description,
@@ -73,7 +79,7 @@ export const updateAboutPage = async (req, res) => {
       experience_image,
       video_banner_image,
       video_url,
-    });
+    }, lang);
 
     return res.json({
       success: true,

@@ -128,7 +128,7 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
                 setCurrentPage(1);
               }}
             />
-            <span>{formatter.format(priceRange.minPrice)}   -  {formatter.format(maxPrice)}</span>
+            <span>{formatPrice(priceRange.minPrice)}   -  {formatPrice(maxPrice)}</span>
           </div>
 
           <div className="sidebar-widget color-filter">

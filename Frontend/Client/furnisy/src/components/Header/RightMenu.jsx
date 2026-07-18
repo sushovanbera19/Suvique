@@ -1,21 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FiUser, FiPackage, FiTruck, FiLogOut } from "react-icons/fi";
 import Dropdown from "./Dropdown";
 import CartSidebar from "./CartSidebar";
 import { useCountry } from "../../context/CountryContext";
 import { useTranslation } from "../../context/LanguageContext";
+
+const API = "http://localhost:5000";
 
 const RightMenu = ({ rightMenuItems, openSearchModal }) => {
     const [openRightMenu, setOpenRightMenu] = useState(null);
     const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
     const [cartCount, setCartCount] = useState(0);
     const [countrySearch, setCountrySearch] = useState("");
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user") || "null"));
+    const [imgVersion, setImgVersion] = useState(Date.now());
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const profileRef = useRef(null);
     const {
         countries,
         selectedCountry,
@@ -25,42 +30,53 @@ const RightMenu = ({ rightMenuItems, openSearchModal }) => {
         languages,
     } = useCountry();
 
+    const profileImgSrc = user?.id
+        ? `${API}/api/users/profile/image/${user.id}?v=${imgVersion}`
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}`;
+
     const fetchCartCount = async () => {
         try {
-            const t = token || localStorage.getItem("token");
-            if (!t) return;
-            const res = await fetch("http://localhost:5000/api/cart", {
-                headers: { Authorization: `Bearer ${t}` },
+            const tk = token || localStorage.getItem("token");
+            if (!tk) return;
+            const res = await fetch(`${API}/api/cart`, {
+                headers: { Authorization: `Bearer ${tk}` },
             });
             const data = await res.json();
             if (data.success) {
-                const count = data.data.reduce(
-                    (sum, item) => sum + item.quantity,
-                    0
-                );
+                const count = data.data.reduce((sum, item) => sum + item.quantity, 0);
                 setCartCount(count);
             }
-        } catch {
-            /* silently fail */
-        }
+        } catch { /* silent */ }
     };
 
     useEffect(() => {
         fetchCartCount();
-        const handleStorageChange = () => fetchCartCount();
-        const handleCartUpdate = () => fetchCartCount();
-        window.addEventListener("storage", handleStorageChange);
-        window.addEventListener("cartUpdated", handleCartUpdate);
+        window.addEventListener("storage", fetchCartCount);
+        window.addEventListener("cartUpdated", fetchCartCount);
         return () => {
-            window.removeEventListener("storage", handleStorageChange);
-            window.removeEventListener("cartUpdated", handleCartUpdate);
+            window.removeEventListener("storage", fetchCartCount);
+            window.removeEventListener("cartUpdated", fetchCartCount);
+        };
+    }, []);
+
+    useEffect(() => {
+        const sync = () => setUser(JSON.parse(localStorage.getItem("user") || "null"));
+        const onProfileUpdate = () => {
+            setUser(JSON.parse(localStorage.getItem("user") || "null"));
+            setImgVersion(Date.now());
+        };
+        window.addEventListener("storage", sync);
+        window.addEventListener("profileUpdated", onProfileUpdate);
+        return () => {
+            window.removeEventListener("storage", sync);
+            window.removeEventListener("profileUpdated", onProfileUpdate);
         };
     }, []);
 
     useEffect(() => {
         if (!openRightMenu) return;
         const handleClickOutside = (e) => {
-            if (!e.target.closest(".has-dropdown")) {
+            if (!e.target.closest(".right-menu")) {
                 setOpenRightMenu(null);
             }
         };
@@ -72,6 +88,7 @@ const RightMenu = ({ rightMenuItems, openSearchModal }) => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         setCartCount(0);
+        setOpenRightMenu(null);
         navigate("/");
         window.location.reload();
     };
@@ -100,26 +117,16 @@ const RightMenu = ({ rightMenuItems, openSearchModal }) => {
                         {filteredCountries.map((c) => (
                             <li
                                 key={c.iso2}
-                                className={
-                                    selectedCountry.iso2 === c.iso2
-                                        ? "country-item active"
-                                        : "country-item"
-                                }
+                                className={selectedCountry.iso2 === c.iso2 ? "country-item active" : "country-item"}
                                 onClick={() => {
                                     setSelectedCountry(c);
                                     setOpenRightMenu(null);
                                     setCountrySearch("");
                                 }}
                             >
-                                <img
-                                    src={c.flag}
-                                    alt={c.name}
-                                    className="country-flag-img"
-                                />
+                                <img src={c.flag} alt={c.name} className="country-flag-img" />
                                 <span className="country-name">{c.name}</span>
-                                <span className="country-currency">
-                                    {c.currency}
-                                </span>
+                                <span className="country-currency">{c.currency}</span>
                             </li>
                         ))}
                     </ul>
@@ -133,11 +140,7 @@ const RightMenu = ({ rightMenuItems, openSearchModal }) => {
                     {languages.map((lang) => (
                         <li
                             key={lang.code}
-                            className={
-                                selectedLanguage === lang.code
-                                    ? "lang-item active"
-                                    : "lang-item"
-                            }
+                            className={selectedLanguage === lang.code ? "lang-item active" : "lang-item"}
                             onClick={() => {
                                 setSelectedLanguage(lang.code);
                                 setOpenRightMenu(null);
@@ -158,125 +161,104 @@ const RightMenu = ({ rightMenuItems, openSearchModal }) => {
             <nav className="right-menu">
                 <ul>
                     <li className="search-item">
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                            className="search-icon"
-                            onClick={openSearchModal}
-                        />
+                        <FontAwesomeIcon icon={faSearch} className="search-icon" onClick={openSearchModal} />
                     </li>
                     {rightMenuItems.map((item, index) => (
                         <li
                             key={index}
-                            className={
-                                item.subMenu ? "has-dropdown" : ""
-                            }
-                            onMouseEnter={() =>
-                                item.subMenu && setOpenRightMenu(item.name)
-                            }
+                            className={item.subMenu ? "has-dropdown" : ""}
+                            onMouseEnter={() => item.subMenu && setOpenRightMenu(item.name)}
                             onMouseLeave={() => {
                                 if (item.subMenu === "country") return;
                                 setOpenRightMenu(null);
                             }}
                         >
                             {item.flag && (
-                                <img
-                                    src={item.flag}
-                                    className="currency-flag"
-                                    alt="flag"
-                                />
+                                <img src={item.flag} className="currency-flag" alt="flag" />
                             )}
                             {item.img && item.path ? (
                                 item.path === "/login" ? (
                                     token && user ? (
                                         <div
+                                            ref={profileRef}
                                             className="profile-wrapper"
-                                            onMouseEnter={() =>
-                                                setOpenRightMenu("profile")
-                                            }
-                                            onMouseLeave={() =>
-                                                setOpenRightMenu(null)
-                                            }
+                                            onMouseEnter={() => setOpenRightMenu("profile")}
+                                            onMouseLeave={() => setOpenRightMenu(null)}
                                         >
                                             <img
-                                                src={
-                                                    user.profileImage ||
-                                                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                                                        user.name || "User"
-                                                    )}`
-                                                }
+                                                src={profileImgSrc}
                                                 className="right-icon-image profile-image"
                                                 alt="profile"
+                                                onError={(e) => {
+                                                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}`;
+                                                }}
                                             />
                                             {openRightMenu === "profile" && (
-                                                <div className="profile-dropdown">
-                                                    <Link to="/profile">
-                                                        {t("menu.profile")}
-                                                    </Link>
-                                                    <button
-                                                        onClick={handleLogout}
-                                                    >
-                                                        {t("menu.logout")}
-                                                    </button>
-                                                </div>
+                                                <ul className="dropdown">
+                                                    <li className="profile-header-item">
+                                                        {/* <img
+                                                            src={profileImgSrc}
+                                                            className="profile-dropdown-avatar"
+                                                            alt="profile"
+                                                            onError={(e) => {
+                                                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}`;
+                                                            }}
+                                                        />*/}
+                                                        {/* <div>
+                                                            <p className="profile-dropdown-name">{user.name}</p>
+                                                             <p className="profile-dropdown-email">{user.email}</p>
+                                                        </div>*/}
+                                                    </li>
+                                                    {/* <li className="profile-divider-item"></li>*/}
+                                                    <li>
+                                                        <Link to="/profile" onClick={() => setOpenRightMenu(null)}>
+                                                            <FiUser /> {t("menu.profile")}
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link to="/orders" onClick={() => setOpenRightMenu(null)}>
+                                                            <FiPackage /> {t("menu.myOrders")}
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link to="/track-order" onClick={() => setOpenRightMenu(null)}>
+                                                            <FiTruck /> {t("menu.trackOrder")}
+                                                        </Link>
+                                                    </li>
+                                                    <li className="profile-divider-item"></li>
+                                                    <li>
+                                                        <button className="profile-logout-btn" onClick={handleLogout}>
+                                                            <FiLogOut /> {t("menu.logout")}
+                                                        </button>
+                                                    </li>
+                                                </ul>
                                             )}
                                         </div>
                                     ) : (
                                         <Link to="/login">
-                                            <img
-                                                src={item.img}
-                                                className="right-icon-image"
-                                                alt="login"
-                                            />
+                                            <img src={item.img} className="right-icon-image" alt="login" />
                                         </Link>
                                     )
                                 ) : item.path === "/cart" ? (
-                                    <div
-                                        className="cart-icon-wrapper"
-                                        onClick={() =>
-                                            setCartSidebarOpen(true)
-                                        }
-                                    >
-                                        <img
-                                            src={item.img}
-                                            className="right-icon-image cart-icon"
-                                            alt="cart"
-                                        />
-                                        {cartCount > 0 && (
-                                            <span className="cart-badge">
-                                                {cartCount}
-                                            </span>
-                                        )}
+                                    <div className="cart-icon-wrapper" onClick={() => setCartSidebarOpen(true)}>
+                                        <img src={item.img} className="right-icon-image cart-icon" alt="cart" />
+                                        {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                                     </div>
                                 ) : (
                                     <Link to={item.path}>
-                                        <img
-                                            src={item.img}
-                                            className="right-icon-image"
-                                            alt="icon"
-                                        />
+                                        <img src={item.img} className="right-icon-image" alt="icon" />
                                     </Link>
                                 )
                             ) : (
                                 item.name
                             )}
-                            {item.subMenu && (
-                                <FontAwesomeIcon
-                                    icon={faAngleDown}
-                                    className="arrow"
-                                />
-                            )}
-                            {item.subMenu &&
-                                openRightMenu === item.name &&
-                                renderDropdownContent(item)}
+                            {item.subMenu && <FontAwesomeIcon icon={faAngleDown} className="arrow" />}
+                            {item.subMenu && openRightMenu === item.name && renderDropdownContent(item)}
                         </li>
                     ))}
                 </ul>
             </nav>
-            <CartSidebar
-                open={cartSidebarOpen}
-                onClose={() => setCartSidebarOpen(false)}
-                onUpdate={fetchCartCount}
-            />
+            <CartSidebar open={cartSidebarOpen} onClose={() => setCartSidebarOpen(false)} onUpdate={fetchCartCount} />
         </>
     );
 };
