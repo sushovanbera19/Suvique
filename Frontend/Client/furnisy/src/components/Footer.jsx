@@ -36,7 +36,7 @@ const Footer = () => {
                 <div className="footer-column">
                     <h4>Savique</h4>
                     <ul>
-                        <li><a href="/about">{t("footer.aboutFurnisy")}</a></li>
+                        <li><a href="/about">{t("footer.aboutSuvique")}</a></li>
                         <li><a href="/careers">{t("footer.joinTeam")}</a></li>
                         <li><a href="/contact">{t("footer.getInTouch")}</a></li>
                     </ul>

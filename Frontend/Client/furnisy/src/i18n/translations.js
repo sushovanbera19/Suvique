@@ -55,7 +55,7 @@ const translations = {
     "footer.interiorDesigner": "Interior Designer",
     "footer.furnitureAnalytics": "Furniture Analytics",
     "footer.boutiqueStore": "Boutique Furniture Store",
-    "footer.aboutFurnisy": "About Savique",
+    "footer.aboutSuvique": "About Savique",
     "footer.joinTeam": "Join Our Team",
     "footer.getInTouch": "Get in Touch",
     "footer.resources": "Resources",
@@ -355,7 +355,7 @@ const translations = {
     // Furniture Gallery
     "gallery.heading": "Furniture Gallery",
     "gallery.follow": "Follow",
-    "gallery.viewMore": "View more in @furnisy",
+    "gallery.viewMore": "View more in @suvique",
 
     // 404 Page
     "notfound.heading": "404",
@@ -693,7 +693,7 @@ const translations = {
     "footer.interiorDesigner": "इंटीरियर डिज़ाइनर",
     "footer.furnitureAnalytics": "फर्नीचर एनालिटिक्स",
     "footer.boutiqueStore": "बुटीक फर्नीचर स्टोर",
-    "footer.aboutFurnisy": "Savique के बारे में",
+    "footer.aboutSuvique": "Savique के बारे में",
     "footer.joinTeam": "हमारी टीम से जुड़ें",
     "footer.getInTouch": "संपर्क करें",
     "footer.resources": "संसाधन",
@@ -941,7 +941,7 @@ const translations = {
     "blog.by": "द्वारा",
     "gallery.heading": "फर्नीचर गैलरी",
     "gallery.follow": "फॉलो",
-    "gallery.viewMore": "@furnisy पर और देखें",
+    "gallery.viewMore": "@suvique पर और देखें",
     "notfound.heading": "404",
     "notfound.title": "ओह! कुछ गलत हो गया",
     "notfound.desc": "माफ़ करें, आप जो पेज ढूंढ रहे हैं वह मौजूद नहीं है।",
@@ -1257,7 +1257,7 @@ const translations = {
     "footer.interiorDesigner": "Designer d'intérieur",
     "footer.furnitureAnalytics": "Analyse de mobilier",
     "footer.boutiqueStore": "Boutique de mobilier",
-    "footer.aboutFurnisy": "À propos de Savique",
+    "footer.aboutSuvique": "À propos de Savique",
     "footer.joinTeam": "Rejoindre notre équipe",
     "footer.getInTouch": "Nous contacter",
     "footer.resources": "Ressources",
@@ -1504,7 +1504,7 @@ const translations = {
     "blog.by": "Par",
     "gallery.heading": "Galerie De Mobilier",
     "gallery.follow": "Suivre",
-    "gallery.viewMore": "Voir plus sur @furnisy",
+    "gallery.viewMore": "Voir plus sur @suvique",
     "notfound.heading": "404",
     "notfound.title": "Oups! Quelque Chose Ne Va Pas",
     "notfound.desc": "Désolé, la page que vous recherchez n'existe pas.",
@@ -1644,7 +1644,7 @@ const translations = {
     "footer.interiorDesigner": "Innenarchitekt",
     "footer.furnitureAnalytics": "Möbel-Analytik",
     "footer.boutiqueStore": "Boutique-Möbelladen",
-    "footer.aboutFurnisy": "Über Savique",
+    "footer.aboutSuvique": "Über Savique",
     "footer.joinTeam": "Unserem Team beitreten",
     "footer.getInTouch": "Kontakt aufnehmen",
     "footer.resources": "Ressourcen",
@@ -1899,7 +1899,7 @@ const translations = {
 
     "gallery.heading": "Möbelgalerie",
     "gallery.follow": "Folgen",
-    "gallery.viewMore": "Mehr ansehen auf @furnisy",
+    "gallery.viewMore": "Mehr ansehen auf @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Hoppla! Etwas Ist Schiefgelaufen",
@@ -2044,7 +2044,7 @@ const translations = {
     "footer.interiorDesigner": "Diseñador de Interiores",
     "footer.furnitureAnalytics": "Análisis de Muebles",
     "footer.boutiqueStore": "Tienda de Muebles Boutique",
-    "footer.aboutFurnisy": "Sobre Savique",
+    "footer.aboutSuvique": "Sobre Savique",
     "footer.joinTeam": "Unirse a Nuestro Equipo",
     "footer.getInTouch": "Contáctenos",
     "footer.resources": "Recursos",
@@ -2299,7 +2299,7 @@ const translations = {
 
     "gallery.heading": "Galería De Muebles",
     "gallery.follow": "Seguir",
-    "gallery.viewMore": "Ver más en @furnisy",
+    "gallery.viewMore": "Ver más en @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "¡Ups! Algo Salió Mal",
@@ -2444,7 +2444,7 @@ const translations = {
     "footer.interiorDesigner": "مصمم داخلي",
     "footer.furnitureAnalytics": "تحليلات الأثاث",
     "footer.boutiqueStore": "متجر أثاث بوتيكي",
-    "footer.aboutFurnisy": "عن Savique",
+    "footer.aboutSuvique": "عن Savique",
     "footer.joinTeam": "انضم إلى فريقنا",
     "footer.getInTouch": "تواصل معنا",
     "footer.resources": "الموارد",
@@ -2699,7 +2699,7 @@ const translations = {
 
     "gallery.heading": "معرض الأثاث",
     "gallery.follow": "متابعة",
-    "gallery.viewMore": "شاهد المزيد على @furnisy",
+    "gallery.viewMore": "شاهد المزيد على @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "عفواً! حدث خطأ ما",
@@ -2844,7 +2844,7 @@ const translations = {
     "footer.interiorDesigner": "室内设计师",
     "footer.furnitureAnalytics": "家具分析",
     "footer.boutiqueStore": "精品家具店",
-    "footer.aboutFurnisy": "关于 Savique",
+    "footer.aboutSuvique": "关于 Savique",
     "footer.joinTeam": "加入我们的团队",
     "footer.getInTouch": "联系我们",
     "footer.resources": "资源",
@@ -3099,7 +3099,7 @@ const translations = {
 
     "gallery.heading": "家具画廊",
     "gallery.follow": "关注",
-    "gallery.viewMore": "在@furnisy上查看更多",
+    "gallery.viewMore": "在@suvique上查看更多",
 
     "notfound.heading": "404",
     "notfound.title": "出错了！",
@@ -3244,7 +3244,7 @@ const translations = {
     "footer.interiorDesigner": "インテリアデザイナー",
     "footer.furnitureAnalytics": "家具アナリティクス",
     "footer.boutiqueStore": "ブティック家具店",
-    "footer.aboutFurnisy": "Savique について",
+    "footer.aboutSuvique": "Savique について",
     "footer.joinTeam": "チームに参加",
     "footer.getInTouch": "お問い合わせ",
     "footer.resources": "リソース",
@@ -3499,7 +3499,7 @@ const translations = {
 
     "gallery.heading": "家具ギャラリー",
     "gallery.follow": "フォロー",
-    "gallery.viewMore": "@furnisyでもっと見る",
+    "gallery.viewMore": "@suviqueでもっと見る",
 
     "notfound.heading": "404",
     "notfound.title": "おっと！問題が発生しました",
@@ -3644,7 +3644,7 @@ const translations = {
     "footer.interiorDesigner": "ইন্টেরিয়র ডিজাইনার",
     "footer.furnitureAnalytics": "আসবাব বিশ্লেষণ",
     "footer.boutiqueStore": "বুটিক আসবাব দোকান",
-    "footer.aboutFurnisy": "Savique সম্পর্কে",
+    "footer.aboutSuvique": "Savique সম্পর্কে",
     "footer.joinTeam": "আমাদের দলে যোগ দিন",
     "footer.getInTouch": "যোগাযোগ করুন",
     "footer.resources": "সম্পদ",
@@ -3899,7 +3899,7 @@ const translations = {
 
     "gallery.heading": "আসবাব গ্যালারি",
     "gallery.follow": "ফলো",
-    "gallery.viewMore": "@furnisy তে আরও দেখুন",
+    "gallery.viewMore": "@suvique তে আরও দেখুন",
 
     "notfound.heading": "404",
     "notfound.title": "ওই! কিছু ভুল হয়েছে",
@@ -4044,7 +4044,7 @@ const translations = {
     "footer.interiorDesigner": "นักออกแบบตกแต่งภายใน",
     "footer.furnitureAnalytics": "การวิเคราะห์เฟอร์นิเจอร์",
     "footer.boutiqueStore": "ร้านเฟอร์นิเจอร์บูติก",
-    "footer.aboutFurnisy": "เกี่ยวกับ Savique",
+    "footer.aboutSuvique": "เกี่ยวกับ Savique",
     "footer.joinTeam": "ร่วมงานกับเรา",
     "footer.getInTouch": "ติดต่อเรา",
     "footer.resources": "แหล่งข้อมูล",
@@ -4299,7 +4299,7 @@ const translations = {
 
     "gallery.heading": "แกลเลอรีเฟอร์นิเจอร์",
     "gallery.follow": "ติดตาม",
-    "gallery.viewMore": "ดูเพิ่มเติมที่ @furnisy",
+    "gallery.viewMore": "ดูเพิ่มเติมที่ @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "โอ๊ะ! มีบางอย่างผิดพลาด",
@@ -4444,7 +4444,7 @@ const translations = {
     "footer.interiorDesigner": "Desainer Interior",
     "footer.furnitureAnalytics": "Analitik Furnitur",
     "footer.boutiqueStore": "Toko Furnitur Butik",
-    "footer.aboutFurnisy": "Tentang Savique",
+    "footer.aboutSuvique": "Tentang Savique",
     "footer.joinTeam": "Bergabung dengan Tim Kami",
     "footer.getInTouch": "Hubungi Kami",
     "footer.resources": "Sumber Daya",
@@ -4699,7 +4699,7 @@ const translations = {
 
     "gallery.heading": "Galeri Furnitur",
     "gallery.follow": "Ikuti",
-    "gallery.viewMore": "Lihat lebih banyak di @furnisy",
+    "gallery.viewMore": "Lihat lebih banyak di @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Ups! Ada yang Salah",
@@ -4844,7 +4844,7 @@ const translations = {
     "footer.interiorDesigner": "Pereka Dalaman",
     "footer.furnitureAnalytics": "Analitik Perabot",
     "footer.boutiqueStore": "Kedai Perabot Butik",
-    "footer.aboutFurnisy": "Tentang Savique",
+    "footer.aboutSuvique": "Tentang Savique",
     "footer.joinTeam": "Sertai Pasukan Kami",
     "footer.getInTouch": "Hubungi Kami",
     "footer.resources": "Sumber",
@@ -5099,7 +5099,7 @@ const translations = {
 
     "gallery.heading": "Galeri Perabot",
     "gallery.follow": "Ikuti",
-    "gallery.viewMore": "Lihat lebih lanjut di @furnisy",
+    "gallery.viewMore": "Lihat lebih lanjut di @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Ups! Ada yang Salah",
@@ -5244,7 +5244,7 @@ const translations = {
     "footer.interiorDesigner": "Interiördesigner",
     "footer.furnitureAnalytics": "Möbelanalys",
     "footer.boutiqueStore": "Boutique möbelbutik",
-    "footer.aboutFurnisy": "Om Savique",
+    "footer.aboutSuvique": "Om Savique",
     "footer.joinTeam": "Gå med i vårt team",
     "footer.getInTouch": "Kontakta oss",
     "footer.resources": "Resurser",
@@ -5499,7 +5499,7 @@ const translations = {
 
     "gallery.heading": "Möbelgalleri",
     "gallery.follow": "Följ",
-    "gallery.viewMore": "Visa mer på @furnisy",
+    "gallery.viewMore": "Visa mer på @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Hoppsan! Något gick fel",
@@ -5644,7 +5644,7 @@ const translations = {
     "footer.interiorDesigner": "Projektant wnętrz",
     "footer.furnitureAnalytics": "Analityka meblowa",
     "footer.boutiqueStore": "Boutique sklep meblowy",
-    "footer.aboutFurnisy": "O Savique",
+    "footer.aboutSuvique": "O Savique",
     "footer.joinTeam": "Dołącz do naszego zespołu",
     "footer.getInTouch": "Skontaktuj się",
     "footer.resources": "Zasoby",
@@ -5899,7 +5899,7 @@ const translations = {
 
     "gallery.heading": "Galeria mebli",
     "gallery.follow": "Obserwuj",
-    "gallery.viewMore": "Zobacz więcej na @furnisy",
+    "gallery.viewMore": "Zobacz więcej na @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Ups! Coś poszło nie tak",
@@ -6044,7 +6044,7 @@ const translations = {
     "footer.interiorDesigner": "Interiérový designér",
     "footer.furnitureAnalytics": "Analytika nábytku",
     "footer.boutiqueStore": "Butikový nábytkářský obchod",
-    "footer.aboutFurnisy": "O Savique",
+    "footer.aboutSuvique": "O Savique",
     "footer.joinTeam": "Připojte se k našemu týmu",
     "footer.getInTouch": "Kontaktujte nás",
     "footer.resources": "Zdroje",
@@ -6299,7 +6299,7 @@ const translations = {
 
     "gallery.heading": "Galerie nábytku",
     "gallery.follow": "Sledovat",
-    "gallery.viewMore": "Zobrazit více na @furnisy",
+    "gallery.viewMore": "Zobrazit více na @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Jej! Něco se pokazilo",
@@ -6444,7 +6444,7 @@ const translations = {
     "footer.interiorDesigner": "Designer de interior",
     "footer.furnitureAnalytics": "Analiză mobilier",
     "footer.boutiqueStore": "Magazin boutique de mobilă",
-    "footer.aboutFurnisy": "Despre Savique",
+    "footer.aboutSuvique": "Despre Savique",
     "footer.joinTeam": "Alătură-te echipei noastre",
     "footer.getInTouch": "Contactează-ne",
     "footer.resources": "Resurse",
@@ -6699,7 +6699,7 @@ const translations = {
 
     "gallery.heading": "Galerie mobilier",
     "gallery.follow": "Urmărește",
-    "gallery.viewMore": "Vezi mai multe pe @furnisy",
+    "gallery.viewMore": "Vezi mai multe pe @suvique",
 
     "notfound.heading": "404",
     "notfound.title": "Ups! Ceva a mers prost",
@@ -6842,7 +6842,7 @@ const translations = {
     "footer.interiorDesigner": "Σχεδιαστής Εσωτερικού Χώρου",
     "footer.furnitureAnalytics": "Αναλύσεις Επίπλων",
     "footer.boutiqueStore": "Boutique Κατάστημα Επίπλων",
-    "footer.aboutFurnisy": "Σχετικά με το Savique",
+    "footer.aboutSuvique": "Σχετικά με το Savique",
     "footer.joinTeam": "Ενταχθείτε στην Ομάδα μας",
     "footer.getInTouch": "Επικοινωνήστε",
     "footer.resources": "Πόροι",
@@ -7074,7 +7074,7 @@ const translations = {
     "blog.by": "Από",
     "gallery.heading": "Γκαλερί Επίπλων",
     "gallery.follow": "Ακολούθηση",
-    "gallery.viewMore": "Δείτε περισσότερα στο @furnisy",
+    "gallery.viewMore": "Δείτε περισσότερα στο @suvique",
     "notfound.heading": "404",
     "notfound.title": "Ωχ! Κάτι Πήγε Λάθος",
     "notfound.desc": "Συγγνώμη, η σελίδα που ψάχνετε δεν υπάρχει.",
