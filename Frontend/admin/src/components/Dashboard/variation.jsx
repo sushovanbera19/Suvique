@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Breadcrumb from "../common/Breadcrumb";
 import "../../assets/style/ProductVariation.css";
-import { FiMoreHorizontal, FiEdit2, FiTrash2, } from "react-icons/fi";
+import { FiMoreHorizontal, FiEdit2, FiTrash2, FiUpload, FiDownload } from "react-icons/fi";
+import * as XLSX from "xlsx";
 
 const ProductVariation = () => {
   
@@ -11,6 +12,12 @@ const ProductVariation = () => {
   const [size, setSize] = useState("");
   const [variations, setVariations] = useState([]);
   const [editId, setEditId] = useState(null);
+
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [excelData, setExcelData] = useState([]);
+  const [excelFileName, setExcelFileName] = useState("");
+  const [importing, setImporting] = useState(false);
+  const excelInputRef = useRef(null);
 
   const handleSubmit = async () => {
     try {
@@ -140,6 +147,84 @@ const ProductVariation = () => {
     }
   };
 
+  // =====================
+  // EXCEL IMPORT
+  // =====================
+  const handleExcelFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setExcelFileName(file.name);
+    const reader = new FileReader();
+
+    reader.onload = (evt) => {
+      const workbook = XLSX.read(evt.target.result, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+      const mapped = jsonData.map((row) => ({
+        color_code: row["Color Code"] || row["color_code"] || "#000000",
+        size: row["Size"] || row["size"] || "",
+        status: row["Status"] || row["status"] || "Active",
+      }));
+
+      setExcelData(mapped);
+      setShowImportModal(true);
+    };
+
+    reader.readAsBinaryString(file);
+    e.target.value = "";
+  };
+
+  const handleBulkImport = async () => {
+    if (excelData.length === 0) return;
+    setImporting(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/product-variation/bulk-import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ variations: excelData }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(data.message);
+        fetchVariations();
+        setShowImportModal(false);
+        setExcelData([]);
+        setExcelFileName("");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Import failed");
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  // =====================
+  // DOWNLOAD TEMPLATE
+  // =====================
+  const handleDownloadTemplate = () => {
+    const templateData = [
+      { "Color Code": "#000000", "Size": "S", "Status": "Active" },
+      { "Color Code": "#000000", "Size": "M", "Status": "Active" },
+      { "Color Code": "#ffffff", "Size": "L", "Status": "Active" },
+      { "Color Code": "#8B4513", "Size": "XL", "Status": "Active" },
+      { "Color Code": "#808080", "Size": "S", "Status": "Inactive" },
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(templateData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Variations");
+    XLSX.writeFile(wb, "variations_template.xlsx");
+  };
+
   return (
     <>
       {/* Header */}
@@ -149,7 +234,22 @@ const ProductVariation = () => {
             Product Variations
           </h1>
 
-          <Breadcrumb />
+          <div className="variation-header-actions">
+            <button className="variation-btn-template" onClick={handleDownloadTemplate}>
+              <FiDownload /> Template
+            </button>
+            <button className="variation-btn-import" onClick={() => excelInputRef.current?.click()}>
+              <FiUpload /> Import Excel
+            </button>
+            <input
+              ref={excelInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={handleExcelFile}
+              style={{ display: "none" }}
+            />
+            <Breadcrumb />
+          </div>
         </div>
       </div>
 
@@ -303,6 +403,58 @@ const ProductVariation = () => {
         </table>
 
       </div>
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="variation-modal-overlay" onClick={() => setShowImportModal(false)}>
+          <div className="variation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="variation-modal-header">
+              <h3>Import Variations</h3>
+              <button className="variation-modal-close" onClick={() => setShowImportModal(false)}>×</button>
+            </div>
+            <div className="variation-modal-body">
+              <p className="variation-modal-info">
+                File: <strong>{excelFileName}</strong> — {excelData.length} variations found
+              </p>
+              <div className="variation-modal-table-wrap">
+                <table className="variation-modal-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Color Code</th>
+                      <th>Size</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {excelData.map((row, i) => (
+                      <tr key={i}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <span className="variation-modal-color-dot" style={{ backgroundColor: row.color_code }} />
+                          {row.color_code}
+                        </td>
+                        <td>{row.size}</td>
+                        <td>
+                          <span className={`variation-modal-status ${row.status === "Active" ? "active" : "inactive"}`}>
+                            {row.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="variation-modal-footer">
+              <button className="variation-modal-cancel" onClick={() => setShowImportModal(false)}>Cancel</button>
+              <button className="variation-modal-import" onClick={handleBulkImport} disabled={importing}>
+                {importing ? "Importing..." : `Import ${excelData.length} Variations`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

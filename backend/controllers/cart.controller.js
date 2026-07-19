@@ -3,9 +3,9 @@ import { addCart, getCart, removeCart } from "../models/cartModel.js";
 // Add to cart
 export const addToCart = (req, res) => {
   const user_id = req.user.userId;
-  const { product_id } = req.body;
+  const { product_id, variation_id } = req.body;
 
-  addCart(user_id, product_id, (err, result) => {
+  addCart(user_id, product_id, variation_id || null, (err, result) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -49,9 +49,9 @@ export const fetchCart = (req, res) => {
 // Remove cart
 export const deleteCart = (req, res) => {
   const user_id = req.user.userId;
-  const { product_id } = req.body;
+  const { product_id, variation_id } = req.body;
 
-  removeCart(user_id, product_id, (err) => {
+  removeCart(user_id, product_id, variation_id || null, (err) => {
     if (err) {
       return res.status(500).json({
         success: false,

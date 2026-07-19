@@ -10,6 +10,20 @@
   text-align: center;
   cursor: pointer;
   flex: 1;
+  transition: transform 0.2s ease;
+}
+
+.category-item:hover {
+  transform: translateY(-3px);
+}
+
+.category-item.active .category-image {
+  box-shadow: 0 0 0 3px #111;
+}
+
+.category-item.active .category-title {
+  font-weight: 700;
+  color: #111;
 }
 
 .category-image {

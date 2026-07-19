@@ -14,6 +14,7 @@ export const addProduct = (req, res) => {
   body.tags = JSON.parse(body.tags || "[]");
   body.sizes = JSON.parse(body.sizes || "[]");
   body.colors = JSON.parse(body.colors || "[]");
+  body.variationData = JSON.parse(body.variationData || "[]");
 
   // Store uploaded image paths
   body.mainImage =
@@ -24,7 +25,16 @@ export const addProduct = (req, res) => {
       (file) => file.path
     ) || [];
 
-  const { basePrice, quantity, sizes, colors } = body;
+  const { basePrice, quantity, sizes, colors, variationData: perVariantData } = body;
+
+  // Build a lookup map from per-variant pricing data
+  const variantPriceMap = {};
+  if (perVariantData && perVariantData.length > 0) {
+    perVariantData.forEach((vd) => {
+      const key = `${String(vd.color_code).trim().toLowerCase()}_${String(vd.size).trim().toLowerCase()}`;
+      variantPriceMap[key] = { price: vd.base_price || basePrice, quantity: vd.quantity || quantity };
+    });
+  }
 
   // STEP 1: INSERT PRODUCT
   createProduct(body, (err, result) => {
@@ -73,11 +83,13 @@ export const addProduct = (req, res) => {
           );
 
           if (match) {
+            const key = `${String(color).trim().toLowerCase()}_${String(size).trim().toLowerCase()}`;
+            const vp = variantPriceMap[key];
             variationData.push([
               productId,
               match.variation_id,
-              quantity,
-              basePrice
+              vp ? vp.quantity : quantity,
+              vp ? vp.price : basePrice
             ]);
           }
         });
@@ -93,7 +105,7 @@ export const addProduct = (req, res) => {
       // STEP 5: INSERT INTO VARIATION MAP
       const insertSql = `
         INSERT INTO product_variation_map
-        (product_id, variation_id, quantity, base_price)
+        (product_id, variation_id, stock, price)
         VALUES ?
       `;
 
@@ -182,7 +194,7 @@ export const fetchProductById = (req, res) => {
     const product = result[0];
 
     const varSql = `
-      SELECT pv.size, pv.color_code
+      SELECT pvm.variation_id, pv.size, pv.color_code, pvm.stock AS variant_quantity, pvm.price AS variant_price
       FROM product_variation_map pvm
       INNER JOIN product_variation pv ON pvm.variation_id = pv.variation_id
       WHERE pvm.product_id = ?
@@ -198,6 +210,13 @@ export const fetchProductById = (req, res) => {
 
       product.sizes = sizes;
       product.colors = colors;
+      product.variationMap = variations.map((v) => ({
+        variation_id: v.variation_id,
+        color_code: v.color_code,
+        size: v.size,
+        quantity: v.variant_quantity,
+        base_price: v.variant_price,
+      }));
 
       res.status(200).json({
         success: true,
@@ -229,7 +248,17 @@ export const editProduct = (req, res) => {
     data.tags = JSON.parse(data.tags || "[]");
     data.sizes = JSON.parse(data.sizes || "[]");
     data.colors = JSON.parse(data.colors || "[]");
+    data.variationData = JSON.parse(data.variationData || "[]");
   } catch (e) { /* already parsed */ }
+
+  const perVariantUpdateData = data.variationData || [];
+  const variantPriceMapUpdate = {};
+  if (perVariantUpdateData.length > 0) {
+    perVariantUpdateData.forEach((vd) => {
+      const key = `${String(vd.color_code).trim().toLowerCase()}_${String(vd.size).trim().toLowerCase()}`;
+      variantPriceMapUpdate[key] = { price: vd.base_price || data.basePrice, quantity: vd.quantity || data.quantity };
+    });
+  }
 
   updateProduct(id, data, (err) => {
     if (err) {
@@ -260,14 +289,16 @@ export const editProduct = (req, res) => {
                        String(v.size).trim().toLowerCase() === String(size).trim().toLowerCase()
               );
               if (match) {
-                rows.push([id, match.variation_id, quantity || 0, basePrice || 0]);
+                const key = `${String(color).trim().toLowerCase()}_${String(size).trim().toLowerCase()}`;
+                const vp = variantPriceMapUpdate[key];
+                rows.push([id, match.variation_id, vp ? vp.quantity : (quantity || 0), vp ? vp.price : (basePrice || 0)]);
               }
             });
           });
           if (rows.length === 0) {
             return res.status(200).json({ success: true, message: "Product updated" });
           }
-          const insSql = `INSERT INTO product_variation_map (product_id, variation_id, quantity, base_price) VALUES ?`;
+          const insSql = `INSERT INTO product_variation_map (product_id, variation_id, stock, price) VALUES ?`;
           db.query(insSql, [rows], () => {
             res.status(200).json({ success: true, message: "Product updated successfully" });
           });

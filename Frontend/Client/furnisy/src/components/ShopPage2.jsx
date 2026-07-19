@@ -7,6 +7,7 @@ import { useTranslation } from "../context/LanguageContext";
 const ShopPage2 = () => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/products/shop/sidebar")
@@ -16,8 +17,8 @@ const ShopPage2 = () => {
           const mapped = data.data.categories.map((cat) => ({
             id: cat.category_id,
             title: cat.category_name,
-            count: 0,
-            image: null,
+            count: cat.product_count || 0,
+            image: cat.image ? `http://localhost:5000/uploads/${cat.image}` : null,
           }));
           setCategories(mapped);
         }
@@ -25,11 +26,15 @@ const ShopPage2 = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleCategorySelect = (catId) => {
+    setSelectedCategoryId((prev) => (prev == catId ? "" : catId));
+  };
+
   return (
     <>
       <AccountHeader title={t("common.shop")} breadcrumb={`${t("common.home")} → ${t("common.shop")}`} />
-      <CategoryStrip categories={categories} />
-      <ShopPage />
+      <CategoryStrip categories={categories} onSelect={handleCategorySelect} selectedId={selectedCategoryId} />
+      <ShopPage selectedCategoryId={selectedCategoryId} />
     </>
   );
 };

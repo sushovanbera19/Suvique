@@ -10,13 +10,18 @@ import { useTranslation } from "../context/LanguageContext";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [shipping, setShipping] = useState("free");
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState("");
   const navigate = useNavigate();
   const { formatPrice } = useCountry();
   const { t } = useTranslation();
 
   const subtotal = cartItems.reduce((total, item) => {
-    return total + Number(item.base_price) * item.quantity;
+    const price = item.variant_price || item.base_price;
+    return total + Number(price) * item.quantity;
   }, 0);
 
   const increaseQty = (id) => {
@@ -58,12 +63,73 @@ const Cart = () => {
 
       if (data.success) {
         setCartItems(data.data);
+        fetchRelatedProducts(data.data);
       }
     } catch (err) {
       console.log(err);
     }
   };
-  const removeCart = async (productId) => {
+
+  const fetchRelatedProducts = async (items) => {
+    try {
+      const ids = items.map((i) => i.id).join(",");
+      const cats = [...new Set(items.map((i) => i.category_id).filter(Boolean))].join(",");
+      const res = await fetch(
+        `http://localhost:5000/api/products/shop?page=1&limit=8&category=${cats}`
+      );
+      const data = await res.json();
+      if (data.success) {
+        const cartIds = items.map((i) => i.id);
+        let related = data.data.filter((p) => !cartIds.includes(p.id));
+        if (related.length < 4) {
+          const res2 = await fetch(`http://localhost:5000/api/products?page=1&limit=8`);
+          const data2 = await res2.json();
+          if (data2.success) {
+            const existingIds = related.map((p) => p.id).concat(...cartIds);
+            const more = data2.data.filter((p) => !existingIds.includes(p.id));
+            related = [...related, ...more];
+          }
+        }
+        setRelatedProducts(related.slice(0, 4));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponError("");
+    try {
+      const res = await fetch("http://localhost:5000/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode.trim(), subtotal }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAppliedCoupon(data.data);
+        setCouponError("");
+      } else {
+        setAppliedCoupon(null);
+        setCouponError(data.message);
+      }
+    } catch (err) {
+      setCouponError("Failed to validate coupon");
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
+  const discount = appliedCoupon ? appliedCoupon.discount : 0;
+  const shippingCost = shipping === "flat" ? 10 : 0;
+  const total = subtotal - discount + shippingCost;
+
+  const removeCart = async (productId, variationId) => {
     try {
       const token = localStorage.getItem("token");
 
@@ -77,6 +143,7 @@ const Cart = () => {
           },
           body: JSON.stringify({
             product_id: productId,
+            variation_id: variationId || null,
           }),
         }
       );
@@ -92,36 +159,6 @@ const Cart = () => {
       console.log(err);
     }
   };
-  const relatedProducts = [
-    {
-      id: 1,
-      name: "Wooden Lounge Chair",
-      price: "$180.00",
-      img: "/images/detail2.webp",
-      tag: "Sale",
-    },
-    {
-      id: 2,
-      name: "Classic Arm Chair",
-      price: "$250.00",
-      img: "/images/detail3.webp",
-      tag: "New",
-    },
-    {
-      id: 3,
-      name: "Modern Fabric Chair",
-      price: "$199.00",
-      img: "/images/detail4.webp",
-    },
-    {
-      id: 4,
-      name: "Modern Fabric Chair",
-      price: "$200.00",
-      img: "/images/img-1.webp",
-    },
-  ];
-
-
   return (
     <>
       <AccountHeader title="Shopping Cart" breadcrumb="Home → Cart" />
@@ -142,7 +179,9 @@ const Cart = () => {
             </div>
 
             {/* Product Row */}
-            {cartItems.map((item) => (
+            {cartItems.map((item) => {
+              const itemPrice = item.variant_price || item.base_price;
+              return (
               <div className="product-item" key={item.id}>
                 <div className="product-cell product-info-cell">
                   <div className="product-thumb">
@@ -152,10 +191,17 @@ const Cart = () => {
                     />
                   </div>
                   <div className="product-name"> {item.product_name}</div>
+                  {(item.color_code || item.size) && (
+                    <div className="product-variant-info">
+                      {item.color_code && <span className="variant-color-dot" style={{ backgroundColor: item.color_code }} />}
+                      {item.color_code && <span>{item.color_code}</span>}
+                      {item.size && <span className="variant-size-badge">{item.size}</span>}
+                    </div>
+                  )}
                 </div>
 
                 <div className="product-cell price-cell">
-                  {formatPrice(item.base_price)}
+                  {formatPrice(itemPrice)}
                 </div>
 
                 <div className="product-cell quantity-cell">
@@ -173,14 +219,15 @@ const Cart = () => {
                 </div>
 
                 <div className="product-cell subtotal-cell">
-                  {formatPrice(Number(item.base_price) * item.quantity)}
+                  {formatPrice(Number(itemPrice) * item.quantity)}
                 </div>
 
                 <div className="product-cell remove-cell">
-                  <button className="remove-icon" onClick={() => removeCart(item.product_id)}>×</button>
+                  <button className="remove-icon" onClick={() => removeCart(item.product_id, item.variation_id)}>×</button>
                 </div>
               </div>
-            ))}
+              );
+            })}
 
             {/* Coupon Section - outside product-item */}
             <div className='coupon_section' >
@@ -189,12 +236,22 @@ const Cart = () => {
                   type="text"
                   placeholder={t("cart.couponPlaceholder")}
                   className="coupon-field"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
                 />
-                <button className="apply-coupon-btn">{t("cart.applyCoupon")}</button>
+                {appliedCoupon ? (
+                  <button className="apply-coupon-btn" onClick={removeCoupon} style={{background:"#ef4444"}}>
+                    {t("cart.removeCoupon") || "Remove"} ({appliedCoupon.code})
+                  </button>
+                ) : (
+                  <button className="apply-coupon-btn" onClick={applyCoupon}>{t("cart.applyCoupon")}</button>
+                )}
               </div>
+              {couponError && <div style={{color:"#ef4444",fontSize:"13px",marginTop:"8px"}}>{couponError}</div>}
               {/* Right: continue shopping */}
               < div className="right-action" >
-                <button className="continue-shopping-btn">{t("cart.continueShopping")}</button>
+                <button className="continue-shopping-btn" onClick={() => navigate("/Shop-1")}>{t("cart.continueShopping")}</button>
               </div>
             </div>
 
@@ -209,6 +266,13 @@ const Cart = () => {
                 <span>{t("cart.subtotal")}</span>
                 <span>{formatPrice(subtotal)}</span>
               </div>
+
+              {appliedCoupon && (
+                <div className="totals-line" style={{color:"#22c55e"}}>
+                  <span>{t("cart.discount") || "Discount"} ({appliedCoupon.code})</span>
+                  <span>-{formatPrice(discount)}</span>
+                </div>
+              )}
 
               <div className="shipping-section">
 
@@ -250,7 +314,7 @@ const Cart = () => {
               <div className="totals-line total-line">
                 <span>{t("cart.total")}</span>
                 <span>
-                  {formatPrice(subtotal + (shipping === "flat" ? 10 : 0))}
+                  {formatPrice(total)}
                 </span>
 
               </div>
@@ -272,15 +336,18 @@ const Cart = () => {
           </div>
 
         </div >
-        <div className="related-products">
-          <h3>{t("cart.relatedProduct")}</h3>
 
-          <div className="related-products-grid">
-            {relatedProducts.map((item) => (
-              <ProductCard key={item.id} product={item} />
-            ))}
+        {relatedProducts.length > 0 && (
+          <div className="related-products">
+            <h3>{t("cart.relatedProduct")}</h3>
+            <div className="related-products-grid">
+              {relatedProducts.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
       </div >
     </>
   );

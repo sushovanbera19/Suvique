@@ -73,6 +73,31 @@
   line-height: 1.4;
 }
 
+.product-variant-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.variant-color-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.variant-size-badge {
+  background: #f3f4f6;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .price-cell,
 .subtotal-cell {
   font-weight: 400;

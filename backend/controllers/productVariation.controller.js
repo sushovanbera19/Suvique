@@ -1,4 +1,4 @@
-import { createVariation, getAllVariations, getVariationById, updateVariation, deleteVariation, } from "../models/productVariation.model.js";
+import { createVariation, getAllVariations, getVariationById, updateVariation, deleteVariation, bulkCreateVariations } from "../models/productVariation.model.js";
 
 // Create
 export const addVariation = async (req, res) => {
@@ -96,5 +96,33 @@ export const removeVariation = async (
       success: false,
       message: error.message,
     });
+  }
+};
+
+// Bulk Import
+export const bulkImportVariations = async (req, res) => {
+  try {
+    const { variations } = req.body;
+
+    if (!variations?.length) {
+      return res.status(400).json({ success: false, message: "No variations provided" });
+    }
+
+    const rows = variations.map((v) => [
+      v.color_code || "#000000",
+      v.size || "M",
+      v.status || "Active",
+    ]);
+
+    const result = await bulkCreateVariations(rows);
+
+    res.status(200).json({
+      success: true,
+      message: `Imported ${result.inserted} variations (${result.skipped} duplicates skipped)`,
+      inserted: result.inserted,
+      skipped: result.skipped,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -8,10 +8,13 @@ export const getCartItems = (userId) => {
       SELECT
         c.product_id,
         c.quantity,
-        p.base_price
+        c.variation_id,
+        COALESCE(pvm.price, p.base_price) AS base_price
       FROM cart c
       JOIN products p
       ON c.product_id = p.id
+      LEFT JOIN product_variation_map pvm
+      ON c.variation_id = pvm.variation_id AND c.product_id = pvm.product_id
       WHERE c.user_id = ?
     `;
 
@@ -55,6 +58,7 @@ export const createOrderItems = (
 
       orderId,
       item.product_id,
+      item.variation_id || null,
       item.quantity,
       item.base_price
 
@@ -65,6 +69,7 @@ export const createOrderItems = (
       (
         order_id,
         product_id,
+        variation_id,
         quantity,
         price
       )
@@ -157,15 +162,23 @@ export const getOrderDetails = (orderId, callback) => {
 
             oi.quantity,
             oi.price,
+            oi.product_id,
+            oi.variation_id,
 
             p.product_name,
             p.main_image,
-            p.sku
+            p.sku,
+
+            pv.color_code,
+            pv.size
 
         FROM order_items oi
 
         JOIN products p
             ON oi.product_id = p.id
+
+        LEFT JOIN product_variation pv
+            ON oi.variation_id = pv.variation_id
 
         WHERE oi.order_id=?
     `;

@@ -29,3 +29,13 @@ export const deleteVariation = (id) => {
   const sql = ` DELETE FROM product_variation WHERE variation_id = ?`;
   return db.promise().query(sql, [id]);
 };
+
+// Bulk create (skip duplicates)
+export const bulkCreateVariations = (rows) => {
+  if (!rows.length) return Promise.resolve({ inserted: 0, skipped: 0 });
+  const sql = `INSERT IGNORE INTO product_variation (color_code, size, status) VALUES ?`;
+  return db.promise().query(sql, [rows]).then(([result]) => ({
+    inserted: result.affectedRows,
+    skipped: rows.length - result.affectedRows,
+  }));
+};

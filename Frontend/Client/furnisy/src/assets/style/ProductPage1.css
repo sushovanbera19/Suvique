@@ -198,6 +198,20 @@
 
 .ProductPage1-add-to-cart-btn:hover { background: #333; }
 
+.ProductPage1-buy-now-btn {
+    padding: 12px 25px;
+    background: #c8953c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    transition: background 0.2s ease;
+}
+
+.ProductPage1-buy-now-btn:hover { background: #b07e2e; }
+
 /* Actions */
 .ProductPage1-actions {
     display: flex;
@@ -425,6 +439,22 @@
     font-size: 15px;
 }
 
+.ProductPage1-name-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.ProductPage1-review-form label {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
 .ProductPage1-submit-btn {
     padding: 12px 25px;
     background: #111;
@@ -639,12 +669,12 @@
     .ProductPage1-container { padding: 30px 20px; }
 
     .ProductPage1-cart-row {
-        flex-direction: row;
-        align-items: stretch;
-        gap: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
-    .ProductPage1-add-to-cart-btn { width: 100%; }
+    .ProductPage1-add-to-cart-btn,
+    .ProductPage1-buy-now-btn { width: 100%; margin-left: 0; }
     .ProductPage1-quantity { justify-content: space-between; width: 100%; }
     .ProductPage1-tab-buttons { flex-wrap: wrap; gap: 15px; }
     .ProductPage1-tab-buttons button { font-size: 20px; }

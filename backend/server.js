@@ -24,6 +24,7 @@ import productInfoRoutes from "./routes/productInfo.routes.js";
 import bannerRoutes from "./routes/banner.routes.js";
 import videoRoutes from "./routes/video.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
+import couponRoutes from "./routes/coupon.routes.js";
 
 
 const app = express();
@@ -58,6 +59,7 @@ app.use("/api/product-info", productInfoRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/coupons", couponRoutes);
 
 // test route
 app.get("/", (req, res) => {

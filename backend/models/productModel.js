@@ -296,8 +296,14 @@ export const getShopProducts = (filters, callback) => {
   let values = [];
 
   if (filters.category) {
-    whereClauses.push(`p.category_id = ?`);
-    values.push(filters.category);
+    const cats = String(filters.category).split(',').map(c => Number(c.trim())).filter(n => !isNaN(n));
+    if (cats.length === 1) {
+      whereClauses.push(`p.category_id = ?`);
+      values.push(cats[0]);
+    } else if (cats.length > 1) {
+      whereClauses.push(`p.category_id IN (${cats.map(() => '?').join(',')})`);
+      values.push(...cats);
+    }
   }
 
   if (filters.subcategory) {
@@ -336,7 +342,7 @@ export const getShopProducts = (filters, callback) => {
   const fromSql = `
     FROM products p
     LEFT JOIN product_category c ON p.category_id = c.category_id
-    LEFT JOIN product_subcategory s ON p.sub_category_id = s.sub_category_id
+    LEFT JOIN product_subcategory s ON p.sub_category_id = s.subcategory_id
     ${needsVariationJoin ? 'LEFT JOIN product_variation_map pvm ON p.id = pvm.product_id LEFT JOIN product_variation pv ON pvm.variation_id = pv.variation_id' : ''}
   `;
 
@@ -389,14 +395,18 @@ export const getShopSidebar = (callback) => {
 
   const data = {};
 
-  // Categories
+  // Categories with image and product count
   const categorySql = `
         SELECT
-            category_id,
-            category_name
-        FROM product_category
-        WHERE status='Active'
-        ORDER BY category_name ASC
+            pc.category_id,
+            pc.category_name,
+            pc.image,
+            COUNT(p.id) AS product_count
+        FROM product_category pc
+        LEFT JOIN products p ON p.category_id = pc.category_id AND p.status = 'Active'
+        WHERE pc.status='Active'
+        GROUP BY pc.category_id, pc.category_name, pc.image
+        ORDER BY pc.category_name ASC
     `;
 
   db.query(categorySql, (err, categories) => {
@@ -478,7 +488,25 @@ export const getShopSidebar = (callback) => {
 
             data.price = price[0];
 
-            callback(null, data);
+            // Tags — extract unique tags from products
+            const tagSql = `SELECT DISTINCT tags FROM products WHERE tags IS NOT NULL AND tags != ''`;
+            db.query(tagSql, (err, tagRows) => {
+              if (err) return callback(err);
+              const tagSet = new Set();
+              tagRows.forEach(row => {
+                try {
+                  const arr = JSON.parse(row.tags);
+                  if (Array.isArray(arr)) arr.forEach(t => tagSet.add(t.trim()));
+                } catch (e) {
+                  row.tags.split(",").forEach(t => {
+                    const trimmed = t.trim();
+                    if (trimmed) tagSet.add(trimmed);
+                  });
+                }
+              });
+              data.tags = [...tagSet].sort();
+              callback(null, data);
+            });
 
           });
 

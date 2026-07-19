@@ -6,6 +6,8 @@ import "../assets/style/AccountPages.css";
 
 const API = "http://localhost:5000";
 
+const STATUS_STEPS = ["Pending", "Processing", "Shipped", "Delivered"];
+
 export default function UserOrders() {
   const { t, lang } = useTranslation();
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ export default function UserOrders() {
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [orderItems, setOrderItems] = useState({});
+  const [filter, setFilter] = useState("all");
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
@@ -71,14 +74,10 @@ export default function UserOrders() {
     }
   };
 
-  const getStatusClass = (status) => {
-    const s = (status || "").toLowerCase();
-    if (s === "pending") return "status-pending";
-    if (s === "processing") return "status-processing";
-    if (s === "shipped") return "status-shipped";
-    if (s === "delivered") return "status-delivered";
-    if (s === "cancelled") return "status-cancelled";
-    return "";
+  const getStepIndex = (status) => {
+    if (status === "Cancelled") return -1;
+    const idx = STATUS_STEPS.indexOf(status);
+    return idx >= 0 ? idx : 0;
   };
 
   const formatDate = (d) => {
@@ -86,74 +85,164 @@ export default function UserOrders() {
     return new Date(d).toLocaleDateString(localeMap[lang] || "en-US", { year: "numeric", month: "short", day: "numeric" });
   };
 
+  const formatDateTime = (d) => {
+    const localeMap = { en:"en-US", hi:"hi-IN", fr:"fr-FR", de:"de-DE", es:"es-ES", ar:"ar-SA", zh:"zh-CN", ja:"ja-JP", bn:"bn-BD", th:"th-TH", id:"id-ID", ms:"ms-MY", sv:"sv-SE", pl:"pl-PL", cs:"cs-CZ", ro:"ro-RO", el:"el-GR" };
+    return new Date(d).toLocaleString(localeMap[lang] || "en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  };
+
+  const filteredOrders = filter === "all" ? orders : orders.filter((o) => o.order_status.toLowerCase() === filter);
+
+  const filterTabs = [
+    { key: "all", label: t("orders.filterAll") || "All" },
+    { key: "pending", label: t("orders.pending") },
+    { key: "processing", label: t("orders.processing") },
+    { key: "shipped", label: t("orders.shipped") },
+    { key: "delivered", label: t("orders.delivered") },
+    { key: "cancelled", label: t("orders.cancelledStatus") },
+  ];
+
   return (
     <>
       <AccountHeader title={t("orders.title")} breadcrumb={`${t("breadcrumb.home")} → ${t("breadcrumb.myOrders")}`} />
       <div className="account-page">
         <div className="account-page-container">
-          <div className="account-card">
-            <h2>{t("orders.title")}</h2>
+          <div className="account-card orders-card">
+            <div className="orders-header">
+              <h2>{t("orders.title")}</h2>
+              <span className="orders-count">{orders.length} {t("orders.totalOrders") || "orders"}</span>
+            </div>
 
             {msg && <p className={`account-msg ${msg.includes("Error") ? "account-msg-error" : ""}`}>{msg}</p>}
 
+            <div className="orders-filter-tabs">
+              {filterTabs.map((tab) => (
+                <button
+                  key={tab.key}
+                  className={`orders-filter-tab ${filter === tab.key ? "active" : ""}`}
+                  onClick={() => setFilter(tab.key)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
             {loading ? (
-              <div className="account-loading">{t("common.loading")}</div>
-            ) : orders.length === 0 ? (
-              <div className="account-empty-state">
-                <p>{t("orders.noOrders")}</p>
+              <div className="account-loading">
+                <div className="orders-spinner" />
+                <p>{t("common.loading")}</p>
+              </div>
+            ) : filteredOrders.length === 0 ? (
+              <div className="orders-empty-state">
+                <div className="orders-empty-icon">&#128722;</div>
+                <h3>{t("orders.noOrders")}</h3>
+                <p>{t("orders.browseProducts") || "Browse our products and place your first order!"}</p>
+                <button className="orders-shop-btn" onClick={() => navigate("/Shop-1")}>{t("common.shop") || "Shop Now"}</button>
               </div>
             ) : (
               <div className="orders-list">
-                {orders.map((order) => (
-                  <div key={order.id} className="order-item">
-                    <div className="order-row" onClick={() => fetchItems(order.id)}>
-                      <div className="order-col order-id">#{order.id}</div>
-                      <div className="order-col order-date">{formatDate(order.created_at)}</div>
-                      <div className="order-col order-total">
-                        {order.currency === "INR" ? "₹" : "$"}{Number(order.total).toFixed(2)}
+                {filteredOrders.map((order) => {
+                  const stepIdx = getStepIndex(order.order_status);
+                  const isCancelled = order.order_status === "Cancelled";
+                  const items = orderItems[order.id] || [];
+                  const firstItem = expandedOrder === order.id && items.length > 0 ? items[0] : null;
+
+                  return (
+                    <div key={order.id} className={`order-card ${expandedOrder === order.id ? "expanded" : ""}`}>
+                      {/* Order Top Bar */}
+                      <div className="order-card-top">
+                        <div className="order-card-left">
+                          <div className="order-card-thumb">
+                            {firstItem ? (
+                              <img src={`${API}${firstItem.main_image}`} alt="" onError={(e) => { e.target.src = "https://via.placeholder.com/64"; }} />
+                            ) : (
+                              <div className="order-thumb-placeholder">&#128230;</div>
+                            )}
+                          </div>
+                          <div className="order-card-info">
+                            <div className="order-card-id-date">
+                              <span className="order-card-id">#{order.id}</span>
+                              <span className="order-card-date">{formatDate(order.created_at)}</span>
+                            </div>
+                            <p className="order-card-items-text">
+                              {order.total_items} {t("orders.itemCount") || "items"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="order-card-right">
+                          <div className="order-card-price">
+                            {order.currency === "INR" ? "₹" : "$"}{Number(order.total).toFixed(2)}
+                          </div>
+                          <span className={`order-status-badge status-${order.order_status.toLowerCase()}`}>
+                            {isCancelled ? "✕" : stepIdx >= 3 ? "✓" : "●"} {t(`orders.${order.order_status.toLowerCase()}`) || order.order_status}
+                          </span>
+                        </div>
                       </div>
-                      <div className="order-col order-items-count">{order.total_items} {t("orders.itemCount")}</div>
-                      <div className="order-col order-status">
-                        <span className={`status-badge ${getStatusClass(order.order_status)}`}>
-                          {t(`orders.${order.order_status.toLowerCase()}`) || order.order_status}
-                        </span>
-                      </div>
-                      <div className="order-col order-actions">
+
+                      {/* Inline Progress Bar */}
+                      {!isCancelled && (
+                        <div className="order-progress">
+                          <div className="order-progress-track">
+                            <div className="order-progress-fill" style={{ width: `${(stepIdx / (STATUS_STEPS.length - 1)) * 100}%` }} />
+                          </div>
+                          <div className="order-progress-steps">
+                            {STATUS_STEPS.map((step, idx) => (
+                              <div key={step} className={`order-progress-step ${idx <= stepIdx ? "active" : ""}`}>
+                                <div className="order-progress-dot" />
+                                <span>{t(`orders.${step.toLowerCase()}`) || step}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {isCancelled && (
+                        <div className="order-cancelled-bar">
+                          <span>✕</span> {t("orders.cancelledStatus") || "Cancelled"}
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="order-card-actions">
+                        <button className="order-action-btn primary" onClick={() => navigate(`/track-order?id=${order.id}`)}>
+                          {t("orders.track") || "Track Order"}
+                        </button>
+                        <button className="order-action-btn" onClick={() => fetchItems(order.id)}>
+                          {expandedOrder === order.id ? (t("orders.hideDetails") || "Hide Details") : (t("orders.viewDetails") || "View Details")}
+                        </button>
                         {order.order_status === "Pending" && (
-                          <button
-                            className="order-cancel-btn"
-                            onClick={(e) => { e.stopPropagation(); handleCancel(order.id); }}
-                          >
+                          <button className="order-action-btn danger" onClick={(e) => { e.stopPropagation(); handleCancel(order.id); }}>
                             {t("orders.cancel")}
                           </button>
                         )}
                       </div>
-                    </div>
 
-                    {expandedOrder === order.id && orderItems[order.id] && (
-                      <div className="order-details">
-                        {orderItems[order.id].length === 0 ? (
-                          <p className="account-empty">{t("common.noData")}</p>
-                        ) : (
-                          orderItems[order.id].map((item, idx) => (
-                            <div key={idx} className="order-detail-row">
+                      {/* Expanded Items */}
+                      {expandedOrder === order.id && items.length > 0 && (
+                        <div className="order-items-expanded">
+                          {items.map((item, idx) => (
+                            <div key={idx} className="order-expanded-item" onClick={() => navigate(`/product-details-1/${item.product_id}`)}>
                               <img
                                 src={`${API}${item.main_image}`}
                                 alt={item.product_name}
-                                className="order-detail-img"
-                                onError={(e) => { e.target.src = "https://via.placeholder.com/56"; }}
+                                className="order-expanded-img"
+                                onError={(e) => { e.target.src = "https://via.placeholder.com/64"; }}
                               />
-                              <div className="order-detail-info">
-                                <p className="order-detail-name">{item.product_name}</p>
-                                <p className="order-detail-meta">Qty: {item.quantity} × {order.currency === "INR" ? "₹" : "$"}{Number(item.price).toFixed(2)}</p>
+                              <div className="order-expanded-info">
+                                <p className="order-expanded-name">{item.product_name}</p>
+                                <p className="order-expanded-meta">
+                                  {t("orders.qty") || "Qty"}: {item.quantity} × {order.currency === "INR" ? "₹" : "$"}{Number(item.price).toFixed(2)}
+                                </p>
+                              </div>
+                              <div className="order-expanded-total">
+                                {order.currency === "INR" ? "₹" : "$"}{(item.quantity * item.price).toFixed(2)}
                               </div>
                             </div>
-                          ))
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

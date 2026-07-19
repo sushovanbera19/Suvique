@@ -77,8 +77,28 @@ export default function CheckoutForm() {
         }
     };
 
+    const removeFromCart = async (productId, variationId) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch("http://localhost:5000/api/cart/remove", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ product_id: productId, variation_id: variationId || null }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setCartItems((prev) => prev.filter((item) => !(item.product_id === productId && item.variation_id === (variationId || null))));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const subtotal = cartItems.reduce(
-        (sum, item) => sum + Number(item.base_price) * item.quantity,
+        (sum, item) => sum + Number(item.variant_price || item.base_price) * item.quantity,
         0
     );
 
@@ -172,148 +192,178 @@ export default function CheckoutForm() {
         <>
             <AccountHeader title="Checkout" breadcrumb="Home → Checkout" />
             <div className="container">
-                {addresses.length > 0 && (
-                    <>
-                        <div className="field">
-                            <label>{t("checkout.savedAddress")}</label>
+                <div className="form-wrapper">
+                    {/* Address Section */}
+                    <div className="address-section">
+                        <h3 className="address-section-title">{t("checkout.shippingAddress") || "Shipping Address"}</h3>
 
-                            <select
-                                className="Checkout_select"
-                                value={selectedAddress}
-                                onChange={(e) => setSelectedAddress(e.target.value)}
-                            >
-                                {addresses.map(address => (
-                                    <option
-                                        key={address.id}
-                                        value={address.id}
+                        {addresses.length > 0 && (
+                            <div className="address-cards">
+                                {addresses.map((addr) => (
+                                    <div
+                                        key={addr.id}
+                                        className={`address-card ${selectedAddress == addr.id ? "selected" : ""}`}
+                                        onClick={() => { setSelectedAddress(addr.id); setShowAddressForm(false); }}
                                     >
-                                        {address.first_name} {address.last_name} -
-                                        {address.street}, {address.city}
-                                    </option>
+                                        <div className="address-card-radio">
+                                            <input
+                                                type="radio"
+                                                name="selectedAddress"
+                                                checked={selectedAddress == addr.id}
+                                                onChange={() => { setSelectedAddress(addr.id); setShowAddressForm(false); }}
+                                            />
+                                        </div>
+                                        <div className="address-card-info">
+                                            <div className="address-card-name">{addr.first_name} {addr.last_name}</div>
+                                            <div className="address-card-detail">{addr.street}</div>
+                                            <div className="address-card-detail">{addr.city}, {addr.zip_code}</div>
+                                            <div className="address-card-detail">{addr.country}</div>
+                                            {addr.phone && <div className="address-card-detail">{addr.phone}</div>}
+                                            {addr.email && <div className="address-card-detail">{addr.email}</div>}
+                                        </div>
+                                    </div>
                                 ))}
-                            </select>
-                        </div>
 
-                        {/* <button
-                            type="button"
-                            onClick={() => setShowAddressForm(true)}
-                        >
-                            + Add New Address
-                        </button> */}
-                    </>
-                )}
-                {(addresses.length === 0 || showAddressForm) && (
-                <form className="form-wrapper">
-                    <p className="info-text">
-                        {t("checkout.returningCustomer")} <a href="#">{t("checkout.clickToLogin")}</a>
-                    </p>
-                    <p className="info-text">
-                        {t("checkout.haveCoupon")} <a href="#">{t("checkout.enterCode")}</a>
-                    </p>
-
-                    <div className="field-row">
-                        <div className="field">
-                            <label htmlFor="firstName" className="label">
-                                {t("checkout.firstName")} <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input id="first_name" type="text" required className="input" value={formData.first_name}
-                                onChange={handleChange} />
-                        </div>
-                        <div className="field">
-                            <label htmlFor="lastName" className="label">
-                                {t("checkout.lastName")} <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input id="last_name" type="text" required className="input" value={formData.last_name}
-                                onChange={handleChange} />
-                        </div>
+                                {/* Add New Address Card */}
+                                <div
+                                    className={`address-card add-new-card ${showAddressForm ? "selected" : ""}`}
+                                    onClick={() => { setShowAddressForm(true); setSelectedAddress(""); }}
+                                >
+                                    <div className="address-card-radio">
+                                        <input
+                                            type="radio"
+                                            name="selectedAddress"
+                                            checked={showAddressForm}
+                                            onChange={() => { setShowAddressForm(true); setSelectedAddress(""); }}
+                                        />
+                                    </div>
+                                    <div className="address-card-info add-new-content">
+                                        <span className="add-new-icon">+</span>
+                                        <span>{t("checkout.addNewAddress") || "Add New Address"}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="field-row">
-                        <div className="field">
-                            <label htmlFor="email" className="label">
-                                {t("checkout.emailAddress")} <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input id="email" type="email" required className="input" value={formData.email}
-                                onChange={handleChange} />
-                        </div>
-                        <div className="field">
-                            <label htmlFor="phone" className="label">
-                                {t("checkout.phone")} <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input id="phone" type="tel" required className="input" value={formData.phone}
-                                onChange={handleChange} />
-                        </div>
-                    </div>
+                    {/* Inline Address Form */}
+                    {showAddressForm && (
+                        <form className="form-wrapper address-form">
+                            <h3 className="address-form-title">{t("checkout.enterNewAddress") || "Enter New Address"}</h3>
 
-                    <div className="field">
-                        <label htmlFor="country" className="label">
-                            {t("checkout.countryRegion")} <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <select id="country" required defaultValue="" className="Checkout_select" value={formData.country}
-                            onChange={handleChange}>
-                            <option value="" disabled>
-                                Select a country
-                            </option>
-                            <option>United States</option>
-                            <option>Canada</option>
-                            <option>United Kingdom</option>
-                            <option>Australia</option>
-                        </select>
-                    </div>
+                            <div className="field-row">
+                                <div className="field">
+                                    <label className="label">
+                                        {t("checkout.firstName")} <span style={{ color: "red" }}>*</span>
+                                    </label>
+                                    <input id="first_name" type="text" required className="input" value={formData.first_name}
+                                        onChange={handleChange} />
+                                </div>
+                                <div className="field">
+                                    <label className="label">
+                                        {t("checkout.lastName")} <span style={{ color: "red" }}>*</span>
+                                    </label>
+                                    <input id="last_name" type="text" required className="input" value={formData.last_name}
+                                        onChange={handleChange} />
+                                </div>
+                            </div>
 
-                    <div className="field">
-                        <label htmlFor="city" className="label">
-                            {t("checkout.townCity")} <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input id="city" type="text" required className="input" value={formData.city}
-                            onChange={handleChange} />
-                    </div>
+                            <div className="field-row">
+                                <div className="field">
+                                    <label className="label">
+                                        {t("checkout.emailAddress")} <span style={{ color: "red" }}>*</span>
+                                    </label>
+                                    <input id="email" type="email" required className="input" value={formData.email}
+                                        onChange={handleChange} />
+                                </div>
+                                <div className="field">
+                                    <label className="label">
+                                        {t("checkout.phone")} <span style={{ color: "red" }}>*</span>
+                                    </label>
+                                    <input id="phone" type="tel" required className="input" value={formData.phone}
+                                        onChange={handleChange} />
+                                </div>
+                            </div>
 
-                    <div className="field">
-                        <label htmlFor="street" className="label">
-                            {t("checkout.streetAddress")} <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input id="street" type="text" required className="input" value={formData.street}
-                            onChange={handleChange} />
-                    </div>
+                            <div className="field">
+                                <label className="label">
+                                    {t("checkout.countryRegion")} <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <select id="country" required className="Checkout_select" value={formData.country}
+                                    onChange={handleChange}>
+                                    <option value="" disabled>Select a country</option>
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>United Kingdom</option>
+                                    <option>Australia</option>
+                                    <option>India</option>
+                                </select>
+                            </div>
 
-                    <div className="field">
-                        <label htmlFor="zip" className="label">
-                            {t("checkout.zipCode")} <span style={{ color: "red" }}>*</span>
-                        </label>
-                        <input id="zip_code" type="text" required className="input" value={formData.zip_code}
-                            onChange={handleChange} />
-                    </div>
+                            <div className="field">
+                                <label className="label">
+                                    {t("checkout.townCity")} <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input id="city" type="text" required className="input" value={formData.city}
+                                    onChange={handleChange} />
+                            </div>
 
-                    <div className="field">
-                        <label htmlFor="additional" className="label">
-                            {t("checkout.additionalInfo")}
-                        </label>
-                        <textarea id="additional_info" className="textarea" value={formData.additional_info}
-                            onChange={handleChange} />
-                    </div>
+                            <div className="field">
+                                <label className="label">
+                                    {t("checkout.streetAddress")} <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input id="street" type="text" required className="input" value={formData.street}
+                                    onChange={handleChange} />
+                            </div>
 
-                    <div className="checkbox-wrapper">
-                        <label>
-                            <input type="checkbox" /> Create an account?
-                        </label>
-                    </div>
-                </form>
-                )}
+                            <div className="field">
+                                <label className="label">
+                                    {t("checkout.zipCode")} <span style={{ color: "red" }}>*</span>
+                                </label>
+                                <input id="zip_code" type="text" required className="input" value={formData.zip_code}
+                                    onChange={handleChange} />
+                            </div>
+
+                            <div className="field">
+                                <label className="label">
+                                    {t("checkout.additionalInfo")}
+                                </label>
+                                <textarea id="additional_info" className="textarea" value={formData.additional_info}
+                                    onChange={handleChange} />
+                            </div>
+
+                            <button type="button" className="save-address-btn" onClick={async () => {
+                                const id = await saveAddress();
+                                if (id) {
+                                    await fetchAddresses();
+                                    setSelectedAddress(id);
+                                    setShowAddressForm(false);
+                                    toastSuccess(t("checkout.addressSaved") || "Address saved successfully");
+                                    setFormData({ first_name: "", last_name: "", email: "", phone: "", country: "", city: "", street: "", zip_code: "", additional_info: "" });
+                                }
+                            }}>
+                                {t("checkout.saveAddress") || "Save Address"}
+                            </button>
+                        </form>
+                    )}
+                </div>
 
                 <div className="order-summary">
                     <div className="summary-top">
                         <Reuseablebutton
                             text={t("checkout.yourOrder")}
+                            onClick={placeOrder}
+                            disabled={!agreeTerms}
                             style={{
                                 padding: "clamp(0.4rem, 0.9vw, 1.2rem) clamp(0.8rem, 3vw, 2.5rem)",
                                 fontSize: "clamp(1rem, 2vw, 1.5rem)",
                                 borderRadius: "0.5rem",
                                 fontWeight: 300,
-                                cursor: "pointer",
+                                cursor: agreeTerms ? "pointer" : "not-allowed",
                                 alignItems: "center",
                                 gap: "0.5rem",
                                 width: "100%",
+                                opacity: agreeTerms ? 1 : 0.6,
                             }}
                         />
 
@@ -321,7 +371,9 @@ export default function CheckoutForm() {
                             <div>{t("checkout.product")}</div>
                             <div>{t("cart.subtotal")}</div>
                         </div>
-                        {cartItems.map((item) => (
+                        {cartItems.map((item) => {
+                            const itemPrice = item.variant_price || item.base_price;
+                            return (
                             <div className="summary-row" key={item.id}>
                                 <div className="product-info">
                                     <img
@@ -334,11 +386,24 @@ export default function CheckoutForm() {
                                         <div style={{ fontSize: "12px", color: "#666", marginTop: 3 }}>
                                             Qty: {item.quantity}
                                         </div>
+                                        {(item.color_code || item.size) && (
+                                            <div style={{ fontSize: "12px", color: "#666", marginTop: 2, display: "flex", alignItems: "center", gap: "6px" }}>
+                                                {item.color_code && <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", backgroundColor: item.color_code, border: "1px solid #ccc" }} />}
+                                                {item.color_code && <span>{item.color_code}</span>}
+                                                {item.size && <span style={{ background: "#f3f4f6", padding: "1px 6px", borderRadius: 4, fontSize: 11 }}>{item.size}</span>}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <div style={{ fontWeight: "600" }}>  {formatPrice(Number(item.base_price) * item.quantity)}</div>
+                                <div className="product-price-remove">
+                                    <div style={{ fontWeight: "600" }}>{formatPrice(Number(itemPrice) * item.quantity)}</div>
+                                    <button className="checkout-remove-btn" onClick={() => removeFromCart(item.product_id, item.variation_id)} title={t("checkout.removeItem") || "Remove"}>
+                                        ✕
+                                    </button>
+                                </div>
                             </div>
-                        ))}
+                            );
+                        })}
                         <div className="summary-row">
                             <div>{t("cart.subtotal")}</div>
                             <div>{formatPrice(subtotal)}</div>

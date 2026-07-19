@@ -46,6 +46,7 @@ const Products = () => {
   const excelInputRef = useRef(null);
 
   const [form, setForm] = useState(emptyForm);
+  const [variantPricing, setVariantPricing] = useState({});
 
   // =====================
   // DRAFT - Save to localStorage
@@ -190,6 +191,23 @@ const Products = () => {
     }
   };
 
+  // Auto-generate variant pricing rows when sizes/colors change
+  useEffect(() => {
+    const newPricing = {};
+    form.colors.forEach((color) => {
+      form.sizes.forEach((size) => {
+        const key = `${color}_${size}`;
+        newPricing[key] = variantPricing[key] || {
+          color_code: color,
+          size: size,
+          base_price: form.basePrice || "",
+          quantity: form.quantity || "",
+        };
+      });
+    });
+    setVariantPricing(newPricing);
+  }, [form.sizes, form.colors]);
+
   const sizeOptions = [...new Set(variations.map((item) => item.size))];
   const colorOptions = [...new Set(variations.map((item) => item.color_code))];
 
@@ -253,6 +271,7 @@ const Products = () => {
     formData.append("tags", JSON.stringify(form.tags.split(",").map((tag) => tag.trim()).filter(Boolean)));
     formData.append("sizes", JSON.stringify(form.sizes));
     formData.append("colors", JSON.stringify(form.colors));
+    formData.append("variationData", JSON.stringify(Object.values(variantPricing)));
 
     const isEditing = !!editingProduct;
     const url = isEditing
@@ -356,6 +375,23 @@ const Products = () => {
         mainImage: null,
         galleryImages: [],
       });
+
+      // Load per-variant pricing from variationMap
+      if (p.variationMap && p.variationMap.length > 0) {
+        const loaded = {};
+        p.variationMap.forEach((v) => {
+          const key = `${v.color_code}_${v.size}`;
+          loaded[key] = {
+            color_code: v.color_code,
+            size: v.size,
+            base_price: v.base_price ?? p.base_price ?? "",
+            quantity: v.quantity ?? p.quantity ?? "",
+          };
+        });
+        setVariantPricing(loaded);
+      } else {
+        setVariantPricing({});
+      }
     } catch (error) {
       console.error(error);
       alert("Error loading product for edit");
@@ -367,6 +403,7 @@ const Products = () => {
     setExistingMainImage(null);
     setExistingGallery([]);
     setForm(emptyForm);
+    setVariantPricing({});
   };
 
   // =====================
@@ -594,6 +631,63 @@ const Products = () => {
                   ))}
                 </div>
               </div>
+
+              {form.sizes.length > 0 && form.colors.length > 0 && (
+                <div className="variant-pricing-section">
+                  <label>Variant Pricing & Stock</label>
+                  <table className="variant-pricing-table">
+                    <thead>
+                      <tr>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {form.colors.map((color) =>
+                        form.sizes.map((size) => {
+                          const key = `${color}_${size}`;
+                          return (
+                            <tr key={key}>
+                              <td><span className="variant-color-dot" style={{ backgroundColor: color }} /> {color}</td>
+                              <td>{size}</td>
+                              <td>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={variantPricing[key]?.base_price ?? ""}
+                                  onChange={(e) => {
+                                    setVariantPricing((prev) => ({
+                                      ...prev,
+                                      [key]: { ...prev[key], color_code: color, size, base_price: e.target.value },
+                                    }));
+                                  }}
+                                  placeholder="Price"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  value={variantPricing[key]?.quantity ?? ""}
+                                  onChange={(e) => {
+                                    setVariantPricing((prev) => ({
+                                      ...prev,
+                                      [key]: { ...prev[key], color_code: color, size, quantity: e.target.value },
+                                    }));
+                                  }}
+                                  placeholder="Qty"
+                                />
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </Card>
           </div>
 

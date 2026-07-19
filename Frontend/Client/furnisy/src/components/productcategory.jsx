@@ -38,7 +38,7 @@ const Catagory = () => {
         {categories.map((cat) => (
           <a
             key={cat.category_id}
-            href={`/category/${cat.category_id}`}
+            href={`/Shop-1?category=${cat.category_id}`}
             className="category-item"
           >
             <img

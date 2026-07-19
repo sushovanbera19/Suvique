@@ -807,3 +807,81 @@ body.dark .draft-clear-btn {
   color: #fbbf24;
   border-color: #334155;
 }
+
+/* Variant Pricing Table */
+.variant-pricing-section {
+  margin-top: 16px;
+}
+
+.variant-pricing-section > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.variant-pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.variant-pricing-table th {
+  background: #f3f4f6;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.variant-pricing-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.variant-pricing-table input {
+  width: 90px;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.variant-pricing-table input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
+}
+
+.variant-color-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+body.dark .variant-pricing-table th {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-bottom-color: #334155;
+}
+
+body.dark .variant-pricing-table td {
+  border-bottom-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark .variant-pricing-table input {
+  background: #1a1a1a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark .variant-pricing-section > label {
+  color: #e2e8f0;
+}

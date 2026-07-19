@@ -11,6 +11,8 @@ import image5 from "../../public/images/img-5.webp";
 import { useCountry } from "../context/CountryContext";
 import { useTranslation } from "../context/LanguageContext";
 import { FiSearch } from "react-icons/fi";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toastSuccess, toastError, toastLoginRequired } from "../utils/toast";
 
 
 // Best sellers
@@ -19,11 +21,14 @@ import { FiSearch } from "react-icons/fi";
 //   { id: 6, name: "Modern Accent Chair", price: 299, img: image5 },
 // ];
 
-const ShopPagecomponent = ({ defaultView = "grid" }) => {
+const ShopPagecomponent = ({ defaultView = "grid", selectedCategoryId = "", onCategoryChange }) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
   const [colors, setColors] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -34,8 +39,15 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
     maxPrice: 0
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || searchParams.get("category") || "");
   const [selectedColor, setSelectedColor] = useState("");
+
+  useEffect(() => {
+    if (selectedCategoryId) {
+      setSelectedCategory(selectedCategoryId);
+      setCurrentPage(1);
+    }
+  }, [selectedCategoryId]);
 
   const [view, setView] = useState(defaultView);
   const [sortBy, setSortBy] = useState("default");
@@ -60,6 +72,8 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
           setColors(data.data.colors);
 
           setBestSellers(data.data.bestSellers);
+
+          setTags(data.data.tags || []);
 
           setPriceRange(data.data.price);
 
@@ -104,6 +118,30 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
 
     }
 
+  };
+
+  const addToCartList = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) { toastLoginRequired(); return; }
+      const res = await fetch("http://localhost:5000/api/cart/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ product_id: productId }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toastSuccess(t("product.addedToCart"));
+        window.dispatchEvent(new Event("cartUpdated"));
+      } else {
+        toastError(data.message || t("product.failedToAdd"));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
@@ -167,7 +205,7 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
             ))}
           </div>
 
-          <div className="sidebar-widget"><BlogTags /></div>
+          <div className="sidebar-widget"><BlogTags tags={tags} onTagClick={(tag) => { setSearchTerm(tag); setCurrentPage(1); }} /></div>
         </aside>
 
         {/* ================= PRODUCTS ================= */}
@@ -220,10 +258,32 @@ const ShopPagecomponent = ({ defaultView = "grid" }) => {
           {/* PRODUCT GRID / LIST */}
           <div className={view === "grid" ? "product-grid" : "product-list"}>
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+              view === "grid" ? (
+                <ProductCard key={product.id} product={product} />
+              ) : (
+                <div key={product.id} className="product-list-card" onClick={() => navigate(`/product-details-1/${product.id}`)}>
+                  <div className="product-list-image">
+                    <img
+                      src={`http://localhost:5000/${product.main_image?.replace(/\\/g, "/")}`}
+                      alt={product.product_name}
+                    />
+                  </div>
+                  <div className="product-list-info">
+                    <h3 className="product-list-name">{product.product_name}</h3>
+                    <p className="product-list-category">{product.category_name || ""}</p>
+                    <p className="product-list-desc">{product.short_description || product.description || ""}</p>
+                    <div className="product-list-price-row">
+                      <span className="product-list-price">{formatPrice(product.sale_price || product.base_price)}</span>
+                      {product.sale_price && product.base_price && product.sale_price < product.base_price && (
+                        <span className="product-list-original-price">{formatPrice(product.base_price)}</span>
+                      )}
+                    </div>
+                    <button className="product-list-cart-btn" onClick={(e) => { e.stopPropagation(); addToCartList(product.id); }}>
+                      {t("product.addToCart")}
+                    </button>
+                  </div>
+                </div>
+              )
             ))}
           </div>
 

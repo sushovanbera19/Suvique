@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
@@ -10,16 +10,6 @@ import ProductCard from "../Common/ProductCard";
 import { toastSuccess, toastError, toastLoginRequired } from "../utils/toast";
 import { useTranslation } from "../context/LanguageContext";
 
-
-const relatedProducts = [
-    {
-        id: 1,
-        name: "Wooden Lounge Chair",
-        price: "$180.00",
-        img: "/images/detail2.webp",
-        tag: "Sale",
-    },
-];
 
 const ProductPage = () => {
     const { id } = useParams();
@@ -35,6 +25,7 @@ const ProductPage = () => {
     const [currentImage, setCurrentImage] = useState(0);
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState("");
+    const [selectedVariation, setSelectedVariation] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState("description");
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -42,7 +33,11 @@ const ProductPage = () => {
     const [hoverRating, setHoverRating] = useState(0);
     const [additionalInfo, setAdditionalInfo] = useState([]);
     const [productReviews, setProductReviews] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState([]);
+    const [reviewName, setReviewName] = useState("");
+    const [reviewText, setReviewText] = useState("");
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const nextImage = () => {
         if (!product?.images?.length) return;
@@ -80,7 +75,11 @@ const ProductPage = () => {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ product_id: productId }),
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity,
+                    variation_id: selectedVariation?.variation_id || null,
+                }),
             });
             const data = await res.json();
             if (data.success) {
@@ -90,6 +89,70 @@ const ProductPage = () => {
             }
         } catch (err) {
             console.log(err);
+        }
+    };
+
+    const buyNow = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) { toastLoginRequired(); return; }
+            const res = await fetch("http://localhost:5000/api/cart/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    product_id: product.id,
+                    quantity: quantity,
+                    variation_id: selectedVariation?.variation_id || null,
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                navigate("/checkout");
+            } else {
+                toastError(data.message);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const submitReview = async () => {
+        try {
+            if (!reviewName.trim()) { toastError(t("product.reviewNameRequired") || "Please enter your name"); return; }
+            if (!reviewText.trim()) { toastError(t("product.reviewTextRequired") || "Please write your review"); return; }
+            if (!userRating) { toastError(t("product.reviewRatingRequired") || "Please select a rating"); return; }
+
+            const res = await fetch("http://localhost:5000/api/reviews", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: reviewName.trim(),
+                    role: "Customer",
+                    text: reviewText.trim(),
+                    rating: userRating,
+                    product_id: product.id,
+                    status: "active",
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                toastSuccess(t("product.reviewSuccess") || "Review submitted successfully!");
+                setReviewName("");
+                setReviewText("");
+                setUserRating(0);
+                setHoverRating(0);
+                const refresh = await fetch(`http://localhost:5000/api/reviews/product/${product.id}`);
+                const refreshData = await refresh.json();
+                setProductReviews(refreshData.data || []);
+            } else {
+                toastError(data.message || "Failed to submit review");
+            }
+        } catch (err) {
+            console.log(err);
+            toastError("Failed to submit review");
         }
     };
 
@@ -121,10 +184,12 @@ const ProductPage = () => {
                         weight: p.weight,
                         width: p.width,
                         height: p.height,
+                        category_id: p.category_id,
                         categories: categoryNames,
                         reviews: [],
                         colors: p.colors || [],
                         sizes: p.sizes || [],
+                        variationMap: p.variationMap || [],
                         tags,
                         images: [p.main_image, ...gallery].map((img) =>
                             `http://localhost:5000/${img.replace(/\\/g, "/")}`
@@ -158,9 +223,45 @@ const ProductPage = () => {
 
     useEffect(() => {
         if (product) {
-            setSelectedColor(product.colors?.[0] || "");
-            setSelectedSize(product.sizes?.[0] || "");
+            const firstColor = product.colors?.[0] || "";
+            const firstSize = product.sizes?.[0] || "";
+            setSelectedColor(firstColor);
+            setSelectedSize(firstSize);
+            if (firstColor && firstSize && product.variationMap?.length > 0) {
+                const match = product.variationMap.find(
+                    (v) => v.color_code === firstColor && v.size === firstSize
+                );
+                setSelectedVariation(match || null);
+            }
         }
+    }, [product]);
+
+    useEffect(() => {
+        const fetchRelated = async () => {
+            if (!product?.category_id) return;
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/products/shop?page=1&limit=8&category=${product.category_id}`
+                );
+                const data = await res.json();
+                if (data.success) {
+                    let items = data.data.filter((p) => p.id !== product.id);
+                    if (items.length < 4) {
+                        const res2 = await fetch(`http://localhost:5000/api/products?page=1&limit=8`);
+                        const data2 = await res2.json();
+                        if (data2.success) {
+                            const existingIds = items.map((p) => p.id).concat(product.id);
+                            const more = data2.data.filter((p) => !existingIds.includes(p.id));
+                            items = [...items, ...more];
+                        }
+                    }
+                    setRelatedProducts(items.slice(0, 4));
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchRelated();
     }, [product]);
 
     if (loading) return <div>{t("product.loading")}</div>;
@@ -226,18 +327,36 @@ const ProductPage = () => {
     /* ===================== */
     /* SHARED: Details Section */
     /* ===================== */
+    const resolveVariation = (color, size) => {
+        if (!color || !size || !product?.variationMap?.length) {
+            setSelectedVariation(null);
+            return;
+        }
+        const match = product.variationMap.find(
+            (v) => v.color_code === color && v.size === size
+        );
+        setSelectedVariation(match || null);
+    };
+
+    const displayPrice = selectedVariation?.base_price || product.price;
+    const displayStock = selectedVariation?.quantity > 0
+        ? t("product.inStock")
+        : selectedVariation?.quantity === 0
+        ? t("product.outOfStock")
+        : product.stock;
+
     const renderDetails = () => (
         <div className="ProductPage1-details">
             <div className="ProductPage1-breadcrumb">
                 <a href="/">{t("common.home")}</a> <span>&gt;</span>
-                <a href="/shop">{t("common.shop")}</a> <span>&gt;</span>
+                <a href="/Shop-1">{t("common.shop")}</a> <span>&gt;</span>
             </div>
             <h1>{product.name}</h1>
             <div className="rating-stock">
                 <span>⭐ {product.rating} ({product.reviewsCount})</span>
-                <span>{t("product.stock")} {product.stock}</span>
+                <span>{t("product.stock")} {displayStock}</span>
             </div>
-            <p className="price">{product.price}</p>
+            <p className="price">{displayPrice}</p>
             <p className="short-description">{product.shortDescription}</p>
 
             <div className="ProductPage1-color-selector">
@@ -247,7 +366,7 @@ const ProductPage = () => {
                         key={color}
                         className={selectedColor === color ? "active" : ""}
                         style={{ backgroundColor: color }}
-                        onClick={() => setSelectedColor(color)}
+                        onClick={() => { setSelectedColor(color); resolveVariation(color, selectedSize); }}
                     />
                 ))}
             </div>
@@ -258,7 +377,7 @@ const ProductPage = () => {
                     <button
                         key={size}
                         className={selectedSize === size ? "active" : ""}
-                        onClick={() => setSelectedSize(size)}
+                        onClick={() => { setSelectedSize(size); resolveVariation(selectedColor, size); }}
                     >
                         {size}
                     </button>
@@ -273,6 +392,9 @@ const ProductPage = () => {
                 </div>
                 <button className="ProductPage1-add-to-cart-btn" onClick={() => addToCart(product.id)}>
                     {t("product.addToCartBtn")}
+                </button>
+                <button className="ProductPage1-buy-now-btn" onClick={buyNow}>
+                    {t("product.buyNow") || "Buy Now"}
                 </button>
             </div>
 
@@ -406,9 +528,22 @@ const ProductPage = () => {
                                     ))}
                                 </div>
                             </div>
+                            <label>{t("product.reviewName") || "Your Name"}</label>
+                            <input
+                                type="text"
+                                className="ProductPage1-name-input"
+                                placeholder={t("product.reviewNamePlaceholder") || "Enter your name"}
+                                value={reviewName}
+                                onChange={(e) => setReviewName(e.target.value)}
+                            />
                             <label>{t("product.yourReview")}</label>
-                            <textarea rows="6"></textarea>
-                            <button className="ProductPage1-submit-btn">{t("product.submit")}</button>
+                            <textarea
+                                rows="6"
+                                placeholder={t("product.reviewPlaceholder") || "Write your review here..."}
+                                value={reviewText}
+                                onChange={(e) => setReviewText(e.target.value)}
+                            ></textarea>
+                            <button className="ProductPage1-submit-btn" onClick={submitReview}>{t("product.submit")}</button>
                         </div>
                     </div>
                 )}
@@ -416,16 +551,19 @@ const ProductPage = () => {
         </div>
     );
 
-    const renderRelated = () => (
-        <div className="related-products">
-            <h3>{t("product.relatedProducts")}</h3>
-            <div className="related-products-grid">
-                {relatedProducts.map((item) => (
-                    <ProductCard key={item.id} product={item} />
-                ))}
+    const renderRelated = () => {
+        if (relatedProducts.length === 0) return null;
+        return (
+            <div className="related-products">
+                <h3>{t("product.relatedProducts")}</h3>
+                <div className="related-products-grid">
+                    {relatedProducts.map((item) => (
+                        <ProductCard key={item.id} product={item} />
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     /* ===================== */
     /* LAYOUT 1: Classic — Gallery left, Details right */
