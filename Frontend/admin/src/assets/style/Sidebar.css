@@ -32,19 +32,18 @@
   gap: 10px;
 }
 
-.logo-icon {
-  font-size: 30px;
-  color: #9b87f5;
+.sidebar-logo-img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .sidebar-logo h2 {
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   color: #fff;
-}
-
-.sidebar-logo span {
-  color: #9b87f5;
+  letter-spacing: 0.5px;
 }
 
 /* CONTENT */

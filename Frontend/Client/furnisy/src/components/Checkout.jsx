@@ -5,10 +5,12 @@ import Reuseablebutton from "../Common/Commonbutton";
 import { toastSuccess, toastError } from "../utils/toast";
 import { useCountry } from "../context/CountryContext";
 import { useTranslation } from "../context/LanguageContext";
+import { getPaymentMethods } from "../utils/paymentMethods";
+import { getGatewayForMethod, payWithStripe, payWithRazorpay, payWithPayPal } from "../utils/paymentGateway";
 
 export default function CheckoutForm() {
     const [shippingMethod, setShippingMethod] = useState("free");
-    const [paymentMethod, setPaymentMethod] = useState("direct");
+    const [paymentMethod, setPaymentMethod] = useState("");
     const [agreeTerms, setAgreeTerms] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [addresses, setAddresses] = useState([]);
@@ -17,6 +19,14 @@ export default function CheckoutForm() {
     const [addressId, setAddressId] = useState(null);
     const { formatPrice, selectedCountry } = useCountry();
     const { t } = useTranslation();
+
+    const availablePayments = getPaymentMethods(selectedCountry?.iso2);
+
+    useEffect(() => {
+        if (availablePayments.length > 0 && !availablePayments.find((m) => m.id === paymentMethod)) {
+            setPaymentMethod(availablePayments[0].id);
+        }
+    }, [selectedCountry?.iso2]);
 
     // const [paymentMethod, setPaymentMethod] = useState("Cash On Delivery");
 
@@ -34,6 +44,9 @@ export default function CheckoutForm() {
     useEffect(() => {
         fetchCart();
         fetchAddresses();
+        const handleCartUpdate = () => fetchCart();
+        window.addEventListener("cart-updated", handleCartUpdate);
+        return () => window.removeEventListener("cart-updated", handleCartUpdate);
     }, []);
 
     const fetchAddresses = async () => {
@@ -135,17 +148,33 @@ export default function CheckoutForm() {
 
    const placeOrder = async () => {
 
+    if (cartItems.length === 0) {
+        toastError(t("cart.emptyCart") || "Your cart is empty");
+        return;
+    }
+
     const token = localStorage.getItem("token");
 
     let id = selectedAddress;
 
     if (!id) {
-
         id = await saveAddress();
-
-        if (!id) return;
-
+        if (!id) {
+            toastError(t("checkout.addressRequired") || "Please select or add a shipping address");
+            return;
+        }
     }
+
+    const selectedMethod = availablePayments.find((m) => m.id === paymentMethod);
+    const paymentLabel = selectedMethod ? t(selectedMethod.labelKey) : paymentMethod;
+    const gateway = getGatewayForMethod(paymentMethod);
+
+    const orderItems = cartItems.map((item) => ({
+      name: item.product_name,
+      price: Number(item.variant_price || item.base_price),
+      quantity: item.quantity,
+      image: item.main_image ? `http://localhost:5000/${item.main_image.replace(/\\/g, "/")}` : "",
+    }));
 
     const res = await fetch(
         "http://localhost:5000/api/orders/place-order",
@@ -156,30 +185,63 @@ export default function CheckoutForm() {
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-
                 address_id: id,
-                payment_method: "Cash On Delivery",
+                payment_method: paymentLabel,
                 country: selectedCountry.name,
                 currency: selectedCountry.currency
-
             })
         }
     );
 
     const data = await res.json();
 
-    if (data.success) {
-
-        toastSuccess(t("checkout.orderSuccess"));
-
-        window.location.href = "/";
-
-    } else {
-
+    if (!data.success) {
         toastError(data.message);
-
+        return;
     }
 
+    const orderId = data.orderId;
+
+    if (!gateway) {
+        toastSuccess(t("checkout.orderSuccess"));
+        window.location.href = `/thank-you?order_id=${orderId}`;
+        return;
+    }
+
+    const onError = (msg) => {
+        toastError(t("payment.failed") || "Payment failed. Your order has been placed but payment was not completed. Please try again from My Orders.");
+    };
+
+    if (gateway === "stripe") {
+        payWithStripe({
+            orderId,
+            amount: total,
+            currency: selectedCountry.currency,
+            items: orderItems,
+            onError,
+        });
+    } else if (gateway === "razorpay") {
+        payWithRazorpay({
+            orderId,
+            amount: total,
+            currency: selectedCountry.currency,
+            customerName: formData.first_name || "",
+            customerEmail: formData.email || "",
+            customerPhone: formData.phone || "",
+            onSuccess: () => {
+                toastSuccess(t("checkout.orderSuccess"));
+                window.location.href = `/thank-you?order_id=${orderId}`;
+            },
+            onError,
+        });
+    } else if (gateway === "paypal") {
+        payWithPayPal({
+            orderId,
+            amount: total,
+            currency: selectedCountry.currency,
+            onError,
+        });
+    }
 };
 
     const handleChange = (e) => {
@@ -443,75 +505,37 @@ export default function CheckoutForm() {
                         </div>
                     </div>
 
-                    <div className="radio-group" style={{ marginTop: 10 }}>
-                        <label>
-                            <input
-                                type="radio"
-                                name="payment"
-                                value="direct"
-                                checked={paymentMethod === "direct"}
-                                onChange={() => setPaymentMethod("direct")}
-                            />
-                            {t("checkout.directBank")}
-                        </label>
+                    <div className="payment-methods-section">
+                        <h4 className="payment-section-title">{t("checkout.paymentMethod") || "Payment Method"}</h4>
 
-                        {paymentMethod === "direct" && (
-                            <div className="payment-instructions">
-                                Make your payment directly into our bank account. Please your
-                                Order ID as the payment reference. Your order will not be shipped
-                                until the funds have cleared in our account.
-                            </div>
-                        )}
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="payment"
-                                value="check"
-                                checked={paymentMethod === "check"}
-                                onChange={() => setPaymentMethod("check")}
-                            />
-                            {t("checkout.checkPayment")}
-                        </label>
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="payment"
-                                value="cod"
-                                checked={paymentMethod === "cod"}
-                                onChange={() => setPaymentMethod("cod")}
-                            />
-                            {t("checkout.cashOnDelivery")}
-                        </label>
-
-                        <label>
-                            <input
-                                type="radio"
-                                name="payment"
-                                value="paypal"
-                                checked={paymentMethod === "paypal"}
-                                onChange={() => setPaymentMethod("paypal")}
-                            />
-                            {t("checkout.paypal")}{" "}
-                            <img
-                                src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
-                                alt="PayPal"
-                                style={{ height: 16, verticalAlign: "middle", marginLeft: 5 }}
-                            />
-                            <span
-                                style={{
-                                    fontSize: 12,
-                                    marginLeft: 8,
-                                    color: "#333",
-                                    cursor: "pointer",
-                                    textDecoration: "underline",
-                                }}
-                                title="What is PayPal?"
-                            >
-                                {t("checkout.whatIsPaypal")}
-                            </span>
-                        </label>
+                        <div className="payment-methods-grid">
+                            {availablePayments.map((method) => (
+                                <div
+                                    key={method.id}
+                                    className={`payment-card ${paymentMethod === method.id ? "selected" : ""}`}
+                                    onClick={() => setPaymentMethod(method.id)}
+                                >
+                                    <div className="payment-card-radio">
+                                        <input
+                                            type="radio"
+                                            name="payment"
+                                            checked={paymentMethod === method.id}
+                                            onChange={() => setPaymentMethod(method.id)}
+                                        />
+                                    </div>
+                                    <div className="payment-card-content">
+                                        <span className="payment-card-icon">{method.icon}</span>
+                                        <div className="payment-card-info">
+                                            <div className="payment-card-label">{t(method.labelKey)}</div>
+                                            <div className="payment-card-desc">{t(method.descriptionKey)}</div>
+                                        </div>
+                                        <span className={`payment-badge ${method.type}`}>
+                                            {method.type === "online" ? (t("payment.online") || "Online") : (t("payment.offline") || "Offline")}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="terms-wrapper">

@@ -23,11 +23,22 @@
 }
 
 .signup-title {
-  color: #ff2b92;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
+}
+
+.signup-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 

@@ -65,3 +65,11 @@ export const removeCart = (userId, productId, variationId, callback) => {
 
   db.query(sql, [userId, productId, variationId || null], callback);
 };
+
+// Update cart quantity
+export const updateCartQuantity = (userId, cartId, quantity, callback) => {
+  const sql = `
+    UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?
+  `;
+  db.query(sql, [quantity, cartId, userId], callback);
+};

@@ -1,133 +1,86 @@
 import Breadcrumb from "../common/Breadcrumb";
 import Card from "../common/Card";
-import React, { useState } from "react";
-import "../../assets/style/Dashboard.css"
+import React, { useState, useEffect } from "react";
+import "../../assets/style/Dashboard.css";
 import { Dropdown } from "antd";
-import { FaDollarSign, FaWallet, FaUsers, FaShoppingCart, FaChevronDown, FaEllipsisV, } from "react-icons/fa";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, } from "recharts";
-// IMPORTS
-import { RiEyeLine, RiMore2Line, RiEditLine, RiDeleteBinLine, RiFileListLine, } from "react-icons/ri";
+import { FaDollarSign, FaWallet, FaUsers, FaShoppingCart, FaChevronDown, FaEllipsisV } from "react-icons/fa";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, Tooltip } from "recharts";
 import { useTranslation } from "../../hooks/useTranslation";
+
+const API = "http://localhost:5000";
 
 const Overview = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("active");
-  // STATES
-  const [openMenu, setOpenMenu] = useState(null);
+  const [activeTab, setActiveTab] = useState("Pending");
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  useEffect(() => {
+    fetch(`${API}/api/stats/overview`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setStats(data.data);
+      })
+      .catch((err) => console.error("Stats fetch error:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const [showProductDetails, setShowProductDetails] = useState(false);
-  // Dummy data
-  const orders = {
-    active: [
-      { customer: "Amanda Nanes", price: "$229.99", date: "24 May 2022" },
-    ],
-    completed: [
-      { customer: "Jackie Chen", price: "$129.99", date: "29 May 2022" },
-    ],
-    cancelled: [
-      { customer: "Robert Smith", price: "$99.99", date: "10 May 2022" },
-    ],
+  const counts = stats?.counts || {};
+  const monthlyRevenue = stats?.monthlyRevenue || [];
+  const recentOrders = stats?.recentOrders || [];
+  const topSellingProducts = stats?.topSellingProducts || [];
+  const topCustomers = stats?.topCustomers || [];
+  const ordersByStatus = stats?.ordersByStatus || [];
+
+  const chartData = monthlyRevenue.length > 0
+    ? monthlyRevenue.map((item) => ({
+        month: item.month,
+        value: Number(item.value),
+        fill: "#cab5ff",
+      }))
+    : [
+        { month: "Jan", value: 0, fill: "#e5e7eb" },
+        { month: "Feb", value: 0, fill: "#e5e7eb" },
+        { month: "Mar", value: 0, fill: "#e5e7eb" },
+        { month: "Apr", value: 0, fill: "#e5e7eb" },
+        { month: "May", value: 0, fill: "#e5e7eb" },
+        { month: "Jun", value: 0, fill: "#e5e7eb" },
+      ];
+
+  const formatCurrency = (val) => {
+    const num = Number(val) || 0;
+    return num >= 1000 ? `$${(num / 1000).toFixed(1)}k` : `$${num.toFixed(0)}`;
   };
 
-  const items = [
-    {
-      key: "1",
-      label: t("overview.download"),
-    },
-    {
-      key: "2",
-      label: t("overview.import"),
-    },
-    {
-      key: "3",
-      label: t("overview.export"),
-    },
-  ];
-  const recentOrders = [
-    {
-      name: "Smart Phone",
-      price: "$699",
-      img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200",
-    },
-  ];
+  const getOrdersForTab = (status) => {
+    if (status === "Pending") return recentOrders.filter((o) => o.order_status === "Pending");
+    if (status === "Confirmed") return recentOrders.filter((o) => o.order_status === "Confirmed");
+    if (status === "Cancelled") return recentOrders.filter((o) => o.order_status === "Cancelled");
+    return [];
+  };
 
-  const menuItems = [
-    {
-      key: "1",
-      label: t("overview.action"),
-    },
-    {
-      key: "2",
-      label: "Another Action",
-    },
-    {
-      key: "3",
-      label: "Something Else",
-    },
-  ];
-  const chartData = [
-    { month: "Jan", value: 45, fill: "#d9c8ff" },
-    { month: "Feb", value: 42, fill: "#d9c8ff" },
-    { month: "Mar", value: 58, fill: "#cab5ff" },
-    { month: "Apr", value: 85, fill: "#cab5ff" },
-    { month: "May", value: 110, fill: "#7c4dff" },
-    { month: "Jun", value: 55, fill: "#cab5ff" },
-    { month: "Jul", value: 70, fill: "#e5e7eb" },
-    { month: "Aug", value: 45, fill: "#e5e7eb" },
-    { month: "Sep", value: 25, fill: "#e5e7eb" },
-    { month: "Oct", value: 55, fill: "#e5e7eb" },
-    { month: "Nov", value: 78, fill: "#e5e7eb" },
-    { month: "Dec", value: 35, fill: "#e5e7eb" },
-  ];
+  const getStatusCount = (status) => {
+    const found = ordersByStatus.find((s) => s.order_status === status);
+    return found ? found.count : 0;
+  };
 
-  const customers = [
-    {
-      id: 1,
-      name: "Emma Wilson",
-      purchases: "15 Purchases",
-      amount: "$1,835",
-      img: "https://i.pravatar.cc/100?img=1",
-    },
-  ];
-  const countries = [
-    {
-      id: 1,
-      name: "France",
-      flag: "🇫🇷",
-      sales: "5,932",
-    },
-  ];
-  const products = [
-    {
-      id: 1,
-      name: "Niker College Bag",
-      productId: "#1734-9743",
-      price: "$199.99",
-      status: "Available",
-      sales: "3,903",
-      revenue: "$67,899",
-    },
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
 
-  ];
-  const topSellingProducts = [
-    {
-      id: 1,
-      productName: "Ethnic School Bag",
-      category: "Bags",
-      stock: t("overview.inStock"),
-      totalSales: "5,093",
-    },
-    {
-      id: 2,
-      productName: "Ethnic School Bag",
-      category: "Bags",
-      stock: t("overview.outOfStock"),
-      totalSales: "5,093",
-    },
-  ];
-
+  if (loading) {
+    return (
+      <div className="content">
+        <div className="page-top">
+          <h1 className="page-title">{t("overview.title")}</h1>
+          <Breadcrumb />
+        </div>
+        <p style={{ color: "#94a3b8", textAlign: "center", marginTop: 60 }}>{t("tables.loading")}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="content">
@@ -143,445 +96,391 @@ const Overview = () => {
           <div className="stats-grid">
             <Card
               title={t("overview.totalSales")}
-              value="14,732"
-              subtitle={`${t("overview.increase")} by +4.2% ${t("overview.thisMonth")}`}
+              value={formatCurrency(counts.totalRevenue)}
+              subtitle={`${counts.monthOrders || 0} orders this month`}
               icon={<FaDollarSign />}
               iconClass="purple"
             />
             <Card
-              title={t("overview.totalExpenses")}
-              value="$28,346"
-              subtitle={`${t("overview.increase")} by +12.0% ${t("overview.thisMonth")}`}
+              title="Monthly Revenue"
+              value={formatCurrency(counts.monthRevenue)}
+              subtitle={`${counts.pendingOrders || 0} pending orders`}
               icon={<FaWallet />}
               iconClass="blue"
             />
             <Card
-              title={t("overview.totalVisitors")}
-              value="1,29,368"
-              subtitle={`${t("overview.decrease")} by -7.6% ${t("overview.thisMonth")}`}
+              title="Total Reviews"
+              value={counts.totalReviews || 0}
+              subtitle="Customer feedback"
               icon={<FaUsers />}
               iconClass="green"
             />
             <Card
               title={t("overview.totalOrders")}
-              value="35,367"
-              subtitle={`${t("overview.increase")} by +2.5% ${t("overview.thisMonth")}`}
+              value={counts.totalOrders || 0}
+              subtitle={`${counts.totalProducts || 0} products listed`}
               icon={<FaShoppingCart />}
               iconClass="orange"
             />
           </div>
 
-          {/* PROMO + RECENT ORDERS */}
-          <div className="small-grid">
-            <Card title={t("overview.bigSavingDays")}>
-              <div className="promo-box">
-                <h3>{t("overview.biggestSale")}</h3>
-                <p>Lorem ipsum dolor sit amet.</p>
-                <button>{t("overview.notifyMe")}</button>
+          {/* RECENT ORDERS */}
+          <Card
+            title={
+              <div className="card-title-row">
+                <span>{t("overview.recentOrders")}</span>
               </div>
-            </Card>
-            <Card
-              title={
-                <div className="card-title-row">
-                  <span>{t("overview.recentOrders")}</span>
-                  <Dropdown
-                    menu={{ items: menuItems }}
-                    trigger={["click"]}
-                    placement="bottomRight"
-                  >
-                    <FaEllipsisV className="three-dot-icon" />
-                  </Dropdown>
-                </div>
-              }
-            >
-              <ul className="product-list">
-                {recentOrders.map((item, index) => (
-                  <li key={index}>
-                    <img src={item.img} alt="product" className="product-img" />
-                    <span className="product-name">{item.name}</span>
-                    <span className="product-price">{item.price}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            }
+          >
+            {recentOrders.length === 0 ? (
+              <p style={{ color: "#94a3b8", textAlign: "center", padding: 20 }}>No orders yet</p>
+            ) : (
+              <div className="table-scroll-wrap">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: 80 }}>Order</th>
+                      <th>{t("overview.customer")}</th>
+                      <th style={{ width: 100 }}>{t("overview.price")}</th>
+                      <th style={{ width: 110 }}>Status</th>
+                      <th style={{ width: 130 }}>{t("overview.date")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentOrders.map((order) => (
+                      <tr key={order.id}>
+                        <td>#{order.id}</td>
+                        <td title={order.customer_name || "Guest"}>{order.customer_name || "Guest"}</td>
+                        <td>{formatCurrency(order.total)}</td>
+                        <td>
+                          <span
+                            className={
+                              order.order_status === "Confirmed"
+                                ? "status-badge status-delivered"
+                                : order.order_status === "Cancelled"
+                                ? "status-badge status-cancelled"
+                                : "status-badge status-pending"
+                            }
+                          >
+                            {order.order_status}
+                          </span>
+                        </td>
+                        <td>{formatDate(order.created_at)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card>
 
-          </div>
-
-          {/* ORDERS TABLE */}
+          {/* ORDERS BY STATUS TABLE */}
           <Card>
             <div className="card-header-with-tabs">
-              <h3 className="card-title">Orders</h3>
+              <h3 className="card-title">Orders by Status</h3>
               <div className="card-tabs">
                 <button
-                  className={activeTab === "active" ? "tab active" : "tab"}
-                  onClick={() => setActiveTab("active")}
+                  className={activeTab === "Pending" ? "tab active" : "tab"}
+                  onClick={() => setActiveTab("Pending")}
                 >
-                  {t("overview.activeOrders")}
+                  Pending ({getStatusCount("Pending")})
                 </button>
                 <button
-                  className={activeTab === "completed" ? "tab active" : "tab"}
-                  onClick={() => setActiveTab("completed")}
+                  className={activeTab === "Confirmed" ? "tab active" : "tab"}
+                  onClick={() => setActiveTab("Confirmed")}
                 >
-                  {t("overview.completed")}
+                  {t("overview.completed")} ({getStatusCount("Confirmed")})
                 </button>
                 <button
-                  className={activeTab === "cancelled" ? "tab active" : "tab"}
-                  onClick={() => setActiveTab("cancelled")}
+                  className={activeTab === "Cancelled" ? "tab active" : "tab"}
+                  onClick={() => setActiveTab("Cancelled")}
                 >
-                  {t("overview.cancelled")}
+                  {t("overview.cancelled")} ({getStatusCount("Cancelled")})
                 </button>
               </div>
             </div>
-            {/* Table */}
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>{t("overview.customer")}</th>
-                  <th>{t("overview.price")}</th>
-                  <th>{t("overview.date")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders[activeTab].map((order, index) => (
-                  <tr key={index}>
-                    <td>{order.customer}</td>
-                    <td>{order.price}</td>
-                    <td>{order.date}</td>
+            <div className="table-scroll-wrap">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th style={{ width: 80 }}>Order</th>
+                    <th>{t("overview.customer")}</th>
+                    <th style={{ width: 100 }}>{t("overview.price")}</th>
+                    <th style={{ width: 120 }}>Payment</th>
+                    <th style={{ width: 130 }}>{t("overview.date")}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {getOrdersForTab(activeTab).length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={{ textAlign: "center", color: "#94a3b8", padding: "20px 0" }}>
+                        No {activeTab.toLowerCase()} orders
+                      </td>
+                    </tr>
+                  ) : (
+                    getOrdersForTab(activeTab).map((order) => (
+                      <tr key={order.id}>
+                        <td>#{order.id}</td>
+                        <td title={order.customer_name || "Guest"}>{order.customer_name || "Guest"}</td>
+                        <td>{formatCurrency(order.total)}</td>
+                        <td>
+                          <span className="status-badge status-pending">{order.payment_method}</span>
+                        </td>
+                        <td>{formatDate(order.created_at)}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
+
         {/* RIGHT COLUMN */}
         <div className="right-column">
-          {/* EARNINGS */}
+          {/* EARNINGS CHART */}
           <Card
             className="earnings-card"
             title={
               <div className="earnings-header">
-                <div className="earnings-title">
-                  {t("overview.earnings")}
-                </div>
+                <div className="earnings-title">{t("overview.earnings")}</div>
                 <div className="earnings-actions">
-                  <span className="view-all">
-                    {t("overview.viewAll")}
-                  </span>
-                  <Dropdown
-                    menu={{ items }}
-                    trigger={["click"]}
-                    placement="bottomRight"
-                  >
-                    <span>
-                      <FaChevronDown className="dropdown-icon" />
-                    </span>
-                  </Dropdown>
-
+                  <span className="view-all">{t("overview.viewAll")}</span>
                 </div>
-
               </div>
             }
           >
-
             {/* STATS */}
             <div className="earning-stats">
               <div className="earning-box">
                 <div className="earning-label purple-light">
                   <span className="dot"></span>
-                  {t("overview.firstHalf")}
+                  Total Revenue
                 </div>
                 <div className="earning-price">
-                  <h2>$51.94k</h2>
-                  <span className="badge success">
-                    +0.9%
-                  </span>
+                  <h2>{formatCurrency(counts.totalRevenue)}</h2>
                 </div>
               </div>
               <div className="earning-box">
                 <div className="earning-label purple">
                   <span className="dot"></span>
-                  {t("overview.topGross")}
+                  This Month
                 </div>
                 <div className="earning-price">
-                  <h2>$18.32k</h2>
-                  <span className="badge success">
-                    +0.39%
-                  </span>
-                </div>
-              </div>
-              <div className="earning-box">
-                <div className="earning-label gray">
-                  <span className="dot"></span>
-                  {t("overview.secondHalf")}
-                </div>
-                <div className="earning-price">
-                  <h2>$38k</h2>
-                  <span className="badge danger">
-                    -0.15%
-                  </span>
+                  <h2>{formatCurrency(counts.monthRevenue)}</h2>
                 </div>
               </div>
             </div>
 
             {/* CHART */}
             <div className="earnings-chart">
-              <ResponsiveContainer
-                width="100%"
-                height={260}
-              >
+              <ResponsiveContainer width="100%" height={260}>
                 <BarChart data={chartData}>
-                  <XAxis
-                    dataKey="month"
-                    axisLine={false}
-                    tickLine={false}
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <Tooltip
+                    cursor={{ fill: "rgba(124,77,255,0.08)" }}
+                    formatter={(val) => [`$${Number(val).toLocaleString()}`, "Revenue"]}
                   />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <Bar
-                    dataKey="value"
-                    radius={[20, 20, 20, 20]}
-                    barSize={15}
-                  >
+                  <Bar dataKey="value" radius={[20, 20, 20, 20]} barSize={15}>
                     {chartData.map((entry, index) => (
-                      <Cell
-                        key={index}
-                        fill={entry.fill}
-                      />
+                      <Cell key={index} fill={entry.fill} />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
-
           </Card>
-          {/* BOTTOM CARDS */}
+
+          {/* BOTTOM SECTION */}
           <div className="right-bottom-section">
-            {/* TOP FULL WIDTH */}
+            {/* TOP SELLING PRODUCTS */}
             <Card title={t("overview.topSellingProducts")}>
-              <table className="table">
-
-                <thead>
-                  <tr>
-                    <th>{t("overview.sNo")}</th>
-                    <th>{t("overview.productName")}</th>
-                    <th>{t("overview.category")}</th>
-                    <th>{t("overview.stock")}</th>
-                    <th>{t("overview.totalSales")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topSellingProducts.map((product, index) => (
-                    <tr key={product.id}>
-                      <td>{index + 1}</td>
-                      <td>{product.productName}</td>
-                      <td>{product.category}</td>
-                      <td>
-                        <span
-                          className={
-                            product.stock === t("overview.inStock")
-                              ? "stock in-stock"
-                              : "stock out-of-stock"
-                          }
-                        >
-                          {product.stock}
-                        </span>
-                      </td>
-
-                      <td>{product.totalSales}</td>
+              <div className="table-scroll-wrap">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: 40 }}>#</th>
+                      <th>{t("overview.productName")}</th>
+                      <th style={{ width: 110 }}>{t("overview.category")}</th>
+                      <th style={{ width: 80 }}>Price</th>
+                      <th style={{ width: 60 }}>Sold</th>
                     </tr>
-                  ))}
-                </tbody>
-
-              </table>
+                  </thead>
+                  <tbody>
+                    {topSellingProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} style={{ textAlign: "center", color: "#94a3b8", padding: "20px 0" }}>
+                          No products yet
+                        </td>
+                      </tr>
+                    ) : (
+                      topSellingProducts.map((product, index) => (
+                        <tr key={product.id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            <div className="product-cell">
+                              {product.main_image && (
+                                <img
+                                  src={`${API}/${product.main_image.replace(/\\/g, "/")}`}
+                                  alt=""
+                                />
+                              )}
+                              <span title={product.product_name}>{product.product_name}</span>
+                            </div>
+                          </td>
+                          <td>{product.category_name || "—"}</td>
+                          <td>{formatCurrency(product.base_price)}</td>
+                          <td>{product.totalSold}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </Card>
 
-            {/* BOTTOM 2 CARDS SAME ROW */}
+            {/* BOTTOM 2 CARDS */}
             <div className="bottom-two-cards">
-
-              <Card
-                title={
-                  <div className="card-title-row">
-                    <span>{t("overview.topCountriesBySales")}</span>
-
-                    <Dropdown
-                      menu={{ items: menuItems }}
-                      trigger={["click"]}
-                      placement="bottomRight"
-                    >
-                      <FaEllipsisV className="three-dot-icon" />
-                    </Dropdown>
-                  </div>
-                }
-              >
-                <div className="country-sales-card">
-
-                  {/* HEADER */}
-                  <div className="country-sales-header">
-
-                    <h2>38,256</h2>
-
-                    <div className="country-growth">
-                      <span className="growth-badge">12.24%</span>
-                      <p>{t("overview.sinceLastWeek")}</p>
-                    </div>
-
-                  </div>
-
-                  {/* COUNTRY LIST */}
-                  <ul className="country-sales-list">
-
-                    {countries.map((country) => (
-                      <li key={country.id}>
-
-                        <div className="country-left">
-                          <span className="flag">{country.flag}</span>
-
-                          <span className="country-name">
-                            {country.name}
-                          </span>
-                        </div>
-
-                        <span className="country-sales">
-                          {country.sales}
-                        </span>
-
-                      </li>
-                    ))}
-
-                  </ul>
-
-                </div>
-              </Card>
-
-              <Card
-                title={
-                  <div className="card-title-row">
-                    <span>{t("overview.topCustomers")}</span>
-
-                    <Dropdown
-                      menu={{ items: menuItems }}
-                      trigger={["click"]}
-                      placement="bottomRight"
-                    >
-                      <FaChevronDown className="three-dot-icon" />
-                    </Dropdown>
-                  </div>
-                }
-              >
+              <Card title={t("overview.topCustomers")}>
                 <ul className="customer-list">
-                  {customers.map((customer) => (
-                    <li key={customer.id} className="customer-item">
-                      <div className="customer-item-left">
-                        <img src={customer.img} className="customer-avatar" />
-
-                        <div className="customer-info">
-                          <h4>{customer.name}</h4>
-                          <span>{customer.purchases}</span>
+                  {topCustomers.length === 0 ? (
+                    <li style={{ color: "#94a3b8", textAlign: "center", padding: 20 }}>No customers yet</li>
+                  ) : (
+                    topCustomers.map((customer) => (
+                      <li key={customer.id} className="customer-item">
+                        <div className="customer-item-left">
+                          <img
+                            src={`https://i.pravatar.cc/100?u=${customer.email || customer.id}`}
+                            className="customer-avatar"
+                            alt=""
+                          />
+                          <div className="customer-info">
+                            <h4 title={customer.name || "Guest"}>{customer.name || "Guest"}</h4>
+                            <span>{customer.orderCount} order{customer.orderCount !== 1 ? "s" : ""}</span>
+                          </div>
                         </div>
-                      </div>
-
-                      <span className="customer-amount">
-                        {customer.amount}
-                      </span>
-                    </li>
-                  ))}
+                        <span className="customer-amount">{formatCurrency(customer.totalSpent)}</span>
+                      </li>
+                    ))
+                  )}
                 </ul>
               </Card>
-            </div>
 
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* PRODUCTS OVERVIEW */}
-      <Card title={t("overview.productsOverview")} className="products-card">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>{t("overview.name")}</th>
-              <th>{t("overview.productId")}</th>
-              <th>{t("overview.price")}</th>
-              <th>{t("overview.status")}</th>
-              <th>{t("overview.sales")}</th>
-              <th>{t("overview.revenue")}</th>
-              <th>{t("overview.actions")}</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {products.map((product, index) => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td>{product.productId}</td>
-                <td>{product.price}</td>
-                <td>{product.status}</td>
-                <td>{product.sales}</td>
-                <td>{product.revenue}</td>
-
-                {/* ACTIONS */}
-                <td>
-                  <div className="orders-action-buttons">
-
-                    {/* VIEW DETAILS */}
-                    <button
-                      className="orders-view-btn"
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setShowProductDetails(true);
-                      }}
-                    >
-                      <RiEyeLine />
-                    </button>
-
-                    {/* DROPDOWN */}
-                    <div className="orders-dropdown-wrapper">
-
-                      <button
-                        className="orders-menu-btn"
-                        onClick={() =>
-                          setOpenMenu(openMenu === index ? null : index)
-                        }
-                      >
-                        <RiMore2Line />
-                      </button>
-
-                      {openMenu === index && (
-                        <div className="orders-dropdown-menu">
-
-                          {/* OVERVIEW */}
-                          <button
-                            onClick={() => {
-                              setSelectedProduct(product);
-                              console.log("Overview:", product);
-                            }}
-                          >
-                            <RiFileListLine />
-                            {t("overview.title")}
-                          </button>
-
-                          {/* EDIT */}
-                          <button
-                            onClick={() => alert(`Edit ${product.name}`)}
-                          >
-                            <RiEditLine />
-                            {t("overview.edit")}
-                          </button>
-
-                          {/* DELETE */}
-                          <button onClick={() => alert(`Delete ${product.name}`)}><RiDeleteBinLine /> {t("overview.delete")}</button>
-                        </div>
-                      )}
+              <Card title={t("overview.topCountriesBySales")}>
+                <div className="country-sales-card">
+                  <div className="country-sales-header">
+                    <h2>{counts.totalOrders || 0}</h2>
+                    <div className="country-growth">
+                      <p>Total Orders</p>
                     </div>
                   </div>
-                </td>
+                  <ul className="country-sales-list">
+                    {recentOrders.slice(0, 5).map((order) => (
+                      <li key={order.id}>
+                        <div className="country-left">
+                          <span className="flag">📦</span>
+                          <span className="country-name" title={`#${order.id} — ${order.customer_name || "Guest"}`}>
+                            #{order.id} — {order.customer_name || "Guest"}
+                          </span>
+                        </div>
+                        <span className="country-sales">{formatCurrency(order.total)}</span>
+                      </li>
+                    ))}
+                    {recentOrders.length === 0 && (
+                      <li style={{ color: "#94a3b8", textAlign: "center", padding: 10 }}>No data</li>
+                    )}
+                  </ul>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* PRODUCTS OVERVIEW — ALL DETAILS */}
+      <Card title={t("overview.productsOverview")} className="products-card">
+        <div className="table-scroll-wrap">
+          <table className="table" style={{ tableLayout: "auto", minWidth: 1400 }}>
+            <thead>
+              <tr>
+                <th style={{ width: 40 }}>#</th>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Base Price</th>
+                <th>Sale Price</th>
+                <th>Stock</th>
+                <th>Sold</th>
+                <th>VAT</th>
+                <th>W × H</th>
+                <th>Weight</th>
+                <th>Ship Cost</th>
+                <th>Status</th>
+                <th>Tags</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {topSellingProducts.length === 0 ? (
+                <tr>
+                  <td colSpan={16} style={{ textAlign: "center", color: "#94a3b8", padding: "20px 0" }}>No products yet</td>
+                </tr>
+              ) : (
+                topSellingProducts.map((p, index) => (
+                  <tr key={p.id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {p.main_image ? (
+                        <img
+                          src={`${API}/${p.main_image.replace(/\\/g, "/")}`}
+                          alt=""
+                          style={{ width: 44, height: 44, borderRadius: 6, objectFit: "cover" }}
+                        />
+                      ) : (
+                        <span style={{ color: "#94a3b8" }}>—</span>
+                      )}
+                    </td>
+                    <td title={p.product_name}>
+                      <div className="product-cell">
+                        <span>{p.product_name}</span>
+                      </div>
+                    </td>
+                    <td>{p.sku || "—"}</td>
+                    <td>{p.category_name || "—"}</td>
+                    <td>{p.subcategory_name || "—"}</td>
+                    <td>{formatCurrency(p.base_price)}</td>
+                    <td>{p.sale_price ? formatCurrency(p.sale_price) : "—"}</td>
+                    <td>{p.stock ?? p.quantity ?? 0}</td>
+                    <td>{p.totalSold}</td>
+                    <td>{p.vat ? `${p.vat}%` : "—"}</td>
+                    <td>{p.width && p.height ? `${p.width}×${p.height}` : "—"}</td>
+                    <td>{p.weight ? `${p.weight}kg` : "—"}</td>
+                    <td>{p.shipping_cost ? formatCurrency(p.shipping_cost) : "—"}</td>
+                    <td>
+                      <span className={`status-badge ${p.status === "Active" ? "status-delivered" : "status-cancelled"}`}>
+                        {p.status || "Active"}
+                      </span>
+                    </td>
+                    <td title={p.tags}>
+                      {(() => {
+                        if (!p.tags) return "—";
+                        try {
+                          const arr = typeof p.tags === "string" ? JSON.parse(p.tags) : p.tags;
+                          if (Array.isArray(arr)) return arr.slice(0, 2).join(", ") + (arr.length > 2 ? ` +${arr.length - 2}` : "");
+                          return String(p.tags).slice(0, 30);
+                        } catch {
+                          return String(p.tags).slice(0, 30);
+                        }
+                      })()}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </Card>
     </div>
   );

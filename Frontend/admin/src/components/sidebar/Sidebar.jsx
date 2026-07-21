@@ -78,7 +78,7 @@ const Sidebar = ({ collapsed }) => {
                 { name: t("sidebar.createBlog"), path: "/dashboard/blogs/create" },
               ],
             },
-            { name: t("sidebar.chat") },
+            // { name: t("sidebar.chat") },
             { name: t("sidebar.contacts"), path: "/dashboard/contacts" },
             { name: t("sidebar.contactUs") },
             {
@@ -234,8 +234,8 @@ const Sidebar = ({ collapsed }) => {
           icon: <FiGrid />,
           badge: "3",
           children: [
-            { name: t("sidebar.basicTables") },
-            { name: t("sidebar.dataTables") },
+            { name: t("sidebar.basicTables"), path: "/dashboard/basic-tables" },
+            { name: t("sidebar.dataTables"), path: "/dashboard/data-tables" },
           ],
         },
         {
@@ -274,8 +274,8 @@ const Sidebar = ({ collapsed }) => {
   return (
     <div className={collapsed ? "sidebar collapsed" : "sidebar"}>
       <div className="sidebar-logo">
-        <div className="logo-icon">✦</div>
-        {!collapsed && <h2>Y<span>nex</span></h2>}
+        <img src="/images/logo.png" alt="Suvique" className="sidebar-logo-img" />
+        {!collapsed && <h2>Suvique</h2>}
       </div>
 
       <div className="sidebar-content">

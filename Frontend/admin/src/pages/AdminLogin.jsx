@@ -84,7 +84,10 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     return (
         <div className="admin_login_form">
             <div className="login-card">
-                <div className="brand">MAXTON ADMIN</div>
+                <div className="brand">
+                    <img src="/images/logo.png" alt="Suvique" className="brand-logo" />
+                    <span>Suvique</span>
+                </div>
                 <p>Enter your credentials to login your account</p>
                 {message && (
                     <div className={`custom-alert ${messageType}`}>

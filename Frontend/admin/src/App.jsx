@@ -35,6 +35,8 @@ import ProductInfoAdmin from "./components/Dashboard/ProductInfoAdmin";
 import BannerAdmin from "./components/Dashboard/BannerAdmin";
 import VideoAdmin from "./components/Dashboard/VideoAdmin";
 import ReviewAdmin from "./components/Dashboard/ReviewAdmin";
+import BasicTables from "./components/Dashboard/BasicTables";
+import DataTables from "./components/Dashboard/DataTables";
 import { SettingsProvider } from "./context/SettingsContext";
 import "./App.css";
 
@@ -58,13 +60,14 @@ const App = () => {
         <Routes>
 
         {/* Login */}
-        <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : (<AdminLogin setIsLoggedIn={setIsLoggedIn} />)} />
+        <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard/overview" /> : (<AdminLogin setIsLoggedIn={setIsLoggedIn} />)} />
         <Route
           path="/signup"
           element={<Signup />}
         />
         {/* Dashboard */}
         <Route path="/dashboard" element={isLoggedIn ? (<Dashboard setIsLoggedIn={setIsLoggedIn} />) : <Navigate to="/" />}>
+          <Route index element={<Navigate to="/dashboard/overview" replace />} />
           <Route path="overview" element={<Overview />} />
           <Route path="sales" element={<Sales />} />
           <Route path="orders" element={<Orders />} />
@@ -93,6 +96,8 @@ const App = () => {
           <Route path="reviews" element={<ReviewAdmin />} />
           <Route path="files" element={<FileManager />} />
           <Route path="files/recent" element={<FileManager recentOnly />} />
+          <Route path="basic-tables" element={<BasicTables />} />
+          <Route path="data-tables" element={<DataTables />} />
           {/* Category */}
           <Route path="categories" element={<CategoryList />} />
           <Route path="categories/create" element={<AddCategory />} />

@@ -16,6 +16,8 @@ import FAQSection from "./components/FAQSection"
 import ComparePage from "./components/ComparePage";
 import ShowroomPage from "./components/ShowroomPage"
 import Checkout from "./components/Checkout"
+import PaymentResult from "./pages/PaymentResult"
+import ThankYou from "./pages/ThankYou"
 import Blog1 from "./components/blog1";
 import Blog2 from "./components/Blog2";
 import BlogDetails from "./components/BlogDetails";
@@ -85,6 +87,9 @@ function App() {
         <Route path="/orders" element={<UserOrders />} />
         <Route path="/track-order" element={<TrackOrder />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/payment/success" element={<PaymentResult />} />
+        <Route path="/payment/fail" element={<PaymentResult />} />
+        <Route path="/thank-you" element={<ThankYou />} />
         {/* NotFound version 1 */}
         <Route
           path="/404-1"

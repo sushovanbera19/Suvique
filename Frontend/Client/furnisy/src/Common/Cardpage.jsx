@@ -24,29 +24,52 @@ const Cart = () => {
     return total + Number(price) * item.quantity;
   }, 0);
 
-  const increaseQty = (id) => {
+  const increaseQty = async (cartId) => {
+    const item = cartItems.find((i) => i.id === cartId);
+    if (!item) return;
+    const newQty = item.quantity + 1;
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
+      prev.map((i) => (i.id === cartId ? { ...i, quantity: newQty } : i))
     );
+    try {
+      const token = localStorage.getItem("token");
+      await fetch("http://localhost:5000/api/cart/update-quantity", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ cart_id: cartId, quantity: newQty }),
+      });
+      window.dispatchEvent(new Event("cart-updated"));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const decreaseQty = (id) => {
+  const decreaseQty = async (cartId) => {
+    const item = cartItems.find((i) => i.id === cartId);
+    if (!item || item.quantity <= 1) return;
+    const newQty = item.quantity - 1;
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+      prev.map((i) => (i.id === cartId ? { ...i, quantity: newQty } : i))
     );
+    try {
+      const token = localStorage.getItem("token");
+      await fetch("http://localhost:5000/api/cart/update-quantity", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ cart_id: cartId, quantity: newQty }),
+      });
+      window.dispatchEvent(new Event("cart-updated"));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
 
   useEffect(() => {
     fetchCart();
+    const handleCartUpdate = () => fetchCart();
+    window.addEventListener("cart-updated", handleCartUpdate);
+    return () => window.removeEventListener("cart-updated", handleCartUpdate);
   }, []);
 
   const fetchCart = async () => {

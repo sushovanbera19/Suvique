@@ -15,6 +15,9 @@ const CartSidebar = ({ open, onClose, onUpdate }) => {
         if (open) {
             fetchCart();
         }
+        const handleCartUpdate = () => { if (open) fetchCart(); };
+        window.addEventListener("cart-updated", handleCartUpdate);
+        return () => window.removeEventListener("cart-updated", handleCartUpdate);
     }, [open]);
 
     if (!open) return null;
@@ -57,7 +60,8 @@ const CartSidebar = ({ open, onClose, onUpdate }) => {
             if (data.success) {
                 toastSuccess("Removed from cart");
                 setCartItems((prev) => prev.filter((item) => item.product_id !== productId));
-                if (onUpdate) onUpdate();
+            if (onUpdate) onUpdate();
+            window.dispatchEvent(new Event("cart-updated"));
             } else {
                 toastError(data.message || "Failed to remove");
             }
@@ -67,10 +71,26 @@ const CartSidebar = ({ open, onClose, onUpdate }) => {
         }
     };
 
-    const handleQtyChange = (id, type) => {
-        setCartItems(prev =>
-            prev.map(item => item.id === id ? { ...item, quantity: type === "inc" ? item.quantity + 1 : Math.max(1, item.quantity - 1) } : item)
+    const handleQtyChange = async (cartId, type) => {
+        const item = cartItems.find((i) => i.id === cartId);
+        if (!item) return;
+        const newQty = type === "inc" ? item.quantity + 1 : Math.max(1, item.quantity - 1);
+        if (newQty === item.quantity) return;
+        setCartItems((prev) =>
+            prev.map((i) => (i.id === cartId ? { ...i, quantity: newQty } : i))
         );
+        try {
+            const token = localStorage.getItem("token");
+            await fetch("http://localhost:5000/api/cart/update-quantity", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ cart_id: cartId, quantity: newQty }),
+            });
+            if (onUpdate) onUpdate();
+            window.dispatchEvent(new Event("cart-updated"));
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const subtotal = cartItems.reduce(
@@ -137,11 +157,11 @@ const CartSidebar = ({ open, onClose, onUpdate }) => {
                         <div className="shipping-progress-bar"></div>
                     </div>
 
-                    <Link to="/cart" className="cart_sidebar_viewcart">
+                    <Link to="/cart" className="cart_sidebar_viewcart" onClick={onClose}>
                         {t("cartSidebar.viewCart")}
                     </Link>
 
-                    <Link to="/checkout" className="cart_sidebar_checkout-btn">
+                    <Link to="/checkout" className="cart_sidebar_checkout-btn" onClick={onClose}>
                         {t("cartSidebar.checkOut")}
                     </Link>
                 </div>

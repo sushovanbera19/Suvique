@@ -178,13 +178,26 @@ export default function TrackOrder() {
                     {order.items.map((item, idx) => (
                       <div key={idx} className="track-item-card" onClick={() => navigate(`/product-details-1/${item.product_id}`)}>
                         <img
-                          src={`${API}${item.main_image}`}
+                          src={`${API}/${item.main_image.replace(/\\/g, "/")}`}
                           alt={item.product_name}
                           className="track-item-img"
                           onError={(e) => { e.target.src = "https://via.placeholder.com/64"; }}
                         />
                         <div className="track-item-info">
                           <p className="track-item-name">{item.product_name}</p>
+                          {(item.color_code || item.size) && (
+                            <div className="order-expanded-variant">
+                              {item.color_code && (
+                                <span className="order-variant-color">
+                                  <span className="order-variant-dot" style={{ backgroundColor: item.color_code }} />
+                                  {item.color_code}
+                                </span>
+                              )}
+                              {item.size && (
+                                <span className="order-variant-size">{item.size}</span>
+                              )}
+                            </div>
+                          )}
                           <p className="track-item-meta">
                             {t("orders.qty") || "Qty"}: {item.quantity}
                           </p>

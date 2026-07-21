@@ -1,4 +1,4 @@
-import { addCart, getCart, removeCart } from "../models/cartModel.js";
+import { addCart, getCart, removeCart, updateCartQuantity } from "../models/cartModel.js";
 
 // Add to cart
 export const addToCart = (req, res) => {
@@ -63,5 +63,22 @@ export const deleteCart = (req, res) => {
       success: true,
       message: "Removed from cart",
     });
+  });
+};
+
+// Update cart quantity
+export const updateQuantity = (req, res) => {
+  const user_id = req.user.userId;
+  const { cart_id, quantity } = req.body;
+
+  if (!cart_id || !quantity || quantity < 1) {
+    return res.status(400).json({ success: false, message: "Invalid cart_id or quantity" });
+  }
+
+  updateCartQuantity(user_id, cart_id, quantity, (err) => {
+    if (err) {
+      return res.status(500).json({ success: false, message: err.message });
+    }
+    res.json({ success: true, message: "Quantity updated" });
   });
 };

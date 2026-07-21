@@ -64,7 +64,10 @@ const Signup = () => {
     return (
         <div className="signup-page">
             <div className="signup-card">
-                <h4 className="signup-title">MAXTON ADMIN</h4>
+                <h4 className="signup-title">
+                    <img src="/images/logo.png" alt="Suvique" className="signup-logo" />
+                    Suvique
+                </h4>
                 <p>Create your account to get started</p>
 
                 <form onSubmit={handleSubmit}>

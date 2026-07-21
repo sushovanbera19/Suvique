@@ -25,6 +25,8 @@ import bannerRoutes from "./routes/banner.routes.js";
 import videoRoutes from "./routes/video.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
 import couponRoutes from "./routes/coupon.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
+import statsRoutes from "./routes/stats.routes.js";
 
 
 const app = express();
@@ -60,6 +62,8 @@ app.use("/api/banners", bannerRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/stats", statsRoutes);
 
 // test route
 app.get("/", (req, res) => {

@@ -218,6 +218,16 @@ export const updateOrder = (orderId, payment_status, order_status, payment_metho
   });
 };
 
+export const updateOrderPaymentStatus = (orderId, payment_status, order_status) => {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE orders SET payment_status = ?, order_status = ? WHERE id = ?";
+    db.query(sql, [payment_status, order_status, orderId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
 // Get single order by id (with status)
 export const getOrderWithStatus = (orderId) => {
   return new Promise((resolve, reject) => {

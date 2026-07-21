@@ -28,12 +28,26 @@
 
 /* Brand */
 .admin_login_form .brand {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff2d95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
-  letter-spacing: 1px;
   text-align: center;
+}
+
+.admin_login_form .brand-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.admin_login_form .brand span {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
 }
 
 
