@@ -30,8 +30,7 @@
   cursor: pointer;
 }
 
-.user-profile img,
-.dropdown-header img {
+.user-profile img {
   width: 45px;
   height: 45px;
   border-radius: 50%;

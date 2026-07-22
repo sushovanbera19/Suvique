@@ -82,6 +82,7 @@ const AdminProfile = () => {
         showToast("success", "Avatar updated!");
         setAvatarFile(null);
         fetchProfile();
+        window.dispatchEvent(new Event("profile-updated"));
       } else {
         showToast("error", json.message || "Upload failed");
       }
@@ -113,6 +114,7 @@ const AdminProfile = () => {
         showToast("success", "Cover photo updated!");
         setCoverFile(null);
         fetchProfile();
+        window.dispatchEvent(new Event("profile-updated"));
       } else {
         showToast("error", json.message || "Upload failed");
       }
@@ -138,6 +140,7 @@ const AdminProfile = () => {
         showToast("success", "Profile updated!");
         setEditing(false);
         fetchProfile();
+        window.dispatchEvent(new Event("profile-updated"));
       } else {
         showToast("error", json.message || "Update failed");
       }

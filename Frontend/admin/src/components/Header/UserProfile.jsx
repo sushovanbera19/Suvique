@@ -16,12 +16,17 @@ const UserProfile = () => {
 
   useEffect(() => {
     if (!adminEmail) return;
-    fetch(`${API}/api/admin/profile?email=${encodeURIComponent(adminEmail)}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success && json.data) setProfile(json.data);
-      })
-      .catch(() => {});
+    const fetchProfile = () => {
+      fetch(`${API}/api/admin/profile?email=${encodeURIComponent(adminEmail)}`)
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.success && json.data) setProfile(json.data);
+        })
+        .catch(() => {});
+    };
+    fetchProfile();
+    window.addEventListener("profile-updated", fetchProfile);
+    return () => window.removeEventListener("profile-updated", fetchProfile);
   }, [adminEmail]);
 
   const displayName = profile?.name || adminName || "Admin";
