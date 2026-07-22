@@ -40,12 +40,14 @@ import SearchPage from "./pages/SearchPage";
 import { CompareProvider } from "./context/CompareContext";
 import { CountryProvider } from "./context/CountryContext";
 import { LanguageProvider } from "./context/LanguageContext";
+import { UISettingsProvider } from "./context/UISettingsContext";
 
 function App() {
   return (
     <CountryProvider>
     <LanguageProvider>
     <CompareProvider>
+    <UISettingsProvider>
     <BrowserRouter>
       {/* Topnav + Header always visible */}
       <div className="sticky-wrapper">
@@ -114,6 +116,7 @@ function App() {
       <FurnitureGallery />
       <Footer />
     </BrowserRouter>
+    </UISettingsProvider>
     </CompareProvider>
     </LanguageProvider>
     </CountryProvider>

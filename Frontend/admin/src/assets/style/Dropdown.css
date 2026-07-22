@@ -76,12 +76,11 @@
 .profile-dropdown li {
   display: flex;
   align-items: center;
-  /* justify-content: center; */
-
-  gap: 12px;
-  padding: 14px 20px;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   transition: 0.2s;
   text-align: center;
 }
@@ -405,4 +404,71 @@
   background: #fff;
   color: black;
   border: 1px solid black;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+/* =========================
+   NOTIFICATION DARK MODE
+   ========================= */
+body.dark .notification-dropdown {
+  background: #1a1a1a;
+}
+
+body.dark .notification-header {
+  border-color: #334155;
+}
+
+body.dark .notification-header h3 {
+  color: #f1f5f9;
+}
+
+body.dark .notification-header span {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38bdf8;
+}
+
+body.dark .notification-item {
+  border-color: #334155;
+}
+
+body.dark .notification-item.active {
+  background: rgba(139, 92, 246, 0.08);
+}
+
+body.dark .notification-content h4 {
+  color: #f1f5f9;
+}
+
+body.dark .notification-content p {
+  color: #94a3b8;
+}
+
+body.dark .notification-time {
+  color: #64748b;
+}
+
+body.dark .notification-close {
+  color: #64748b;
+}
+
+body.dark .notification-close:hover {
+  color: #f87171;
+  background: transparent;
+}
+
+body.dark .notification-footer button {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body.dark .notification-footer button:hover {
+  background: #475569;
+  color: #f1f5f9;
+  border-color: #475569;
 }

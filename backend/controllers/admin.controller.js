@@ -60,6 +60,9 @@ export const adminLogin = async (req, res) => {
       admin: {
         name: admin.name,
         email: admin.email,
+        avatar: admin.avatar || null,
+        cover_photo: admin.cover_photo || null,
+        role: admin.role || "Administrator",
       },
     });
 

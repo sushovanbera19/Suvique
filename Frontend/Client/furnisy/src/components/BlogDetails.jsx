@@ -6,6 +6,7 @@ import {
     FaXTwitter
 } from "react-icons/fa6";
 import { useTranslation } from "../context/LanguageContext";
+import { useSearchParams } from "react-router-dom";
 
 import AccountHeader from "../Common/AccountHeader";
 import BlogCard from "../Common/BlogCard";
@@ -21,30 +22,60 @@ const API = "http://localhost:5000";
 
 const BlogDetails = () => {
     const { t, lang } = useTranslation();
+    const [searchParams] = useSearchParams();
+    const blogId = searchParams.get("id");
     const [blog, setBlog] = useState(null);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`${API}/api/blogs/published?lang=${lang}`)
+        if (!blogId) {
+            setLoading(false);
+            return;
+        }
+
+        fetch(`${API}/api/blogs/${blogId}?lang=${lang}`)
             .then((res) => res.json())
             .then((data) => {
-                if (data.success && data.data.length > 0) {
-                    const first = data.data[0];
-                    setBlog(first);
-                    setRelatedBlogs(data.data.slice(1).map((b) => ({
-                        image: b.image,
-                        title: b.title,
-                        date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
-                        category: b.category,
-                        author: b.author,
-                        description: b.description,
-                    })));
+                if (data.success && data.data) {
+                    setBlog(data.data);
+                    // Fetch related blogs from same category
+                    fetch(`${API}/api/blogs/published?lang=${lang}`)
+                        .then((r) => r.json())
+                        .then((all) => {
+                            if (all.success) {
+                                const related = all.data
+                                    .filter((b) => b.id !== Number(blogId) && b.category === data.data.category)
+                                    .slice(0, 3)
+                                    .map((b) => ({
+                                        id: b.id,
+                                        image: b.image,
+                                        title: b.title,
+                                        date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
+                                        category: b.category,
+                                        author: b.author,
+                                        description: b.description,
+                                    }));
+                                setRelatedBlogs(related);
+                            }
+                        })
+                        .catch(() => {});
                 }
             })
             .catch(() => {})
             .finally(() => setLoading(false));
-    }, [lang]);
+    }, [blogId, lang]);
+
+    if (!blogId) {
+        return (
+            <>
+                <AccountHeader title={t("blog.details")} breadcrumb={`${t("common.home")} → ${t("blog.title")} → ${t("blog.details")}`} />
+                <div style={{ textAlign: "center", padding: "60px 20px", color: "#888" }}>
+                    No blog selected. Go back to the <a href="/blog-1">blog page</a> to browse articles.
+                </div>
+            </>
+        );
+    }
 
     if (loading) {
         return (
@@ -78,7 +109,7 @@ const BlogDetails = () => {
                 <article className="blog-details-content">
                     {blog.image && (
                         <img
-                            src={blog.image}
+                            src={blog.image.startsWith("http") ? blog.image : `${API}${blog.image.replace(/\\/g, "/")}`}
                             alt={blog.title}
                             className="blog-cover"
                         />

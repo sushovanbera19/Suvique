@@ -143,3 +143,81 @@ export const getOrdersByStatus = () => {
     });
   });
 };
+
+// Analytics: orders grouped by country
+export const getOrdersByCountry = () => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        COALESCE(ua.country, o.country, 'Unknown') AS country,
+        COUNT(o.id) AS orderCount,
+        COALESCE(SUM(o.total), 0) AS totalRevenue
+      FROM orders o
+      LEFT JOIN user_addresses ua ON o.address_id = ua.id
+      GROUP BY country
+      ORDER BY orderCount DESC
+    `;
+    db.query(sql, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// Analytics: orders grouped by payment method
+export const getOrdersByPaymentMethod = () => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        payment_method,
+        COUNT(*) AS count,
+        COALESCE(SUM(total), 0) AS totalRevenue
+      FROM orders
+      GROUP BY payment_method
+      ORDER BY count DESC
+    `;
+    db.query(sql, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// Analytics: orders grouped by currency
+export const getOrdersByCurrency = () => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        currency,
+        COUNT(*) AS count
+      FROM orders
+      GROUP BY currency
+      ORDER BY count DESC
+    `;
+    db.query(sql, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// Analytics: orders per month (for audience chart)
+export const getOrdersPerMonth = () => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT
+        DATE_FORMAT(created_at, '%b') AS month,
+        MONTH(created_at) AS monthNum,
+        COUNT(*) AS orders,
+        COALESCE(SUM(total), 0) AS revenue
+      FROM orders
+      WHERE created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
+      GROUP BY YEAR(created_at), MONTH(created_at)
+      ORDER BY YEAR(created_at), MONTH(created_at)
+    `;
+    db.query(sql, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};

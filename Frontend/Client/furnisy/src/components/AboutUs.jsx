@@ -130,21 +130,19 @@ const Aboutus_Video_BannerSection = ({ image, videoUrl }) => {
 
 /* ---------------- BRANDS SECTION ---------------- */
 const BrandsSection = () => {
-    const logos = [
-        "/images/brand1.webp",
-        "/images/brand2.webp",
-        "/images/brand 3.webp",
-        "/images/brand4.webp",
-        "/images/brand5.webp",
-        "/images/brand10.webp",
-        "/images/brand9.webp",
-        "/images/brand 8.webp",
-        "/images/brand7.webp",
-        "/images/brand6.webp",
-    ];
-
+    const [logos, setLogos] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const logosPerSlide = 5;
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/vendors/active")
+            .then((res) => res.json())
+            .then((json) => {
+                const data = json?.data || (Array.isArray(json) ? json : []);
+                setLogos(data.filter((v) => v.logo).map((v) => v.logo));
+            })
+            .catch(() => {});
+    }, []);
 
     const prevSlide = () => {
         setCurrentIndex((prev) =>
@@ -158,6 +156,8 @@ const BrandsSection = () => {
         );
     };
 
+    if (logos.length === 0) return null;
+
     const visibleLogos = logos.slice(currentIndex, currentIndex + logosPerSlide);
 
     return (
@@ -169,7 +169,7 @@ const BrandsSection = () => {
 
                 <div className="slide-wrapper">
                     {visibleLogos.map((logo, index) => (
-                        <img key={index} src={logo} alt={`Brand ${currentIndex + index}`} />
+                        <img key={index} src={`http://localhost:5000${logo.replace(/\\/g, "/")}`} alt={`Brand ${currentIndex + index + 1}`} />
                     ))}
                 </div>
 

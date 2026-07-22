@@ -42,16 +42,20 @@ const AdminLogin = ({ setIsLoggedIn }) => {
 
                 // save login
                 localStorage.setItem("adminAuth", "true");
+                localStorage.setItem("adminName", data.admin.name);
+                localStorage.setItem("adminEmail", data.admin.email);
 
-                localStorage.setItem(
-                    "adminName",
-                    data.admin.name
-                );
+                if (data.admin.avatar) {
+                    localStorage.setItem("adminImage", `http://localhost:5000${data.admin.avatar.replace(/\\/g, "/")}`);
+                } else {
+                    localStorage.removeItem("adminImage");
+                }
 
-                localStorage.setItem(
-                    "adminEmail",
-                    data.admin.email
-                );
+                if (data.admin.cover_photo) {
+                    localStorage.setItem("adminCover", `http://localhost:5000${data.admin.cover_photo.replace(/\\/g, "/")}`);
+                } else {
+                    localStorage.removeItem("adminCover");
+                }
 
                 // update react state
                 setIsLoggedIn(true);

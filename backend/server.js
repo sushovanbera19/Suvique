@@ -4,6 +4,7 @@ import cors from "cors";
 import "./config/db.js";
 import userRoutes from "./routes/user.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import adminProfileRoutes from "./routes/adminProfile.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import productCategoryRoutes from "./routes/productCategory.routes.js";
 import productSubCategoryRoutes from "./routes/productSubCategory.routes.js";
@@ -27,6 +28,10 @@ import reviewRoutes from "./routes/review.routes.js";
 import couponRoutes from "./routes/coupon.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
+import uiSettingsRoutes from "./routes/uiSettings.routes.js";
+import vendorRoutes from "./routes/vendor.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 
 const app = express();
@@ -35,12 +40,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin", adminProfileRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/product-category", productCategoryRoutes);
 app.use("/api/product-subcategory", productSubCategoryRoutes);
@@ -64,6 +71,10 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/ui-settings", uiSettingsRoutes);
+app.use("/api/vendors", vendorRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // test route
 app.get("/", (req, res) => {

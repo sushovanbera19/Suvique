@@ -14,6 +14,7 @@ import Inventory from "./components/dashboard/variation";
 import Vendors from "./components/dashboard/Vendors";
 import Support from "./components/dashboard/Support";
 import Settings from "./components/dashboard/Settings";
+import AdminProfile from "./components/dashboard/AdminProfile";
 import CategoryList from "./components/category/CategoryList";
 import AddCategory from "./components/category/AddCategory";
 import SubCategoryList from "./components/subcategory/SubCategoryList";
@@ -37,7 +38,18 @@ import VideoAdmin from "./components/Dashboard/VideoAdmin";
 import ReviewAdmin from "./components/Dashboard/ReviewAdmin";
 import BasicTables from "./components/Dashboard/BasicTables";
 import DataTables from "./components/Dashboard/DataTables";
+import ButtonsShowcase from "./components/Dashboard/ButtonsShowcase";
+import CardsShowcase from "./components/Dashboard/CardsShowcase";
+import ModalShowcase from "./components/Dashboard/ModalShowcase";
+import ChartsShowcase from "./components/Dashboard/ChartsShowcase";
+import ChartJsShowcase from "./components/Dashboard/ChartJsShowcase";
+import FormElementsShowcase from "./components/Dashboard/FormElementsShowcase";
+import FormValidationShowcase from "./components/Dashboard/FormValidationShowcase";
+import ShopAdmin from "./components/Dashboard/ShopAdmin";
+import ProductDetailsAdmin from "./components/Dashboard/ProductDetailsAdmin";
+import CartAdmin from "./components/Dashboard/CartAdmin";
 import { SettingsProvider } from "./context/SettingsContext";
+import { UISettingsProvider } from "./context/UISettingsContext";
 import "./App.css";
 
 const App = () => {
@@ -56,6 +68,7 @@ const App = () => {
 
   return (
     <SettingsProvider>
+      <UISettingsProvider>
       <BrowserRouter>
         <Routes>
 
@@ -80,6 +93,7 @@ const App = () => {
           <Route path="vendors" element={<Vendors />} />
           <Route path="support" element={<Support />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="profile" element={<AdminProfile />} />
           <Route path="about-us" element={<AboutUs />} />
           <Route path="blogs" element={<AdminBlog />} />
           <Route path="blogs/details" element={<BlogDetailsAdmin />} />
@@ -111,9 +125,25 @@ const App = () => {
             element={<EditSubCategory />}
           />
 
+          {/* UI Elements */}
+          <Route path="buttons" element={<ButtonsShowcase />} />
+          <Route path="cards" element={<CardsShowcase />} />
+          <Route path="modal" element={<ModalShowcase />} />
+          <Route path="apex-charts" element={<ChartsShowcase />} />
+          <Route path="chartjs" element={<ChartJsShowcase />} />
+          <Route path="form-elements" element={<FormElementsShowcase />} />
+          <Route path="form-validation" element={<FormValidationShowcase />} />
+
+          {/* Ecommerce */}
+          <Route path="shop" element={<ShopAdmin />} />
+          <Route path="product-details" element={<ProductDetailsAdmin />} />
+          <Route path="product-details/:id" element={<ProductDetailsAdmin />} />
+          <Route path="cart" element={<CartAdmin />} />
+
         </Route>
       </Routes>
       </BrowserRouter>
+      </UISettingsProvider>
     </SettingsProvider>
   );
 };

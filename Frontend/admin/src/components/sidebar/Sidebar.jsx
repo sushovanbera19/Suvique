@@ -29,12 +29,13 @@ const Sidebar = ({ collapsed }) => {
             { name: t("sidebar.products"), icon: <FiBox />, path: "/dashboard/products" },
             { name: t("sidebar.customers"), icon: <FiUsers />, path: "/dashboard/customers" },
             { name: t("sidebar.analytics"), icon: <FiBarChart2 />, path: "/dashboard/analytics" },
-            { name: t("sidebar.marketing"), icon: <FiPieChart />, path: "/dashboard/marketing" },
+            // { name: t("sidebar.marketing"), icon: <FiPieChart />, path: "/dashboard/marketing" },
             // { name: t("sidebar.finance"), icon: <FiCreditCard />, path: "/dashboard/finance" },
             { name: t("sidebar.variations"), icon: <FiActivity />, path: "/dashboard/inventory" },
             { name: t("sidebar.vendors"), icon: <FiBriefcase />, path: "/dashboard/vendors" },
             // { name: t("sidebar.support"), icon: <FiBookOpen />, path: "/dashboard/support" },
             { name: t("sidebar.settings"), icon: <FiSettings />, path: "/dashboard/settings" },
+            { name: "My Profile", icon: <FiUser />, path: "/dashboard/profile" },
           ],
         },
       ],
@@ -84,9 +85,9 @@ const Sidebar = ({ collapsed }) => {
             {
               name: t("sidebar.ecommerce"),
               children: [
-                { name: t("sidebar.shop") },
-                { name: t("sidebar.productDetails") },
-                { name: t("sidebar.cart") },
+                { name: t("sidebar.shop"), path: "/dashboard/shop" },
+                { name: t("sidebar.productDetails"), path: "/dashboard/product-details" },
+                { name: t("sidebar.cart"), path: "/dashboard/cart" },
               ],
             },
             {
@@ -102,7 +103,6 @@ const Sidebar = ({ collapsed }) => {
             { name: "Product Info", path: "/dashboard/product-info" },
             { name: "Banners", path: "/dashboard/banners" },
             { name: "Videos", path: "/dashboard/videos" },
-            { name: "Reviews", path: "/dashboard/reviews" },
             {
               name: t("sidebar.fileManager"),
               children: [
@@ -110,27 +110,29 @@ const Sidebar = ({ collapsed }) => {
                 { name: t("sidebar.recentFiles"), path: "/dashboard/files/recent" },
               ],
             },
-            {
-              name: t("sidebar.invoice"),
-              children: [
-                { name: t("sidebar.invoiceList") },
-                { name: t("sidebar.invoiceDetails") },
-              ],
-            },
-            { name: t("sidebar.landing") },
-            { name: t("sidebar.jobsLanding") },
+            { name: "Reviews", path: "/dashboard/reviews" },
+
+            // {
+            //   name: t("sidebar.invoice"),
+            //   children: [
+            //     { name: t("sidebar.invoiceList") },
+            //     { name: t("sidebar.invoiceDetails") },
+            //   ],
+            // },
+            // { name: t("sidebar.landing") },
+            // { name: t("sidebar.jobsLanding") },
           ],
         },
-        {
-          title: t("sidebar.task"),
-          icon: <FiCheckSquare />,
-          badge: t("sidebar.new"),
-          children: [
-            { name: t("sidebar.taskList") },
-            { name: t("sidebar.taskDetails") },
-            { name: t("sidebar.createTask") },
-          ],
-        },
+        // {
+        //   title: t("sidebar.task"),
+        //   icon: <FiCheckSquare />,
+        //   badge: t("sidebar.new"),
+        //   children: [
+        //     { name: t("sidebar.taskList") },
+        //     { name: t("sidebar.taskDetails") },
+        //     { name: t("sidebar.createTask") },
+        //   ],
+        // },
         {
           title: t("sidebar.authentication"),
           icon: <FiShield />,
@@ -140,14 +142,14 @@ const Sidebar = ({ collapsed }) => {
             { name: t("sidebar.forgotPassword") },
           ],
         },
-        {
-          title: t("sidebar.error"),
-          icon: <FiAlertTriangle />,
-          children: [
-            { name: t("sidebar.page404") },
-            { name: t("sidebar.page500") },
-          ],
-        },
+        // {
+        //   title: t("sidebar.error"),
+        //   icon: <FiAlertTriangle />,
+        //   children: [
+        //     { name: t("sidebar.page404") },
+        //     { name: t("sidebar.page500") },
+        //   ],
+        // },
       ],
     },
     {
@@ -157,75 +159,75 @@ const Sidebar = ({ collapsed }) => {
           title: t("sidebar.uiElements"),
           icon: <FiBox />,
           children: [
-            { name: t("sidebar.buttons") },
-            { name: t("sidebar.cards") },
-            { name: t("sidebar.modal") },
+            { name: t("sidebar.buttons"), path: "/dashboard/buttons" },
+            { name: t("sidebar.cards"), path: "/dashboard/cards" },
+            { name: t("sidebar.modal"), path: "/dashboard/modal" },
           ],
         },
-        {
-          title: t("sidebar.utilities"),
-          icon: <FiActivity />,
-          children: [
-            { name: t("sidebar.colors") },
-            { name: t("sidebar.borders") },
-            { name: t("sidebar.typography") },
-          ],
-        },
+        // {
+        //   title: t("sidebar.utilities"),
+        //   icon: <FiActivity />,
+        //   children: [
+        //     { name: t("sidebar.colors") },
+        //     { name: t("sidebar.borders") },
+        //     { name: t("sidebar.typography") },
+        //   ],
+        // },
         {
           title: t("sidebar.forms"),
           icon: <FiFileText />,
           children: [
-            { name: t("sidebar.formElements") },
-            { name: t("sidebar.formValidation") },
+            { name: t("sidebar.formElements"), path: "/dashboard/form-elements" },
+            { name: t("sidebar.formValidation"), path: "/dashboard/form-validation" },
           ],
         },
-        {
-          title: t("sidebar.advancedUI"),
-          icon: <FiLayers />,
-          children: [
-            { name: t("sidebar.dragDrop") },
-            { name: t("sidebar.rangeSlider") },
-          ],
-        },
-        {
-          title: t("sidebar.widgets"),
-          icon: <FiPieChart />,
-          badge: t("sidebar.hot"),
-          children: [
-            { name: t("sidebar.statistics") },
-            { name: t("sidebar.chartsWidget") },
-          ],
-        },
+        // {
+        //   title: t("sidebar.advancedUI"),
+        //   icon: <FiLayers />,
+        //   children: [
+        //     { name: t("sidebar.dragDrop") },
+        //     { name: t("sidebar.rangeSlider") },
+        //   ],
+        // },
+        // {
+        //   title: t("sidebar.widgets"),
+        //   icon: <FiPieChart />,
+        //   badge: t("sidebar.hot"),
+        //   children: [
+        //     { name: t("sidebar.statistics") },
+        //     { name: t("sidebar.chartsWidget") },
+        //   ],
+        // },
       ],
     },
-    {
-      section: t("sidebar.webApps"),
-      menus: [
-        {
-          title: t("sidebar.apps"),
-          icon: <FiGrid />,
-          badge: t("sidebar.new"),
-          children: [
-            { name: t("sidebar.kanban") },
-            { name: t("sidebar.calendar") },
-            { name: t("sidebar.chatApp") },
-          ],
-        },
-        {
-          title: t("sidebar.nestedMenu"),
-          icon: <FiLayers />,
-          children: [
-            {
-              name: t("sidebar.level1"),
-              children: [
-                { name: t("sidebar.level2") },
-                { name: t("sidebar.level21") },
-              ],
-            },
-          ],
-        },
-      ],
-    },
+    // {
+      // section: t("sidebar.webApps"),
+      // menus: [
+        // {
+        //   title: t("sidebar.apps"),
+        //   icon: <FiGrid />,
+        //   badge: t("sidebar.new"),
+        //   children: [
+        //     { name: t("sidebar.kanban") },
+        //     { name: t("sidebar.calendar") },
+        //     { name: t("sidebar.chatApp") },
+        //   ],
+        // },
+        // {
+        //   title: t("sidebar.nestedMenu"),
+        //   icon: <FiLayers />,
+        //   children: [
+        //     {
+        //       name: t("sidebar.level1"),
+        //       children: [
+        //         { name: t("sidebar.level2") },
+        //         { name: t("sidebar.level21") },
+        //       ],
+        //     },
+        //   ],
+        // },
+      // ],
+    // },
     {
       section: t("sidebar.tablesCharts"),
       menus: [
@@ -242,33 +244,33 @@ const Sidebar = ({ collapsed }) => {
           title: t("sidebar.charts"),
           icon: <FiBarChart2 />,
           children: [
-            { name: t("sidebar.apexCharts") },
-            { name: t("sidebar.chartJs") },
+            { name: t("sidebar.apexCharts"), path: "/dashboard/apex-charts" },
+            { name: t("sidebar.chartJs"), path: "/dashboard/chartjs" },
           ],
         },
       ],
     },
-    {
-      section: t("sidebar.mapsIcons"),
-      menus: [
-        {
-          title: t("sidebar.maps"),
-          icon: <FiMapPin />,
-          children: [
-            { name: t("sidebar.googleMaps") },
-            { name: t("sidebar.vectorMaps") },
-          ],
-        },
-        {
-          title: t("sidebar.icons"),
-          icon: <FiStar />,
-          children: [
-            { name: t("sidebar.fontAwesome") },
-            { name: t("sidebar.bootstrapIcons") },
-          ],
-        },
-      ],
-    },
+    // {
+    //   section: t("sidebar.mapsIcons"),
+    //   menus: [
+    //     // {
+    //     //   title: t("sidebar.maps"),
+    //     //   icon: <FiMapPin />,
+    //     //   children: [
+    //     //     { name: t("sidebar.googleMaps") },
+    //     //     { name: t("sidebar.vectorMaps") },
+    //     //   ],
+    //     // },
+    //     {
+    //       title: t("sidebar.icons"),
+    //       icon: <FiStar />,
+    //       children: [
+    //         { name: t("sidebar.fontAwesome") },
+    //         { name: t("sidebar.bootstrapIcons") },
+    //       ],
+    //     },
+    //   ],
+    // },
   ];
 
   return (

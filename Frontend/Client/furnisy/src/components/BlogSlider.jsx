@@ -17,6 +17,7 @@ const BlogSlider = () => {
             .then((data) => {
                 if (data.success) {
                     setBlogs(data.data.map((b) => ({
+                        id: b.id,
                         image: b.image,
                         title: b.title,
                         date: new Date(b.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }),
