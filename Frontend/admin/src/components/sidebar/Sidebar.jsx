@@ -118,6 +118,7 @@ const Sidebar = ({ collapsed }) => {
             { name: "Product Info", path: "/dashboard/product-info" },
             { name: "Banners", path: "/dashboard/banners" },
             { name: "Inspired Sections", path: "/dashboard/inspired-sections" },
+            { name: "Instagram Gallery", path: "/dashboard/instagram-gallery" },
             { name: "Videos", path: "/dashboard/videos" },
             {
               name: t("sidebar.fileManager"),

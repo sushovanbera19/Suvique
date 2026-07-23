@@ -47,6 +47,7 @@ import FormElementsShowcase from "./components/Dashboard/FormElementsShowcase";
 import FormValidationShowcase from "./components/Dashboard/FormValidationShowcase";
 import ManageBrand from "./components/Dashboard/ManageBrand";
 import InspiredAdmin from "./components/Dashboard/InspiredAdmin";
+import InstagramAdmin from "./components/Dashboard/InstagramAdmin";
 import ShopAdmin from "./components/Dashboard/ShopAdmin";
 import ProductDetailsAdmin from "./components/Dashboard/ProductDetailsAdmin";
 import CartAdmin from "./components/Dashboard/CartAdmin";
@@ -137,6 +138,7 @@ const App = () => {
           <Route path="form-validation" element={<FormValidationShowcase />} />
           <Route path="manage-brand" element={<ManageBrand />} />
           <Route path="inspired-sections" element={<InspiredAdmin />} />
+          <Route path="instagram-gallery" element={<InstagramAdmin />} />
 
           {/* Ecommerce */}
           <Route path="shop" element={<ShopAdmin />} />

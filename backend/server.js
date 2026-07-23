@@ -34,6 +34,7 @@ import vendorRoutes from "./routes/vendor.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import siteBrandRoutes from "./routes/siteBrand.routes.js";
 import inspiredSectionRoutes from "./routes/inspiredSection.routes.js";
+import instagramSectionRoutes from "./routes/instagramSection.routes.js";
 
 
 const app = express();
@@ -79,6 +80,7 @@ app.use("/api/vendors", vendorRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/site-brand", siteBrandRoutes);
 app.use("/api/inspired-sections", inspiredSectionRoutes);
+app.use("/api/instagram", instagramSectionRoutes);
 
 // test route
 app.get("/", (req, res) => {

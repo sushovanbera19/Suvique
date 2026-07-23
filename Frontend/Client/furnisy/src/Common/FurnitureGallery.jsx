@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/style/FurnitureGallery.css';
 import ReusableButton from '../Common/Commonbutton';
 import { FaInstagram } from 'react-icons/fa';
 import { useTranslation } from "../context/LanguageContext";
 
-const furnitureItems = [
-  {
-    id: 1,
-    src: "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800",
-    alt: "Cozy bedroom with beige bedding and built-in shelves",
-    
-  },
-];
+const API = "http://localhost:5000";
 
 function FurnitureGallery() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
+  const [section, setSection] = useState(null);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API}/api/instagram`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && json.data) {
+          setSection(json.data.section || null);
+          setItems(json.data.items || []);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!section || items.length === 0) return null;
+
   return (
     <div className="gallery-container">
       <div className="gallery-header">
-        <h2>{t("gallery.heading")}</h2>
-        
+        <h2>{lang === "en" ? section.heading : t("gallery.heading")}</h2>
+
         <ReusableButton
-          href="https://instagram.com"
+          href={section.instagram_url}
           target="_blank"
           text={
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <FaInstagram /> {t("gallery.follow")}
+              <FaInstagram /> {lang === "en" ? section.button_text : t("gallery.follow")}
             </span>
           }
           style={{
@@ -40,17 +50,19 @@ function FurnitureGallery() {
       </div>
 
       <div className="gallery-grid">
-        {furnitureItems.map(item => (
+        {items.map(item => (
           <div key={item.id} className="gallery-item">
             <div className="image-wrapper">
-              <img 
-                src={item.src} 
-                alt={item.alt} 
-                loading="lazy"
-              />
+              <a href={item.link || section.instagram_url} target="_blank" rel="noopener noreferrer" style={{ display: "block", width: "100%", height: "100%" }}>
+                <img
+                  src={item.image_url}
+                  alt={item.alt_text}
+                  loading="lazy"
+                />
+              </a>
               <div className="gallery-overlay">
                 <div className="gallery-overlay-content">
-                  <h3>{t("gallery.viewMore")}</h3>
+                  <h3>{lang === "en" ? section.overlay_text : t("gallery.viewMore")}</h3>
                 </div>
               </div>
             </div>
