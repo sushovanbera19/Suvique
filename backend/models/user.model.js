@@ -116,6 +116,69 @@ export const getUserCoverImage = (id) => {
   });
 };
 
+// get single user detail (safe fields, no password/blob)
+export const getUserDetail = (user_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT id, user_id, name, email, agreeTerms, status, created_at FROM users WHERE user_id = ?";
+    db.query(sql, [user_id], (err, result) => {
+      if (err) return reject(err);
+      resolve(result[0] || null);
+    });
+  });
+};
+
+// get user orders
+export const getUserOrders = (numericId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC";
+    db.query(sql, [numericId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// get user order items
+export const getUserOrderItems = (orderIds) => {
+  return new Promise((resolve, reject) => {
+    if (!orderIds.length) return resolve([]);
+    const sql = `SELECT oi.*, p.product_name, p.main_image
+      FROM order_items oi
+      LEFT JOIN products p ON oi.product_id = p.id
+      WHERE oi.order_id IN (${orderIds.map(() => "?").join(",")})
+      ORDER BY oi.id DESC`;
+    db.query(sql, orderIds, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// get user addresses
+export const getUserAddresses = (numericId) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM user_addresses WHERE user_id = ? ORDER BY is_default DESC, id DESC";
+    db.query(sql, [numericId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+// get user cart items
+export const getUserCartItems = (numericId) => {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT c.*, p.product_name, p.main_image, p.sale_price, p.base_price
+      FROM cart c
+      LEFT JOIN products p ON c.product_id = p.id
+      WHERE c.user_id = ?`;
+    db.query(sql, [numericId], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
 // update user cover photo (buffer + mimetype)
 export const updateUserCoverImage = (id, buffer, mimeType) => {
   return new Promise((resolve, reject) => {

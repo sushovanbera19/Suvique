@@ -1,4 +1,4 @@
-import { insertUser, findUserByEmail, getAllUsers, deleteUser, updateUser, findUserById, getUserImage, updateUserProfile, updateUserImage, getUserCoverImage, updateUserCoverImage } from "../models/user.model.js";
+import { insertUser, findUserByEmail, getAllUsers, deleteUser, updateUser, findUserById, getUserImage, updateUserProfile, updateUserImage, getUserCoverImage, updateUserCoverImage, getUserDetail, getUserOrders, getUserOrderItems, getUserAddresses, getUserCartItems } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -134,6 +134,33 @@ export const fetchUsers = async (req, res) => {
     res.json(users); // send all users
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+// fetch single user detail (profile + orders + addresses + cart)
+export const fetchUserDetail = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await getUserDetail(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    const [orders, addresses, cart] = await Promise.all([
+      getUserOrders(user.id),
+      getUserAddresses(user.id),
+      getUserCartItems(user.id),
+    ]);
+    let orderItems = [];
+    if (orders.length > 0) {
+      orderItems = await getUserOrderItems(orders.map((o) => o.id));
+    }
+    res.json({
+      success: true,
+      data: { user, orders, orderItems, addresses, cart },
+    });
+  } catch (error) {
+    console.error("fetchUserDetail error:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 

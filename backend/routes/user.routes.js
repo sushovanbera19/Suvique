@@ -3,6 +3,7 @@ import {
   createUser,
   loginUser,
   fetchUsers,
+  fetchUserDetail,
   deleteUserController,
   updateUserController,
   getUserProfile,
@@ -22,6 +23,7 @@ const router = express.Router();
 router.post("/signup", createUser);
 router.post("/login", loginUser);
 router.get("/all-users", fetchUsers);
+router.get("/detail/:userId", fetchUserDetail);
 
 router.get("/profile", verifyToken, getUserProfile);
 router.get("/profile/image/:id", getUserProfileImage);
