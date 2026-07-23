@@ -47,21 +47,27 @@ export const getActiveItems = () => {
   });
 };
 
-export const getItemById = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM instagram_items WHERE id = ?", [id], (err, result) => {
-      if (err) return reject(err);
-      resolve(result[0] || null);
-    });
-  });
-};
-
 export const createItem = (data) => {
   return new Promise((resolve, reject) => {
     const { image_url, alt_text, link, sort_order, is_active } = data;
     db.query(
       "INSERT INTO instagram_items (image_url, alt_text, link, sort_order, is_active) VALUES (?, ?, ?, ?, ?)",
       [image_url, alt_text || "", link || "", sort_order || 0, is_active !== undefined ? is_active : 1],
+      (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      }
+    );
+  });
+};
+
+export const bulkCreateItems = (items) => {
+  return new Promise((resolve, reject) => {
+    if (!items.length) return resolve({ affectedRows: 0 });
+    const values = items.map((item) => [item.image_url, item.alt_text || "", item.link || "", item.sort_order || 0, 1]);
+    db.query(
+      "INSERT INTO instagram_items (image_url, alt_text, link, sort_order, is_active) VALUES ?",
+      [values],
       (err, result) => {
         if (err) return reject(err);
         resolve(result);
@@ -92,6 +98,15 @@ export const updateItem = (id, data) => {
 export const deleteItem = (id) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM instagram_items WHERE id = ?", [id], (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+export const deleteAllItems = () => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM instagram_items", (err, result) => {
       if (err) return reject(err);
       resolve(result);
     });

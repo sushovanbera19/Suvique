@@ -53,15 +53,16 @@ function FurnitureGallery() {
         {items.map(item => (
           <div key={item.id} className="gallery-item">
             <div className="image-wrapper">
-              <a href={item.link || section.instagram_url} target="_blank" rel="noopener noreferrer" style={{ display: "block", width: "100%", height: "100%" }}>
-                <img
-                  src={item.image_url}
-                  alt={item.alt_text}
-                  loading="lazy"
-                />
-              </a>
+              {item.link ? (
+                <a href={item.link} target="_blank" rel="noopener noreferrer" style={{ display: "block", width: "100%", height: "100%" }}>
+                  <img src={item.image_url} alt={item.alt_text} loading="lazy" />
+                </a>
+              ) : (
+                <img src={item.image_url} alt={item.alt_text} loading="lazy" />
+              )}
               <div className="gallery-overlay">
                 <div className="gallery-overlay-content">
+                  <FaInstagram size={28} />
                   <h3>{lang === "en" ? section.overlay_text : t("gallery.viewMore")}</h3>
                 </div>
               </div>

@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Breadcrumb from "../common/Breadcrumb";
 import {
-  FiImage, FiSave, FiX, FiTrash2, FiPlus, FiEdit2,
-  FiSettings, FiGrid, FiArrowUp, FiArrowDown
+  FiSave, FiX, FiTrash2, FiSettings, FiGrid,
+  FiArrowUp, FiArrowDown, FiEye, FiEyeOff, FiRefreshCw, FiLink, FiImage, FiPlus
 } from "react-icons/fi";
 import { FaInstagram } from "react-icons/fa";
 import "../../assets/style/InstagramAdmin.css";
@@ -16,18 +16,18 @@ const InstagramAdmin = () => {
   const [toast, setToast] = useState({ type: "", msg: "" });
 
   // Section form
-  const [secForm, setSecForm] = useState({ heading: "", instagram_url: "", button_text: "", overlay_text: "" });
+  const [secForm, setSecForm] = useState({ heading: "", instagram_url: "", instagram_username: "", button_text: "", overlay_text: "" });
   const [secSaving, setSecSaving] = useState(false);
 
-  // Item form
-  const [showItemForm, setShowItemForm] = useState(false);
-  const [editItemId, setEditItemId] = useState(null);
-  const [itemForm, setItemForm] = useState({ alt_text: "", link: "", sort_order: 0, is_active: 1 });
-  const [itemImageFile, setItemImageFile] = useState(null);
-  const [itemImagePreview, setItemImagePreview] = useState(null);
-  const [itemImageUrl, setItemImageUrl] = useState("");
-  const [itemSaving, setItemSaving] = useState(false);
-  const fileRef = useRef(null);
+  // Fetch from Instagram
+  const [urlsInput, setUrlsInput] = useState("");
+  const [fetching, setFetching] = useState(false);
+  const [fetchedItems, setFetchedItems] = useState([]);
+  const [fetchErrors, setFetchErrors] = useState([]);
+
+  // Manual add
+  const [showManual, setShowManual] = useState(false);
+  const [manualForm, setManualForm] = useState({ image_url: "", alt_text: "", link: "" });
 
   const showToast = (type, msg) => {
     setToast({ type, msg });
@@ -46,6 +46,7 @@ const InstagramAdmin = () => {
           setSecForm({
             heading: secRes.data.heading || "",
             instagram_url: secRes.data.instagram_url || "",
+            instagram_username: secRes.data.instagram_username || "",
             button_text: secRes.data.button_text || "",
             overlay_text: secRes.data.overlay_text || "",
           });
@@ -68,94 +69,90 @@ const InstagramAdmin = () => {
         body: JSON.stringify(secForm),
       });
       const json = await res.json();
-      if (json.success) {
-        setSection(json.data);
-        showToast("success", "Settings saved!");
-      } else {
-        showToast("error", json.message || "Failed");
-      }
-    } catch {
-      showToast("error", "Failed");
-    } finally {
-      setSecSaving(false);
-    }
+      if (json.success) { setSection(json.data); showToast("success", "Settings saved!"); }
+      else showToast("error", json.message || "Failed");
+    } catch { showToast("error", "Failed"); }
+    finally { setSecSaving(false); }
   };
 
-  // Item form handlers
-  const resetItemForm = () => {
-    setItemForm({ alt_text: "", link: "", sort_order: 0, is_active: 1 });
-    setItemImageFile(null);
-    setItemImagePreview(null);
-    setEditItemId(null);
-    setShowItemForm(false);
+  const parseUrls = (text) => {
+    return text.split(/[\n,]+/).map((u) => u.trim()).filter((u) => u.length > 0 && u.includes("instagram.com"));
   };
 
-  const startEditItem = (item) => {
-    setItemForm({
-      alt_text: item.alt_text || "",
-      link: item.link || "",
-      sort_order: item.sort_order || 0,
-      is_active: item.is_active,
-    });
-    setItemImageFile(null);
-    setItemImagePreview(item.image_url || null);
-    setEditItemId(item.id);
-    setShowItemForm(true);
-  };
-
-  const handleItemImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setItemImageFile(file);
-    setItemImagePreview(URL.createObjectURL(file));
-  };
-
-  const handleItemSave = async () => {
-    const fd = new FormData();
-    Object.entries(itemForm).forEach(([k, v]) => fd.append(k, v));
-    if (itemImageFile) fd.append("image", itemImageFile);
-    else if (editItemId && itemImagePreview && !itemImagePreview.startsWith("blob:")) {
-      fd.append("image_url", itemForm.image_url || itemImagePreview);
-    }
-
-    const url = editItemId ? `${API}/api/instagram/items/${editItemId}` : `${API}/api/instagram/items`;
-    const method = editItemId ? "PUT" : "POST";
+  const handleFetch = async () => {
+    const urls = parseUrls(urlsInput);
+    if (urls.length === 0) return showToast("error", "Paste Instagram post/reel URLs");
+    setFetching(true);
+    setFetchErrors([]);
+    setFetchedItems([]);
     try {
-      const res = await fetch(url, { method, body: fd });
+      const res = await fetch(`${API}/api/instagram/fetch`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ urls }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setFetchedItems(json.data.fetched || []);
+        setFetchErrors(json.data.errors || []);
+        if (json.data.fetched.length === 0 && json.data.errors.length > 0) {
+          showToast("error", "Auto-fetch unavailable. Use 'Add Manually' below.");
+        } else if (json.data.fetched.length > 0) {
+          showToast("success", `${json.data.fetched.length} image(s) fetched!`);
+        }
+      } else showToast("error", json.message || "Failed");
+    } catch { showToast("error", "Fetch failed"); }
+    finally { setFetching(false); }
+  };
+
+  const handleSaveFetched = async (clearFirst = false) => {
+    if (fetchedItems.length === 0) return;
+    try {
+      const res = await fetch(`${API}/api/instagram/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: fetchedItems, clearFirst }),
+      });
+      const json = await res.json();
+      if (json.success) { setItems(json.data); setFetchedItems([]); setUrlsInput(""); showToast("success", `${json.data.length} images saved!`); }
+    } catch { showToast("error", "Save failed"); }
+  };
+
+  const handleManualAdd = async () => {
+    if (!manualForm.image_url.trim()) return showToast("error", "Image URL is required");
+    try {
+      const res = await fetch(`${API}/api/instagram/items`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(manualForm),
+      });
       const json = await res.json();
       if (json.success) {
         setItems(json.data);
-        resetItemForm();
-        showToast("success", editItemId ? "Item updated!" : "Item added!");
-      } else {
-        showToast("error", json.message || "Failed");
-      }
-    } catch {
-      showToast("error", "Failed");
-    }
+        setManualForm({ image_url: "", alt_text: "", link: "" });
+        setShowManual(false);
+        showToast("success", "Image added!");
+      } else showToast("error", json.message || "Failed");
+    } catch { showToast("error", "Failed"); }
   };
 
-  const handleDeleteItem = async (id) => {
-    if (!window.confirm("Delete this item?")) return;
+  const handleToggleItem = async (id, current) => {
     try {
-      const res = await fetch(`${API}/api/instagram/items/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/api/instagram/items/${id}/toggle`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: current ? 0 : 1 }),
+      });
       const json = await res.json();
-      if (json.success) {
-        setItems(json.data);
-        showToast("success", "Deleted!");
-      }
-    } catch {
-      showToast("error", "Failed");
-    }
+      if (json.success) setItems(json.data);
+    } catch {}
   };
 
   const handleSortItem = async (id, dir) => {
     const item = items.find((i) => i.id === id);
     if (!item) return;
     try {
-      const res = await fetch(`${API}/api/instagram/items/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`${API}/api/instagram/items/${id}/reorder`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sort_order: item.sort_order + dir }),
       });
       const json = await res.json();
@@ -163,16 +160,22 @@ const InstagramAdmin = () => {
     } catch {}
   };
 
-  const handleToggleItem = async (id, current) => {
+  const handleDeleteItem = async (id) => {
+    if (!window.confirm("Delete this image?")) return;
     try {
-      const res = await fetch(`${API}/api/instagram/items/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ is_active: current ? 0 : 1 }),
-      });
+      const res = await fetch(`${API}/api/instagram/items/${id}`, { method: "DELETE" });
       const json = await res.json();
-      if (json.success) setItems(json.data);
-    } catch {}
+      if (json.success) { setItems(json.data); showToast("success", "Deleted!"); }
+    } catch { showToast("error", "Failed"); }
+  };
+
+  const handleClearAll = async () => {
+    if (!window.confirm("Delete ALL gallery images?")) return;
+    try {
+      const res = await fetch(`${API}/api/instagram/items`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) { setItems([]); showToast("success", "All images cleared"); }
+    } catch { showToast("error", "Failed"); }
   };
 
   if (loading) {
@@ -200,7 +203,7 @@ const InstagramAdmin = () => {
 
       <div className="ig-wrap">
 
-        {/* Section Settings Card */}
+        {/* Section Settings */}
         <div className="ig-card">
           <div className="ig-card-header">
             <h3><FiSettings /> Section Settings</h3>
@@ -209,108 +212,161 @@ const InstagramAdmin = () => {
             <div className="ig-settings-grid">
               <div className="ig-field">
                 <label className="ig-label">Heading</label>
-                <input type="text" className="ig-input" value={secForm.heading} onChange={(e) => setSecForm({ ...secForm, heading: e.target.value })} placeholder="Section heading" />
+                <input type="text" className="ig-input" value={secForm.heading} onChange={(e) => setSecForm({ ...secForm, heading: e.target.value })} placeholder="Follow Us on Instagram" />
               </div>
               <div className="ig-field">
-                <label className="ig-label">Instagram URL</label>
-                <input type="url" className="ig-input" value={secForm.instagram_url} onChange={(e) => setSecForm({ ...secForm, instagram_url: e.target.value })} placeholder="https://instagram.com/yourprofile" />
+                <label className="ig-label">Instagram Username</label>
+                <div className="ig-input-with-icon">
+                  <FaInstagram className="ig-input-icon" />
+                  <input type="text" className="ig-input ig-input-icon-field" value={secForm.instagram_username} onChange={(e) => {
+                    const username = e.target.value.replace("@", "").trim();
+                    setSecForm({ ...secForm, instagram_username: username, instagram_url: `https://instagram.com/${username}` });
+                  }} placeholder="your_username" />
+                </div>
               </div>
               <div className="ig-field">
                 <label className="ig-label">Button Text</label>
                 <input type="text" className="ig-input" value={secForm.button_text} onChange={(e) => setSecForm({ ...secForm, button_text: e.target.value })} placeholder="Follow Us" />
               </div>
               <div className="ig-field">
-                <label className="ig-label">Overlay Text</label>
+                <label className="ig-label">Overlay Text (on hover)</label>
                 <input type="text" className="ig-input" value={secForm.overlay_text} onChange={(e) => setSecForm({ ...secForm, overlay_text: e.target.value })} placeholder="View More" />
               </div>
             </div>
             <div className="ig-settings-actions">
-              <a href={secForm.instagram_url} target="_blank" rel="noopener noreferrer" className="ig-btn ig-btn-link"><FaInstagram /> Preview Profile</a>
+              {secForm.instagram_url && (
+                <a href={secForm.instagram_url} target="_blank" rel="noopener noreferrer" className="ig-btn ig-btn-link"><FaInstagram /> Open Profile</a>
+              )}
               <button className="ig-btn ig-btn-save" onClick={handleSecSave} disabled={secSaving}><FiSave /> {secSaving ? "Saving..." : "Save Settings"}</button>
             </div>
           </div>
         </div>
 
-        {/* Gallery Items Card */}
+        {/* Add Images */}
         <div className="ig-card">
           <div className="ig-card-header">
-            <h3><FiGrid /> Gallery Items ({items.length})</h3>
-            <button className="ig-btn ig-btn-primary" onClick={() => { resetItemForm(); setShowItemForm(!showItemForm); }}>
-              <FiPlus /> {showItemForm ? "Close" : "Add Image"}
-            </button>
+            <h3><FiLink /> Add Images from Instagram</h3>
           </div>
+          <div className="ig-card-body">
 
-          {/* Add/Edit Item Form */}
-          {showItemForm && (
-            <div className="ig-item-form">
-              <div className="ig-item-form-grid">
-                <div>
-                  <label className="ig-label">Image</label>
-                  <div className="ig-image-upload" onClick={() => document.getElementById("ig-file-input").click()}>
-                    {itemImagePreview ? (
-                      <img src={itemImagePreview} alt="Preview" />
-                    ) : (
-                      <>
-                        <FiImage size={32} color="#94a3b8" />
-                        <span className="ig-image-upload-text">Click to upload</span>
-                      </>
-                    )}
+            {/* Auto fetch */}
+            <p className="ig-help-text">
+              <strong>Option 1:</strong> Paste Instagram post/reel URLs below. If oEmbed is available, images auto-fetch.
+            </p>
+            <div className="ig-field">
+              <textarea className="ig-textarea" rows={4} value={urlsInput} onChange={(e) => setUrlsInput(e.target.value)}
+                placeholder={"https://www.instagram.com/p/ABC123/\nhttps://www.instagram.com/reel/XYZ789/"} />
+            </div>
+            <div className="ig-fetch-actions">
+              <button className="ig-btn ig-btn-fetch" onClick={handleFetch} disabled={fetching || !urlsInput.trim()}>
+                <FiRefreshCw className={fetching ? "ig-spin" : ""} /> {fetching ? "Fetching..." : "Fetch Images"}
+              </button>
+            </div>
+
+            {/* Fetched preview */}
+            {fetchedItems.length > 0 && (
+              <div className="ig-fetched">
+                <div className="ig-fetched-header">
+                  <h4>Fetched {fetchedItems.length} image(s)</h4>
+                  <div className="ig-fetched-btns">
+                    <button className="ig-btn ig-btn-save" onClick={() => handleSaveFetched(false)}>Add to Gallery</button>
+                    <button className="ig-btn ig-btn-primary" onClick={() => handleSaveFetched(true)}>Replace All</button>
                   </div>
-                  <input id="ig-file-input" type="file" accept="image/*" style={{ display: "none" }} onChange={handleItemImageChange} />
                 </div>
-                <div className="ig-item-form-fields">
-                  <div className="ig-field">
-                    <label className="ig-label">Alt Text</label>
-                    <input type="text" className="ig-input" value={itemForm.alt_text} onChange={(e) => setItemForm({ ...itemForm, alt_text: e.target.value })} placeholder="Describe the image" />
-                  </div>
-                  <div className="ig-field">
-                    <label className="ig-label">Link (optional)</label>
-                    <input type="url" className="ig-input" value={itemForm.link} onChange={(e) => setItemForm({ ...itemForm, link: e.target.value })} placeholder="https://instagram.com/p/..." />
-                  </div>
-                  <div className="ig-field-row">
-                    <div className="ig-field">
-                      <label className="ig-label">Sort Order</label>
-                      <input type="number" className="ig-input" value={itemForm.sort_order} onChange={(e) => setItemForm({ ...itemForm, sort_order: parseInt(e.target.value) || 0 })} />
+                <div className="ig-fetched-grid">
+                  {fetchedItems.map((item, idx) => (
+                    <div className="ig-fetched-card" key={idx}>
+                      <img src={item.image_url} alt={item.alt_text} />
+                      <p className="ig-fetched-alt">{item.alt_text || "No caption"}</p>
                     </div>
-                    <div className="ig-field">
-                      <label className="ig-label">Status</label>
-                      <label className="ig-toggle">
-                        <input type="checkbox" checked={itemForm.is_active === 1} onChange={(e) => setItemForm({ ...itemForm, is_active: e.target.checked ? 1 : 0 })} />
-                        <span className="ig-toggle-slider"></span>
-                        <span className="ig-toggle-label">{itemForm.is_active ? "Active" : "Inactive"}</span>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="ig-item-form-btns">
-                    <button className="ig-btn ig-btn-cancel" onClick={resetItemForm}><FiX /> Cancel</button>
-                    <button className="ig-btn ig-btn-save" onClick={handleItemSave}><FiSave /> {editItemId ? "Update" : "Add"}</button>
-                  </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Items Grid */}
+            {fetchErrors.length > 0 && (
+              <div className="ig-fetch-errors">
+                {fetchErrors.map((err, i) => (
+                  <p key={i} className="ig-fetch-error"><FiX size={12} /> {err.url} — {err.error}</p>
+                ))}
+              </div>
+            )}
+
+            {/* Divider */}
+            <div className="ig-divider"><span>OR</span></div>
+
+            {/* Manual add */}
+            <p className="ig-help-text">
+              <strong>Option 2:</strong> Right-click any Instagram image → "Copy image address" → paste below. Add the post URL for the "View More" link.
+            </p>
+            <button className="ig-btn ig-btn-link" onClick={() => setShowManual(!showManual)}>
+              <FiImage /> {showManual ? "Close" : "Add Image Manually"}
+            </button>
+
+            {showManual && (
+              <div className="ig-manual-form">
+                <div className="ig-field">
+                  <label className="ig-label">Image URL *</label>
+                  <input type="url" className="ig-input" value={manualForm.image_url} onChange={(e) => setManualForm({ ...manualForm, image_url: e.target.value })} placeholder="Paste image URL from Instagram" />
+                </div>
+                <div className="ig-manual-row">
+                  <div className="ig-field" style={{ flex: 1 }}>
+                    <label className="ig-label">Instagram Post URL (for link)</label>
+                    <input type="url" className="ig-input" value={manualForm.link} onChange={(e) => setManualForm({ ...manualForm, link: e.target.value })} placeholder="https://www.instagram.com/p/..." />
+                  </div>
+                  <div className="ig-field" style={{ flex: 1 }}>
+                    <label className="ig-label">Alt Text</label>
+                    <input type="text" className="ig-input" value={manualForm.alt_text} onChange={(e) => setManualForm({ ...manualForm, alt_text: e.target.value })} placeholder="Caption or description" />
+                  </div>
+                </div>
+                <div className="ig-manual-actions">
+                  <button className="ig-btn ig-btn-cancel" onClick={() => { setShowManual(false); setManualForm({ image_url: "", alt_text: "", link: "" }); }}><FiX /> Cancel</button>
+                  <button className="ig-btn ig-btn-save" onClick={handleManualAdd}><FiPlus /> Add Image</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Current Gallery */}
+        <div className="ig-card">
+          <div className="ig-card-header">
+            <h3><FiGrid /> Gallery ({items.length} images)</h3>
+            {items.length > 0 && (
+              <button className="ig-btn ig-btn-delete-text" onClick={handleClearAll}><FiTrash2 /> Clear All</button>
+            )}
+          </div>
+
           {items.length === 0 ? (
-            <div className="ig-empty">No gallery items. Click "Add Image" to start.</div>
+            <div className="ig-empty">
+              <FaInstagram size={40} color="#d1d5db" />
+              <p>No images yet. Add images using the section above.</p>
+            </div>
           ) : (
             <div className="ig-items-grid">
               {items.map((item) => (
                 <div className="ig-item-card" key={item.id}>
                   <div className="ig-item-card-image">
-                    <img src={item.image_url} alt={item.alt_text} />
+                    <img src={item.image_url} alt={item.alt_text} loading="lazy" />
                     <div className="ig-item-card-overlay">
                       <span className={`ig-badge ${item.is_active ? "ig-badge-active" : "ig-badge-inactive"}`}>
-                        {item.is_active ? "Active" : "Off"}
+                        {item.is_active ? "Live" : "Off"}
                       </span>
                     </div>
+                    {item.link && (
+                      <a href={item.link} target="_blank" rel="noopener noreferrer" className="ig-item-card-link-overlay" title="Open on Instagram">
+                        <FaInstagram />
+                      </a>
+                    )}
                   </div>
                   <div className="ig-item-card-body">
-                    <p className="ig-item-card-alt">{item.alt_text || "No description"}</p>
+                    <p className="ig-item-card-alt" title={item.alt_text}>{item.alt_text || "No caption"}</p>
                     <div className="ig-item-card-actions">
-                      <button className="ig-icon-btn ig-icon-btn-edit" onClick={() => startEditItem(item)} title="Edit"><FiEdit2 /></button>
+                      {item.link && (
+                        <a href={item.link} target="_blank" rel="noopener noreferrer" className="ig-icon-btn ig-icon-btn-link" title="Open post"><FiLink /></a>
+                      )}
                       <button className="ig-icon-btn ig-icon-btn-toggle" onClick={() => handleToggleItem(item.id, item.is_active)} title={item.is_active ? "Hide" : "Show"}>
-                        {item.is_active ? <FiGrid /> : <FiGrid />}
+                        {item.is_active ? <FiEyeOff /> : <FiEye />}
                       </button>
                       <button className="ig-icon-btn ig-icon-btn-up" onClick={() => handleSortItem(item.id, -1)} title="Move up"><FiArrowUp /></button>
                       <button className="ig-icon-btn ig-icon-btn-down" onClick={() => handleSortItem(item.id, 1)} title="Move down"><FiArrowDown /></button>

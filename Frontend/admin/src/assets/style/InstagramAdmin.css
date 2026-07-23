@@ -396,7 +396,260 @@
   text-align: center;
   color: #94a3b8;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
+
+/* --- Input with icon --- */
+.ig-input-with-icon {
+  position: relative;
+}
+
+.ig-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #e1306c;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.ig-input-icon-field {
+  padding-left: 40px !important;
+}
+
+/* --- Textarea --- */
+.ig-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 10px;
+  font-size: 13px;
+  background: var(--input-bg, #fff);
+  color: var(--text-primary, #111827);
+  outline: none;
+  resize: vertical;
+  font-family: monospace;
+  line-height: 1.6;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ig-textarea:focus {
+  border-color: #e1306c;
+  box-shadow: 0 0 0 3px rgba(225, 48, 108, 0.12);
+}
+
+.ig-textarea::placeholder {
+  color: #c1c7d0;
+}
+
+.ig-help-text {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* --- Fetch Actions --- */
+.ig-fetch-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ig-btn-fetch {
+  background: linear-gradient(135deg, #e1306c, #833ab4);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(225, 48, 108, 0.3);
+}
+
+.ig-btn-fetch:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.ig-btn-fetch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ig-spin {
+  animation: ig-spin 1s linear infinite;
+}
+
+@keyframes ig-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- Fetched Results --- */
+.ig-fetched {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color, #edf1f7);
+}
+
+.ig-fetched-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ig-fetched-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.ig-fetched-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.ig-fetched-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.ig-fetched-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #dcfce7;
+  background: #f0fdf4;
+}
+
+.ig-fetched-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.ig-fetched-alt {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Fetch Errors --- */
+.ig-fetch-errors {
+  margin-top: 12px;
+}
+
+.ig-fetch-error {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+/* --- Delete All text button --- */
+.ig-btn-delete-text {
+  background: transparent;
+  color: #dc2626;
+  font-size: 13px;
+  height: 36px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ig-btn-delete-text:hover {
+  background: #fee2e2;
+}
+
+/* --- Divider --- */
+.ig-divider {
+  text-align: center;
+  margin: 24px 0;
+  position: relative;
+}
+
+.ig-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color, #e5e7eb);
+}
+
+.ig-divider span {
+  background: var(--card-bg, #fff);
+  padding: 0 16px;
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Manual Add Form --- */
+.ig-manual-form {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--input-bg, #f9fafb);
+  border: 1px solid var(--border-color, #edf1f7);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ig-manual-row {
+  display: flex;
+  gap: 14px;
+}
+
+.ig-manual-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* --- Link overlay on item card --- */
+.ig-item-card-link-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 28px;
+  opacity: 0;
+  transition: opacity 0.25s;
+  text-decoration: none;
+}
+
+.ig-item-card:hover .ig-item-card-link-overlay {
+  opacity: 1;
+}
+
+.ig-icon-btn-link {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.ig-icon-btn-link:hover { background: #c7d2fe; }
 
 /* =========================
    DARK MODE
@@ -514,8 +767,73 @@ body.dark .ig-empty {
   color: #4b5563;
 }
 
+body.dark .ig-textarea {
+  background: #111827;
+  border-color: #2d3748;
+  color: #f1f5f9;
+}
+
+body.dark .ig-textarea:focus {
+  border-color: #e1306c;
+  box-shadow: 0 0 0 3px rgba(225, 48, 108, 0.2);
+}
+
+body.dark .ig-textarea::placeholder {
+  color: #4b5563;
+}
+
+body.dark .ig-help-text {
+  color: #64748b;
+}
+
+body.dark .ig-fetched {
+  border-top-color: #2d3748;
+}
+
+body.dark .ig-fetched-card {
+  border-color: #064e3b;
+  background: #052e16;
+}
+
+body.dark .ig-fetched-alt {
+  color: #64748b;
+}
+
+body.dark .ig-btn-delete-text {
+  color: #f87171;
+}
+
+body.dark .ig-btn-delete-text:hover {
+  background: #450a0a;
+}
+
+body.dark .ig-icon-btn-link {
+  background: #1e1b4b;
+  color: #a5b4fc;
+}
+
+body.dark .ig-icon-btn-link:hover { background: #312e81; }
+
 body.dark .ig-item-form {
   border-top-color: #2d3748;
+}
+
+body.dark .ig-divider::before {
+  background: #2d3748;
+}
+
+body.dark .ig-divider span {
+  background: #1a1a1a;
+  color: #64748b;
+}
+
+body.dark .ig-manual-form {
+  background: #111827;
+  border-color: #2d3748;
+}
+
+body.dark .ig-fetched-header h4 {
+  color: #4ade80;
 }
 
 /* =========================
