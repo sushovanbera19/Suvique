@@ -2,7 +2,13 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
-import { fetchSiteBrand, updateSiteBrandCtrl } from "../controllers/siteBrand.controller.js";
+import {
+  fetchActiveBrand,
+  fetchAllBrands,
+  createBrandCtrl,
+  activateBrandCtrl,
+  deleteBrandCtrl,
+} from "../controllers/siteBrand.controller.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +17,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, path.join(__dirname, "../uploads/brand")),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    cb(null, `logo-${Date.now()}${ext}`);
+    cb(null, `brand-${Date.now()}${ext}`);
   },
 });
 
@@ -29,7 +35,10 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get("/", fetchSiteBrand);
-router.post("/", upload.single("logo"), updateSiteBrandCtrl);
+router.get("/", fetchActiveBrand);
+router.get("/all", fetchAllBrands);
+router.post("/", upload.single("logo"), createBrandCtrl);
+router.put("/:id/activate", activateBrandCtrl);
+router.delete("/:id", deleteBrandCtrl);
 
 export default router;

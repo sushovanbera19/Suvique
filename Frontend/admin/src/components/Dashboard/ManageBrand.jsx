@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import Breadcrumb from "../common/Breadcrumb";
-import { FiImage, FiSave, FiX, FiCheck, FiTrash2 } from "react-icons/fi";
+import {
+  FiImage, FiSave, FiX, FiCheck, FiTrash2, FiPlus,
+  FiPower, FiClock
+} from "react-icons/fi";
 
 const API = "http://localhost:5000";
 
 const ManageBrand = () => {
-  const [brand, setBrand] = useState(null);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [brandName, setBrandName] = useState("Suvique");
+  const [brandName, setBrandName] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState({ type: "", msg: "" });
+  const [showAdd, setShowAdd] = useState(false);
   const fileRef = useRef(null);
 
   const showToast = (type, msg) => {
@@ -19,23 +23,19 @@ const ManageBrand = () => {
     setTimeout(() => setToast({ type: "", msg: "" }), 3000);
   };
 
-  const fetchBrand = () => {
-    fetch(`${API}/api/site-brand`)
+  const fetchBrands = () => {
+    fetch(`${API}/api/site-brand/all`)
       .then((res) => res.json())
       .then((json) => {
-        if (json.success && json.data) {
-          setBrand(json.data);
-          setBrandName(json.data.brand_name || "Suvique");
-          if (json.data.logo_path) {
-            setLogoPreview(`${API}${json.data.logo_path}`);
-          }
-        }
+        if (json.success) setBrands(json.data || []);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchBrand(); }, []);
+  useEffect(() => { fetchBrands(); }, []);
+
+  const activeBrand = brands.find((b) => b.is_active);
 
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0];
@@ -44,7 +44,7 @@ const ManageBrand = () => {
     setLogoPreview(URL.createObjectURL(file));
   };
 
-  const handleSave = async () => {
+  const handleAddBrand = async () => {
     if (!brandName.trim()) return showToast("error", "Brand name is required");
     setSaving(true);
     try {
@@ -54,27 +54,55 @@ const ManageBrand = () => {
       const res = await fetch(`${API}/api/site-brand`, { method: "POST", body: fd });
       const json = await res.json();
       if (json.success) {
-        setBrand(json.data);
-        if (json.data.logo_path) {
-          setLogoPreview(`${API}${json.data.logo_path}`);
-        }
+        setBrands(json.data);
+        setBrandName("");
         setLogoFile(null);
-        showToast("success", "Brand updated successfully!");
-        window.dispatchEvent(new Event("brand-updated"));
+        setLogoPreview(null);
+        setShowAdd(false);
+        showToast("success", "Brand added! Click Activate to make it live.");
       } else {
-        showToast("error", json.message || "Update failed");
+        showToast("error", json.message || "Failed");
       }
     } catch (err) {
-      showToast("error", "Update failed");
+      showToast("error", "Failed");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleCancel = () => {
-    setBrandName(brand?.brand_name || "Suvique");
-    setLogoPreview(brand?.logo_path ? `${API}${brand.logo_path}` : null);
-    setLogoFile(null);
+  const handleActivate = async (id) => {
+    try {
+      const res = await fetch(`${API}/api/site-brand/${id}/activate`, { method: "PUT" });
+      const json = await res.json();
+      if (json.success) {
+        setBrands(json.data);
+        showToast("success", "Brand activated!");
+        window.dispatchEvent(new Event("brand-updated"));
+      }
+    } catch (err) {
+      showToast("error", "Failed to activate");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this brand?")) return;
+    try {
+      const res = await fetch(`${API}/api/site-brand/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        setBrands(json.data);
+        showToast("success", "Brand deleted");
+      } else {
+        showToast("error", json.message || "Cannot delete active brand");
+      }
+    } catch (err) {
+      showToast("error", "Failed to delete");
+    }
+  };
+
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    return `${API}${path.replace(/\\/g, "/")}`;
   };
 
   if (loading) {
@@ -100,8 +128,8 @@ const ManageBrand = () => {
         <Breadcrumb />
       </div>
 
-      <div style={{ maxWidth: 640 }}>
-        {/* Logo Card */}
+      <div style={{ maxWidth: 720 }}>
+        {/* Active Brand Card */}
         <div style={{
           background: "var(--card-bg, #fff)",
           border: "1px solid var(--border-color, #e2e8f0)",
@@ -109,47 +137,57 @@ const ManageBrand = () => {
           overflow: "hidden",
           marginBottom: 24,
         }}>
-          <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--border-color, #e2e8f0)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{
+            padding: "18px 24px",
+            borderBottom: "1px solid var(--border-color, #e2e8f0)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
             <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--text-primary, #1e293b)", display: "flex", alignItems: "center", gap: 8 }}>
-              <FiImage /> Logo
+              <FiPower /> Active Brand
             </h3>
+            <span style={{ padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "#dcfce7", color: "#16a34a" }}>
+              Live
+            </span>
           </div>
-          <div style={{ padding: 24 }}>
-            <div
-              onClick={() => fileRef.current?.click()}
-              style={{
-                width: 180,
-                height: 180,
+          {activeBrand ? (
+            <div style={{ padding: 24, display: "flex", alignItems: "center", gap: 20 }}>
+              <div style={{
+                width: 80,
+                height: 80,
                 borderRadius: 14,
-                border: "2px dashed var(--border-color, #e2e8f0)",
+                border: "2px solid var(--border-color, #e2e8f0)",
+                overflow: "hidden",
                 display: "flex",
-                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: "pointer",
-                overflow: "hidden",
                 background: "var(--input-bg, #f8fafc)",
-                transition: "border-color 0.2s",
-                margin: "0 auto",
-              }}
-            >
-              {logoPreview ? (
-                <img src={logoPreview} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-              ) : (
-                <>
-                  <FiImage size={36} color="#94a3b8" />
-                  <span style={{ fontSize: 12, color: "#94a3b8", marginTop: 8 }}>Click to upload</span>
-                </>
-              )}
+                flexShrink: 0,
+              }}>
+                {activeBrand.logo_path ? (
+                  <img src={getImageUrl(activeBrand.logo_path)} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                ) : (
+                  <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg, #667eea, #764ba2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 28, fontWeight: 700 }}>
+                    {activeBrand.brand_name.charAt(0)}
+                  </div>
+                )}
+              </div>
+              <div>
+                <h2 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 700, color: "var(--text-primary, #1e293b)" }}>
+                  {activeBrand.brand_name}
+                </h2>
+                <p style={{ margin: 0, fontSize: 13, color: "#94a3b8" }}>
+                  Created {new Date(activeBrand.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                </p>
+              </div>
             </div>
-            <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoChange} />
-            <p style={{ textAlign: "center", fontSize: 12, color: "#94a3b8", marginTop: 12 }}>
-              Recommended: 200×200px, PNG or SVG
-            </p>
-          </div>
+          ) : (
+            <div style={{ padding: 32, textAlign: "center", color: "#94a3b8" }}>No active brand</div>
+          )}
         </div>
 
-        {/* Brand Name Card */}
+        {/* Add New Brand */}
         <div style={{
           background: "var(--card-bg, #fff)",
           border: "1px solid var(--border-color, #e2e8f0)",
@@ -157,104 +195,277 @@ const ManageBrand = () => {
           overflow: "hidden",
           marginBottom: 24,
         }}>
-          <div style={{ padding: "18px 24px", borderBottom: "1px solid var(--border-color, #e2e8f0)" }}>
-            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--text-primary, #1e293b)" }}>
-              Brand Name
-            </h3>
-          </div>
-          <div style={{ padding: 24 }}>
-            <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.3, marginBottom: 6 }}>
-              Brand / Company Name
-            </label>
-            <input
-              type="text"
-              value={brandName}
-              onChange={(e) => setBrandName(e.target.value)}
-              placeholder="Enter brand name"
-              style={{
-                width: "100%",
-                padding: "10px 14px",
-                border: "1px solid var(--border-color, #e2e8f0)",
-                borderRadius: 8,
-                fontSize: 14,
-                background: "var(--input-bg, #fff)",
-                color: "var(--text-primary, #1e293b)",
-                outline: "none",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-          <button
-            onClick={handleCancel}
+          <div
             style={{
-              height: 42,
-              padding: "0 22px",
-              borderRadius: 10,
-              border: "1px solid var(--border-color, #e5e7eb)",
-              background: "var(--input-bg, #f1f5f9)",
-              color: "#64748b",
-              fontSize: 14,
-              fontWeight: 600,
+              padding: "18px 24px",
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              gap: 8,
               cursor: "pointer",
             }}
+            onClick={() => setShowAdd(!showAdd)}
           >
-            <FiX /> Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            style={{
-              height: 42,
-              padding: "0 22px",
-              borderRadius: 10,
-              border: "none",
-              background: "var(--btn-primary-bg, #667eea)",
-              color: "#fff",
-              fontSize: 14,
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              cursor: saving ? "not-allowed" : "pointer",
-              opacity: saving ? 0.6 : 1,
-            }}
-          >
-            <FiSave /> {saving ? "Saving..." : "Save Changes"}
-          </button>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--text-primary, #1e293b)", display: "flex", alignItems: "center", gap: 8 }}>
+              <FiPlus /> Add New Brand
+            </h3>
+            <FiChevronIcon open={showAdd} />
+          </div>
+
+          {showAdd && (
+            <div style={{ padding: "0 24px 24px", borderTop: "1px solid var(--border-color, #e2e8f0)", paddingTop: 20 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 20, alignItems: "start" }}>
+                {/* Logo Upload */}
+                <div>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.3, marginBottom: 8 }}>
+                    Logo
+                  </label>
+                  <div
+                    onClick={() => fileRef.current?.click()}
+                    style={{
+                      width: 120,
+                      height: 120,
+                      borderRadius: 14,
+                      border: "2px dashed var(--border-color, #e2e8f0)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      overflow: "hidden",
+                      background: "var(--input-bg, #f8fafc)",
+                    }}
+                  >
+                    {logoPreview ? (
+                      <img src={logoPreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                    ) : (
+                      <>
+                        <FiImage size={28} color="#94a3b8" />
+                        <span style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>Upload</span>
+                      </>
+                    )}
+                  </div>
+                  <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoChange} />
+                </div>
+
+                {/* Brand Name */}
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.3, marginBottom: 8 }}>
+                    Brand Name
+                  </label>
+                  <input
+                    type="text"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    placeholder="Enter brand name"
+                    style={{
+                      width: "100%",
+                      padding: "10px 14px",
+                      border: "1px solid var(--border-color, #e2e8f0)",
+                      borderRadius: 8,
+                      fontSize: 14,
+                      background: "var(--input-bg, #fff)",
+                      color: "var(--text-primary, #1e293b)",
+                      outline: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 16 }}>
+                    <button
+                      onClick={() => { setShowAdd(false); setBrandName(""); setLogoFile(null); setLogoPreview(null); }}
+                      style={{
+                        height: 38,
+                        padding: "0 18px",
+                        borderRadius: 8,
+                        border: "1px solid var(--border-color, #e5e7eb)",
+                        background: "var(--input-bg, #f1f5f9)",
+                        color: "#64748b",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <FiX /> Cancel
+                    </button>
+                    <button
+                      onClick={handleAddBrand}
+                      disabled={saving}
+                      style={{
+                        height: 38,
+                        padding: "0 18px",
+                        borderRadius: 8,
+                        border: "none",
+                        background: "var(--btn-primary-bg, #667eea)",
+                        color: "#fff",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        cursor: saving ? "not-allowed" : "pointer",
+                        opacity: saving ? 0.6 : 1,
+                      }}
+                    >
+                      <FiSave /> {saving ? "Adding..." : "Add Brand"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Preview */}
+        {/* All Brands History */}
         <div style={{
-          marginTop: 32,
-          padding: 24,
           background: "var(--card-bg, #fff)",
           border: "1px solid var(--border-color, #e2e8f0)",
           borderRadius: 14,
+          overflow: "hidden",
         }}>
-          <h3 style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.3 }}>
-            Preview
-          </h3>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {logoPreview ? (
-              <img src={logoPreview} alt="Logo" style={{ width: 40, height: 40, borderRadius: 8, objectFit: "contain" }} />
-            ) : (
-              <div style={{ width: 40, height: 40, borderRadius: 8, background: "linear-gradient(135deg, #667eea, #764ba2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 16 }}>
-                {brandName.charAt(0)}
-              </div>
-            )}
-            <span style={{ fontSize: 20, fontWeight: 700, color: "var(--text-primary, #1e293b)" }}>{brandName}</span>
+          <div style={{
+            padding: "18px 24px",
+            borderBottom: "1px solid var(--border-color, #e2e8f0)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "var(--text-primary, #1e293b)", display: "flex", alignItems: "center", gap: 8 }}>
+              <FiClock /> Brand History
+            </h3>
+            <span style={{ padding: "3px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600, background: "#f1f5f9", color: "#64748b" }}>
+              {brands.length} total
+            </span>
           </div>
+
+          {brands.length === 0 ? (
+            <div style={{ padding: 32, textAlign: "center", color: "#94a3b8" }}>No brands yet</div>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ background: "#f8fafc" }}>
+                    <th style={{ padding: "12px 18px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.3 }}>Logo</th>
+                    <th style={{ padding: "12px 18px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.3 }}>Brand Name</th>
+                    <th style={{ padding: "12px 18px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.3 }}>Status</th>
+                    <th style={{ padding: "12px 18px", textAlign: "left", fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.3 }}>Created</th>
+                    <th style={{ padding: "12px 18px", textAlign: "right", fontSize: 12, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.3 }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brands.map((brand) => (
+                    <tr key={brand.id} style={{ borderTop: "1px solid #f1f5f9" }}>
+                      <td style={{ padding: "14px 18px" }}>
+                        <div style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 10,
+                          border: "1px solid #e2e8f0",
+                          overflow: "hidden",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "#f8fafc",
+                        }}>
+                          {brand.logo_path ? (
+                            <img src={getImageUrl(brand.logo_path)} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                          ) : (
+                            <span style={{ fontSize: 18, fontWeight: 700, color: "#667eea" }}>{brand.brand_name.charAt(0)}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ padding: "14px 18px", fontSize: 14, fontWeight: 600, color: "var(--text-primary, #1e293b)" }}>
+                        {brand.brand_name}
+                      </td>
+                      <td style={{ padding: "14px 18px" }}>
+                        <span style={{
+                          padding: "4px 12px",
+                          borderRadius: 20,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          background: brand.is_active ? "#dcfce7" : "#f1f5f9",
+                          color: brand.is_active ? "#16a34a" : "#94a3b8",
+                        }}>
+                          {brand.is_active ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td style={{ padding: "14px 18px", fontSize: 13, color: "#94a3b8" }}>
+                        {new Date(brand.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                      </td>
+                      <td style={{ padding: "14px 18px", textAlign: "right" }}>
+                        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                          {!brand.is_active && (
+                            <>
+                              <button
+                                onClick={() => handleActivate(brand.id)}
+                                title="Activate"
+                                style={{
+                                  width: 34,
+                                  height: 34,
+                                  borderRadius: 8,
+                                  border: "none",
+                                  background: "#dcfce7",
+                                  color: "#16a34a",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                  fontSize: 14,
+                                }}
+                              >
+                                <FiPower />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(brand.id)}
+                                title="Delete"
+                                style={{
+                                  width: 34,
+                                  height: 34,
+                                  borderRadius: 8,
+                                  border: "none",
+                                  background: "#fee2e2",
+                                  color: "#dc2626",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  cursor: "pointer",
+                                  fontSize: 14,
+                                }}
+                              >
+                                <FiTrash2 />
+                              </button>
+                            </>
+                          )}
+                          {brand.is_active && (
+                            <span style={{ fontSize: 12, color: "#16a34a", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+                              <FiCheck size={14} /> Live
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
+const FiChevronIcon = ({ open }) => (
+  <span style={{
+    transform: open ? "rotate(180deg)" : "rotate(0)",
+    transition: "transform 0.2s",
+    display: "flex",
+    fontSize: 18,
+    color: "#64748b",
+  }}>
+    ▾
+  </span>
+);
 
 export default ManageBrand;
