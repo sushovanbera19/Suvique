@@ -33,6 +33,7 @@ import uiSettingsRoutes from "./routes/uiSettings.routes.js";
 import vendorRoutes from "./routes/vendor.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import siteBrandRoutes from "./routes/siteBrand.routes.js";
+import inspiredSectionRoutes from "./routes/inspiredSection.routes.js";
 
 
 const app = express();
@@ -77,6 +78,7 @@ app.use("/api/ui-settings", uiSettingsRoutes);
 app.use("/api/vendors", vendorRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/site-brand", siteBrandRoutes);
+app.use("/api/inspired-sections", inspiredSectionRoutes);
 
 // test route
 app.get("/", (req, res) => {
