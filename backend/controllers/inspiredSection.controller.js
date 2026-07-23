@@ -76,6 +76,7 @@ export const updateSection = async (req, res) => {
     if (sort_order !== undefined) updateData.sort_order = parseInt(sort_order);
     if (is_active !== undefined) updateData.is_active = parseInt(is_active);
     if (req.file) updateData.image = `/uploads/inspired/${req.file.filename}`;
+    else if (req.body.image !== undefined) updateData.image = req.body.image;
     await updateInspiredSection(req.params.id, updateData);
     const sections = await getAllInspiredSections();
     res.json({ success: true, data: sections });
