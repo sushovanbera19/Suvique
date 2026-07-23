@@ -7,6 +7,7 @@ import {
   fetchAllBrands,
   createBrandCtrl,
   activateBrandCtrl,
+  updateBrandCtrl,
   deleteBrandCtrl,
 } from "../controllers/siteBrand.controller.js";
 
@@ -39,6 +40,7 @@ router.get("/", fetchActiveBrand);
 router.get("/all", fetchAllBrands);
 router.post("/", upload.single("logo"), createBrandCtrl);
 router.put("/:id/activate", activateBrandCtrl);
+router.put("/:id", upload.single("logo"), updateBrandCtrl);
 router.delete("/:id", deleteBrandCtrl);
 
 export default router;

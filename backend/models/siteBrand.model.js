@@ -39,6 +39,29 @@ export const activateBrand = (id) => {
   });
 };
 
+export const updateBrand = (id, logoPath, brandName) => {
+  return new Promise((resolve, reject) => {
+    if (logoPath && brandName) {
+      db.query("UPDATE site_brand SET logo_path = ?, brand_name = ? WHERE id = ?", [logoPath, brandName, id], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    } else if (brandName) {
+      db.query("UPDATE site_brand SET brand_name = ? WHERE id = ?", [brandName, id], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    } else if (logoPath) {
+      db.query("UPDATE site_brand SET logo_path = ? WHERE id = ?", [logoPath, id], (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    } else {
+      resolve({ affectedRows: 0 });
+    }
+  });
+};
+
 export const deleteBrand = (id) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM site_brand WHERE id = ? AND is_active = 0", [id], (err, result) => {

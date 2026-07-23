@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Breadcrumb from "../common/Breadcrumb";
 import {
   FiImage, FiSave, FiX, FiCheck, FiTrash2, FiPlus,
-  FiPower, FiClock
+  FiPower, FiClock, FiEdit2
 } from "react-icons/fi";
 import "../../assets/style/ManageBrand.css";
 
@@ -18,6 +18,13 @@ const ManageBrand = () => {
   const [toast, setToast] = useState({ type: "", msg: "" });
   const [showAdd, setShowAdd] = useState(false);
   const fileRef = useRef(null);
+
+  const [editId, setEditId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editLogoFile, setEditLogoFile] = useState(null);
+  const [editLogoPreview, setEditLogoPreview] = useState(null);
+  const [editSaving, setEditSaving] = useState(false);
+  const editFileRef = useRef(null);
 
   const showToast = (type, msg) => {
     setToast({ type, msg });
@@ -71,6 +78,51 @@ const ManageBrand = () => {
     }
   };
 
+  const startEdit = (brand) => {
+    setEditId(brand.id);
+    setEditName(brand.brand_name);
+    setEditLogoFile(null);
+    setEditLogoPreview(null);
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
+    setEditName("");
+    setEditLogoFile(null);
+    setEditLogoPreview(null);
+  };
+
+  const handleEditLogoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setEditLogoFile(file);
+    setEditLogoPreview(URL.createObjectURL(file));
+  };
+
+  const handleUpdateBrand = async () => {
+    if (!editName.trim()) return showToast("error", "Brand name is required");
+    setEditSaving(true);
+    try {
+      const fd = new FormData();
+      fd.append("brand_name", editName.trim());
+      if (editLogoFile) fd.append("logo", editLogoFile);
+      const res = await fetch(`${API}/api/site-brand/${editId}`, { method: "PUT", body: fd });
+      const json = await res.json();
+      if (json.success) {
+        setBrands(json.data);
+        cancelEdit();
+        showToast("success", "Brand updated!");
+        window.dispatchEvent(new Event("brand-updated"));
+      } else {
+        showToast("error", json.message || "Failed");
+      }
+    } catch (err) {
+      showToast("error", "Failed");
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   const handleActivate = async (id) => {
     try {
       const res = await fetch(`${API}/api/site-brand/${id}/activate`, { method: "PUT" });
@@ -101,9 +153,9 @@ const ManageBrand = () => {
     }
   };
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    return `${API}${path.replace(/\\/g, "/")}`;
+  const getImageUrl = (imgPath) => {
+    if (!imgPath) return null;
+    return `${API}${imgPath.replace(/\\/g, "/")}`;
   };
 
   if (loading) {
@@ -172,7 +224,6 @@ const ManageBrand = () => {
           {showAdd && (
             <div className="mb-add-form">
               <div className="mb-add-grid">
-                {/* Logo Upload */}
                 <div>
                   <label className="mb-label">Logo</label>
                   <div className="mb-logo-upload" onClick={() => fileRef.current?.click()}>
@@ -188,7 +239,6 @@ const ManageBrand = () => {
                   <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoChange} />
                 </div>
 
-                {/* Brand Name */}
                 <div style={{ flex: 1 }}>
                   <label className="mb-label">Brand Name</label>
                   <input
@@ -244,15 +294,43 @@ const ManageBrand = () => {
                   {brands.map((brand) => (
                     <tr key={brand.id}>
                       <td>
-                        <div className="mb-logo-cell">
-                          {brand.logo_path ? (
-                            <img src={getImageUrl(brand.logo_path)} alt="Logo" />
-                          ) : (
-                            <span className="mb-logo-initial">{brand.brand_name.charAt(0)}</span>
-                          )}
-                        </div>
+                        {editId === brand.id ? (
+                          <div>
+                            <div className="mb-logo-cell mb-logo-cell-edit" onClick={() => editFileRef.current?.click()}>
+                              {editLogoPreview ? (
+                                <img src={editLogoPreview} alt="Preview" />
+                              ) : brand.logo_path ? (
+                                <img src={getImageUrl(brand.logo_path)} alt="Logo" />
+                              ) : (
+                                <span className="mb-logo-initial">{brand.brand_name.charAt(0)}</span>
+                              )}
+                            </div>
+                            <input ref={editFileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleEditLogoChange} />
+                          </div>
+                        ) : (
+                          <div className="mb-logo-cell">
+                            {brand.logo_path ? (
+                              <img src={getImageUrl(brand.logo_path)} alt="Logo" />
+                            ) : (
+                              <span className="mb-logo-initial">{brand.brand_name.charAt(0)}</span>
+                            )}
+                          </div>
+                        )}
                       </td>
-                      <td><span className="mb-brand-name">{brand.brand_name}</span></td>
+                      <td>
+                        {editId === brand.id ? (
+                          <input
+                            type="text"
+                            className="mb-input mb-input-edit"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            placeholder="Brand name"
+                            autoFocus
+                          />
+                        ) : (
+                          <span className="mb-brand-name">{brand.brand_name}</span>
+                        )}
+                      </td>
                       <td>
                         <span className={`mb-badge ${brand.is_active ? "mb-badge-active" : "mb-badge-inactive"}`}>
                           {brand.is_active ? "Active" : "Inactive"}
@@ -265,18 +343,34 @@ const ManageBrand = () => {
                       </td>
                       <td>
                         <div className="mb-action-btns">
-                          {!brand.is_active && (
+                          {editId === brand.id ? (
                             <>
-                              <button className="mb-icon-btn mb-icon-btn-activate" onClick={() => handleActivate(brand.id)} title="Activate">
-                                <FiPower />
+                              <button className="mb-icon-btn mb-icon-btn-save" onClick={handleUpdateBrand} disabled={editSaving} title="Save">
+                                <FiSave />
                               </button>
-                              <button className="mb-icon-btn mb-icon-btn-delete" onClick={() => handleDelete(brand.id)} title="Delete">
-                                <FiTrash2 />
+                              <button className="mb-icon-btn mb-icon-btn-delete" onClick={cancelEdit} title="Cancel">
+                                <FiX />
                               </button>
                             </>
-                          )}
-                          {brand.is_active && (
-                            <span className="mb-live-text"><FiCheck size={14} /> Live</span>
+                          ) : (
+                            <>
+                              <button className="mb-icon-btn mb-icon-btn-edit" onClick={() => startEdit(brand)} title="Edit">
+                                <FiEdit2 />
+                              </button>
+                              {!brand.is_active && (
+                                <>
+                                  <button className="mb-icon-btn mb-icon-btn-activate" onClick={() => handleActivate(brand.id)} title="Activate">
+                                    <FiPower />
+                                  </button>
+                                  <button className="mb-icon-btn mb-icon-btn-delete" onClick={() => handleDelete(brand.id)} title="Delete">
+                                    <FiTrash2 />
+                                  </button>
+                                </>
+                              )}
+                              {brand.is_active && (
+                                <span className="mb-live-text"><FiCheck size={14} /> Live</span>
+                              )}
+                            </>
                           )}
                         </div>
                       </td>
