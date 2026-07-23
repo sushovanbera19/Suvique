@@ -201,7 +201,7 @@ const ManageBrand = () => {
                     </div>
                   )}
                 </div>
-                <div>
+                <div className="mb-active-info">
                   <h2 className="mb-active-name">{activeBrand.brand_name}</h2>
                   <p className="mb-active-date">
                     Created {new Date(activeBrand.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
@@ -218,7 +218,7 @@ const ManageBrand = () => {
         <div className="mb-card">
           <div className="mb-add-toggle" onClick={() => setShowAdd(!showAdd)}>
             <h3><FiPlus /> Add New Brand</h3>
-            <span className="mb-chevron" style={{ transform: showAdd ? "rotate(180deg)" : "rotate(0)" }}>▾</span>
+            <span className={`mb-chevron ${showAdd ? "mb-chevron-open" : ""}`}>▾</span>
           </div>
 
           {showAdd && (
@@ -236,10 +236,10 @@ const ManageBrand = () => {
                       </>
                     )}
                   </div>
-                  <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleLogoChange} />
+                  <input ref={fileRef} type="file" accept="image/*" className="mb-hidden-input" onChange={handleLogoChange} />
                 </div>
 
-                <div style={{ flex: 1 }}>
+                <div className="mb-form-col">
                   <label className="mb-label">Brand Name</label>
                   <input
                     type="text"
@@ -287,7 +287,7 @@ const ManageBrand = () => {
                     <th>Brand Name</th>
                     <th>Status</th>
                     <th>Created</th>
-                    <th style={{ textAlign: "right" }}>Actions</th>
+                    <th className="mb-th-actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -305,7 +305,7 @@ const ManageBrand = () => {
                                 <span className="mb-logo-initial">{brand.brand_name.charAt(0)}</span>
                               )}
                             </div>
-                            <input ref={editFileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleEditLogoChange} />
+                            <input ref={editFileRef} type="file" accept="image/*" className="mb-hidden-input" onChange={handleEditLogoChange} />
                           </div>
                         ) : (
                           <div className="mb-logo-cell">
