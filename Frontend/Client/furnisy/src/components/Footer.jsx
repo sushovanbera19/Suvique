@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/style/Footer.css";
 import Visa from "../../public/images/visa.jfif";
 import Mastercard from "../../public/images/mastercard.png";
@@ -6,15 +6,28 @@ import paypal from "../../public/images/paypal.png";
 import Discover from "../../public/images/discover.png";
 import { useTranslation } from "../context/LanguageContext";
 
+const API = "http://localhost:5000";
 
 const Footer = () => {
     const { t } = useTranslation();
+    const [brand, setBrand] = useState(null);
+
+    useEffect(() => {
+        fetch(`${API}/api/site-brand`)
+            .then((res) => res.json())
+            .then((json) => { if (json.success && json.data) setBrand(json.data); })
+            .catch(() => {});
+    }, []);
     return (
         <footer className="footer">
             <div className="footer-container">
                 {/* Column 1 */}
                 <div className="footer-column">
-                    <img src="/images/logo.png" alt="Logo" style={{ height: "100px" }} />
+                    {brand?.logo_path ? (
+                        <img src={`${API}${brand.logo_path}`} alt={brand.brand_name || "Logo"} style={{ height: "100px", objectFit: "contain" }} />
+                    ) : (
+                        <img src="/images/logo.png" alt="Logo" style={{ height: "100px" }} />
+                    )}
                     <div className="footer-text">
                         <p>{t("footer.aboutText1")}</p>
                         <p>{t("footer.aboutText2")}</p>
@@ -34,7 +47,7 @@ const Footer = () => {
 
                 {/* Column 3 */}
                 <div className="footer-column">
-                    <h4>Savique</h4>
+                    <h4>{brand?.brand_name || "Suvique"}</h4>
                     <ul>
                         <li><a href="/about">{t("footer.aboutSuvique")}</a></li>
                         <li><a href="/careers">{t("footer.joinTeam")}</a></li>

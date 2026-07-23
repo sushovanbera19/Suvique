@@ -1,18 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FiHome, FiFileText, FiCheckSquare, FiShield, FiAlertTriangle, FiChevronRight, FiChevronDown, FiBox, FiLayers, FiLayout, FiPieChart, FiBriefcase, FiImage, FiTrendingUp, FiBarChart2, FiFolder, FiUsers, FiActivity, FiBookOpen, FiUser, FiGrid, FiMapPin, FiStar, FiCreditCard, FiPackage, FiSettings, } from "react-icons/fi";
 import { useTranslation } from "../../hooks/useTranslation";
 import "../../assets/style/Sidebar.css";
+
+const API = "http://localhost:5000";
 
 const Sidebar = ({ collapsed }) => {
   const { t } = useTranslation();
   const [active, setActive] = useState("Ecommerce");
   const [openMenu, setOpenMenu] = useState("Pages");
   const [openSubMenus, setOpenSubMenus] = useState({ "Blog": true, [t("sidebar.fileManager")]: true });
+  const [brand, setBrand] = useState(null);
 
   const toggleSubMenu = (name) => {
     setOpenSubMenus((prev) => ({ ...prev, [name]: !prev[name] }));
   };
+
+  useEffect(() => {
+    const fetchBrand = () => {
+      fetch(`${API}/api/site-brand`)
+        .then((res) => res.json())
+        .then((json) => { if (json.success && json.data) setBrand(json.data); })
+        .catch(() => {});
+    };
+    fetchBrand();
+    window.addEventListener("brand-updated", fetchBrand);
+    return () => window.removeEventListener("brand-updated", fetchBrand);
+  }, []);
 
   const menuData = [
     {
@@ -162,6 +177,7 @@ const Sidebar = ({ collapsed }) => {
             { name: t("sidebar.buttons"), path: "/dashboard/buttons" },
             { name: t("sidebar.cards"), path: "/dashboard/cards" },
             { name: t("sidebar.modal"), path: "/dashboard/modal" },
+            { name: t("sidebar.manageBrand"), path: "/dashboard/manage-brand" },
           ],
         },
         // {
@@ -276,8 +292,12 @@ const Sidebar = ({ collapsed }) => {
   return (
     <div className={collapsed ? "sidebar collapsed" : "sidebar"}>
       <div className="sidebar-logo">
-        <img src="/images/logo.png" alt="Suvique" className="sidebar-logo-img" />
-        {!collapsed && <h2>Suvique</h2>}
+        {brand?.logo_path ? (
+          <img src={`${API}${brand.logo_path}`} alt={brand.brand_name || "Suvique"} className="sidebar-logo-img" />
+        ) : (
+          <img src="/images/logo.png" alt="Suvique" className="sidebar-logo-img" />
+        )}
+        {!collapsed && <h2>{brand?.brand_name || "Suvique"}</h2>}
       </div>
 
       <div className="sidebar-content">

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../assets/style/AdminLogin.css";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF, FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+const API = "http://localhost:5000";
 
 const AdminLogin = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState("");
@@ -12,7 +14,16 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
 
+    const [brand, setBrand] = useState(null);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch(`${API}/api/site-brand`)
+            .then((res) => res.json())
+            .then((json) => { if (json.success && json.data) setBrand(json.data); })
+            .catch(() => {});
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -89,8 +100,12 @@ const AdminLogin = ({ setIsLoggedIn }) => {
         <div className="admin_login_form">
             <div className="login-card">
                 <div className="brand">
-                    <img src="/images/logo.png" alt="Suvique" className="brand-logo" />
-                    <span>Suvique</span>
+                    {brand?.logo_path ? (
+                        <img src={`${API}${brand.logo_path}`} alt={brand.brand_name || "Suvique"} className="brand-logo" />
+                    ) : (
+                        <img src="/images/logo.png" alt="Suvique" className="brand-logo" />
+                    )}
+                    <span>{brand?.brand_name || "Suvique"}</span>
                 </div>
                 <p>Enter your credentials to login your account</p>
                 {message && (

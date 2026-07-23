@@ -45,6 +45,7 @@ import ChartsShowcase from "./components/Dashboard/ChartsShowcase";
 import ChartJsShowcase from "./components/Dashboard/ChartJsShowcase";
 import FormElementsShowcase from "./components/Dashboard/FormElementsShowcase";
 import FormValidationShowcase from "./components/Dashboard/FormValidationShowcase";
+import ManageBrand from "./components/Dashboard/ManageBrand";
 import ShopAdmin from "./components/Dashboard/ShopAdmin";
 import ProductDetailsAdmin from "./components/Dashboard/ProductDetailsAdmin";
 import CartAdmin from "./components/Dashboard/CartAdmin";
@@ -133,6 +134,7 @@ const App = () => {
           <Route path="chartjs" element={<ChartJsShowcase />} />
           <Route path="form-elements" element={<FormElementsShowcase />} />
           <Route path="form-validation" element={<FormValidationShowcase />} />
+          <Route path="manage-brand" element={<ManageBrand />} />
 
           {/* Ecommerce */}
           <Route path="shop" element={<ShopAdmin />} />
