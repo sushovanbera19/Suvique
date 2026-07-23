@@ -216,7 +216,15 @@ const Customers = () => {
               {/* User Info Card */}
               <div className="cust-detail-user-card">
                 <div className="cust-detail-avatar">
-                  {user.name ? user.name.split(" ").map((w) => w.charAt(0)).join("").toUpperCase().slice(0, 2) : "U"}
+                  <img
+                    src={`${API}/api/users/profile/image/${user.id}`}
+                    alt={user.name}
+                    style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
+                    onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+                  />
+                  <div style={{ display: "none", width: "100%", height: "100%", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 700 }}>
+                    {user.name ? user.name.split(" ").map((w) => w.charAt(0)).join("").toUpperCase().slice(0, 2) : "U"}
+                  </div>
                 </div>
                 <div className="cust-detail-user-info">
                   <h2>{user.name || "Unknown"}</h2>
@@ -553,7 +561,7 @@ const Customers = () => {
                   const status = item.status || "Active";
                   const country = item.country || "N/A";
                   const createdAt = item.created_at || null;
-                  const image = item.image || null;
+                  const profileImageUrl = `${API}/api/users/profile/image/${item.id}`;
 
                   return (
                     <tr key={index} className={selectedRows.includes(item.user_id) ? "selected-row" : ""}>
@@ -566,13 +574,15 @@ const Customers = () => {
                       </td>
                       <td>
                         <div className="customers-customer-info">
-                          {image ? (
-                            <img src={image} alt={item.name} className="customer-avatar" />
-                          ) : (
-                            <div className="customer-initials">
-                              {item.name ? `${item.name.charAt(0).toUpperCase()}${item.name.charAt(item.name.length - 1).toUpperCase()}` : "NA"}
-                            </div>
-                          )}
+                          <img
+                            src={profileImageUrl}
+                            alt={item.name}
+                            className="customer-avatar"
+                            onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+                          />
+                          <div className="customer-initials" style={{ display: "none" }}>
+                            {item.name ? `${item.name.charAt(0).toUpperCase()}${item.name.charAt(item.name.length - 1).toUpperCase()}` : "NA"}
+                          </div>
                           <span>{item.name}</span>
                         </div>
                       </td>
